@@ -30,15 +30,17 @@
   --color-background: #f6eee3;   /* 乳白背景 */
   --color-success: #2a9d8f;      /* 美綠色 */
   --color-danger: #dc3545;       /* 紅色 */
+  --color-input: #e2b98c;
 }
 
 .dark {
   --color-primary: #8c6b3d;
-  --color-secondary: #2c1f11;
+  --color-secondary: #b77128;
   --color-text: #d4c5a5;
   --color-background: #2b2211;
   --color-success: #1f776f;
   --color-danger: #e55353;
+  --color-input: #e2b98c;
 }
 
 header {
@@ -46,6 +48,7 @@ header {
 }
 section {
   min-height: calc(100vh - 104px);
+  padding: 10px;
 }
 footer {
   height: 30px;

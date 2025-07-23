@@ -25,6 +25,9 @@ export default {
         },
         danger: {
           DEFAULT: 'var(--color-danger)',
+        },
+        input: {
+          DEFAULT: 'var(--color-input)',
         }
       }
     },

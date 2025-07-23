@@ -32,16 +32,14 @@ const StarRating = ({
             const ifFilled = (hoverIndex !== null) ? hoverIndex >= index : showRating >= index;
             const StarIcon = ifFilled ? FaStar : FaRegStar;
             return (
-              <>
-                <StarIcon
-                  key={index}
-                  size={20}
-                  className={`${!readonly && 'cursor-pointer'} text-yellow-500`}
-                  onMouseEnter={() => !readonly && setHoverIndex(index)}
-                  onMouseLeave={() => !readonly && setHoverIndex(null)}
-                  onClick={() => !readonly && setShowRating(index as DrinkRatingType)}
-                />
-              </>
+              <StarIcon
+                key={index}
+                size={20}
+                className={`${!readonly && 'cursor-pointer'} text-yellow-500`}
+                onMouseEnter={() => !readonly && setHoverIndex(index)}
+                onMouseLeave={() => !readonly && setHoverIndex(null)}
+                onClick={() => !readonly && setShowRating(index as DrinkRatingType)}
+              />
             )
           })
         }

@@ -14,20 +14,24 @@ export default {
         secondary: {
           DEFAULT: 'var(--color-secondary)',
         },
+        highlight: {
+          DEFAULT: 'var(--color-highlight)',
+        },
         text: {
           DEFAULT: 'var(--color-text)',
+          secondary: 'var(--color-text-secondary)',
         },
         background: {
           DEFAULT: 'var(--color-background)',
+        },
+        surface: {
+          DEFAULT: 'var(--color-surface)',
         },
         success: {
           DEFAULT: 'var(--color-success)',
         },
         danger: {
           DEFAULT: 'var(--color-danger)',
-        },
-        input: {
-          DEFAULT: 'var(--color-input)',
         }
       }
     },

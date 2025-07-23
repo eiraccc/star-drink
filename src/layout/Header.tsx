@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { CupSoda, Moon, Sun } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+    const location = useLocation();
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -23,11 +24,11 @@ const Header = () => {
             </div>
             <h1 className='text-primary text-xl'>Drink</h1>
             <div className='flex items-center'>
-                <Link to="/drink/add">
+                {location.pathname !== '/drink/add' && <Link to="/drink/add">
                     <button
-                        className='bg-secondary text-white rounded-full px-2 py-2 mr-2'
+                        className='bg-highlight text-white rounded-full px-2 py-2 mr-2'
                     >✚新增飲料</button>
-                </Link>
+                </Link>}
                 <button
                     onClick={ collapseMode }
                     aria-label="切換模式"

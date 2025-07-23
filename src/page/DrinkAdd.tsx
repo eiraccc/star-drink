@@ -42,7 +42,7 @@ const DrinkAdd = () => {
             <input
               type="text"
               id="drinkName"
-              className='w-full md:max-w-[400px] border-2 border-input rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
+              className='w-full md:max-w-[400px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
               value={ drinkData.drinkName }
               onChange={(e) => setDrinkData({...drinkData, drinkName: e.target.value})}
               required
@@ -56,7 +56,7 @@ const DrinkAdd = () => {
             <input
               type="text"
               id="storeName"
-              className='w-full md:max-w-[400px] border-2 border-input rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
+              className='w-full md:max-w-[400px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
               value={drinkData.storeName}
               onChange={(e) => setDrinkData({...drinkData, storeName: e.target.value})}
               required
@@ -80,7 +80,7 @@ const DrinkAdd = () => {
             <div className='relative w-full md:max-w-[400px]'>
               <select
                 name="ice" id="ice"
-                className="w-full md:max-w-[400px] border-2 border-input rounded-full pl-3 pr-8 py-1 focus:outline-none focus:border-secondary bg-transparent block appearance-none"
+                className="w-full md:max-w-[400px] border-2 border-primary rounded-full pl-3 pr-8 py-1 focus:outline-none focus:border-secondary bg-transparent block appearance-none"
                 onChange={(e) => setDrinkData({...drinkData, ice: e.target.value as IceLevel})}
               >
                 {
@@ -102,7 +102,7 @@ const DrinkAdd = () => {
             <div className='relative w-full md:max-w-[400px]'>
               <select
                 name="sweetness" id="sweetness"
-                className="w-full md:max-w-[400px] border-2 border-input rounded-full pl-3 pr-8 py-1 focus:outline-none focus:border-secondary bg-transparent block appearance-none"
+                className="w-full md:max-w-[400px] border-2 border-primary rounded-full pl-3 pr-8 py-1 focus:outline-none focus:border-secondary bg-transparent block appearance-none"
                 onChange={(e) => setDrinkData({...drinkData, sweetness: e.target.value as SweetnessLevel})}
               >
                 {
@@ -124,7 +124,7 @@ const DrinkAdd = () => {
             >Comment:</label>
             <textarea
               id="comment"
-              className='w-full md:max-w-[400px] border-2 border-input rounded-xl py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
+              className='w-full md:max-w-[400px] border-2 border-primary rounded-xl py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
               value={drinkData.comment}
               onChange={(e) => setDrinkData({...drinkData, comment: e.target.value})}
               required

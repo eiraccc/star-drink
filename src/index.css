@@ -23,25 +23,35 @@
   box-sizing: border-box;
 }
 
+/* 淺色主題 */
 :root {
-  --color-primary: #b5916a;      /* 奶茶色 */
-  --color-secondary: #986a49;    /* 黑珍珠色 */
-  --color-text: #3e2f1c;         /* 深咖啡文字色 */
-  --color-background: #f6eee3;   /* 乳白背景 */
-  --color-success: #2a9d8f;      /* 美綠色 */
-  --color-danger: #dc3545;       /* 紅色 */
-  --color-input: #e2b98c;
+  --color-primary: #c49066;       /* 深奶茶主色，讓元素跳起來 */
+  --color-secondary: #9C7B5F;     /* 次色，溫暖棕色 */
+  --color-highlight: #A6C48A;     /* 抹茶綠，醒目 */
+  --color-text: #4A3221;          /* 主文字色，深棕 */
+  --color-text-secondary: #7F6A58; /* 次文字色，柔和 */
+  --color-background: #FAF1E9;    /* 奶茶米白，溫暖底色 */
+  --color-surface: #E1CFC0;       /* 卡片色，比背景深 */
+  --color-success: #4CAF50;       /* 成功綠 */
+  --color-danger: #E53935;        /* 危險紅 */
 }
 
+/* 深色主題 */
 .dark {
-  --color-primary: #8c6b3d;
-  --color-secondary: #b77128;
-  --color-text: #d4c5a5;
-  --color-background: #2b2211;
-  --color-success: #1f776f;
-  --color-danger: #e55353;
-  --color-input: #e2b98c;
+  --color-primary: #C1A78C;
+  --color-secondary: #8C7763;
+  --color-highlight: #A6C48A;
+  --color-text: #EADDCB;
+  --color-text-secondary: #B6A89B;
+  --color-background: #1D1A17;
+  --color-surface: #3B322A;
+  --color-success: #81C784;
+  --color-danger: #EF9A9A;
 }
+
+
+
+
 
 header {
   height: 74px;

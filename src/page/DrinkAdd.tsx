@@ -1,6 +1,11 @@
+import StarRating from "../component/StarRating"
+
 const DrinkAdd = () => {
   return (
-    <section>DrinkAdd</section>
+    <section>
+        DrinkAdd
+        <StarRating rating={4} />
+    </section>
   )
 }
 

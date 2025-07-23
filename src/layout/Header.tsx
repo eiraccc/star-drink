@@ -17,11 +17,11 @@ const Header = () => {
 
     return (
         <header className='flex justify-between items-center p-4 border-b-2 border-primary'>
-            <div>
+            <Link to="/">
                 <div className='text-primary'>
                     <CupSoda size="36" />
                 </div>
-            </div>
+            </Link>
             <h1 className='text-primary text-xl'>Drink</h1>
             <div className='flex items-center'>
                 {location.pathname !== '/drink/add' && <Link to="/drink/add">

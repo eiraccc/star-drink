@@ -33,7 +33,7 @@ const DrinkAdd = () => {
 
   return (
     <section className='flex justify-center'>
-        <form action="" className='w-full md:max-w-[500px]'>
+        <form action="" className='w-full md:max-w-[400px]'>
           <div className="mb-2">
             <label
               htmlFor="drinkName"

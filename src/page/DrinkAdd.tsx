@@ -85,7 +85,9 @@ const DrinkAdd = () => {
               >
                 {
                   iceOptions.map(iceOption => {
-                    return <option value={iceOption}>{ iceOption }</option>
+                    return (
+                      <option value={ iceOption } key={ iceOption }>{ iceOption }</option>
+                    )
                   })
                 }
               </select>
@@ -107,7 +109,9 @@ const DrinkAdd = () => {
               >
                 {
                   sweetnessOptions.map(sweetnessOption => {
-                    return <option value={sweetnessOption}>{ sweetnessOption }</option>
+                    return (
+                      <option value={ sweetnessOption } key={ sweetnessOption }>{ sweetnessOption }</option>
+                    )
                   })
                 }
               </select>

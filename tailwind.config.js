@@ -10,9 +10,11 @@ export default {
       colors: {
         primary: {
           DEFAULT: 'var(--color-primary)',
+          ice: 'var(--color-primary-ice)'
         },
         secondary: {
           DEFAULT: 'var(--color-secondary)',
+          ice: 'var(--color-secondary-ice)'
         },
         highlight: {
           DEFAULT: 'var(--color-highlight)',
@@ -20,6 +22,7 @@ export default {
         text: {
           DEFAULT: 'var(--color-text)',
           secondary: 'var(--color-text-secondary)',
+          ice: 'var(--color-text-ice)'
         },
         background: {
           DEFAULT: 'var(--color-background)',

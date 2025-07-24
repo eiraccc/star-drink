@@ -1,16 +1,5 @@
-export type SweetnessLevel =
-    | 'No Sugar'
-    | 'Less Sugar'
-    | 'Half Sugar'
-    | 'Regular Sugar'
-    | 'Unset'
-
-export type IceLevel = 
-    | 'No Ice'
-    | 'Less Ice'
-    | 'Light Ice'
-    | 'Regular Ice'
-    | 'Unset'
+export type SugarLevel = 0 | 25 | 50 | 75 | 100;
+export type IceLevel = -1 | 0 | 30 | 70 | 100;
 
 export type Topping = 
   | 'Pearls' 
@@ -26,7 +15,7 @@ export interface drinkReview {
     drinkName: string,
     storeName: string,
     rating: DrinkRatingType,
-    sweetness: SweetnessLevel,
+    sugar: SugarLevel,
     ice: IceLevel,
     toppings: Topping[],
     comment: string,

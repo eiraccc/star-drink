@@ -26,10 +26,13 @@
 /* 淺色主題 */
 :root {
   --color-primary: #c49066;       /* 深奶茶主色，讓元素跳起來 */
+  --color-primary-ice: #A8B7C7;
   --color-secondary: #9C7B5F;     /* 次色，溫暖棕色 */
+  --color-secondary-ice: #60728A;
   --color-highlight: #A6C48A;     /* 抹茶綠，醒目 */
   --color-text: #4A3221;          /* 主文字色，深棕 */
   --color-text-secondary: #7F6A58; /* 次文字色，柔和 */
+  --color-text-ice: #4A5A6A;
   --color-background: #FAF1E9;    /* 奶茶米白，溫暖底色 */
   --color-surface: #E1CFC0;       /* 卡片色，比背景深 */
   --color-success: #4CAF50;       /* 成功綠 */
@@ -39,16 +42,63 @@
 /* 深色主題 */
 .dark {
   --color-primary: #C1A78C;
+  --color-primary-ice: #A8B7C7;
   --color-secondary: #8C7763;
+  --color-secondary-ice: #60728A;
   --color-highlight: #A6C48A;
   --color-text: #EADDCB;
   --color-text-secondary: #B6A89B;
+  --color-text-ice: #4A5A6A;
   --color-background: #1D1A17;
   --color-surface: #3B322A;
   --color-success: #81C784;
   --color-danger: #EF9A9A;
 }
 
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #f3e5ab; /* 奶茶淺底色 */
+  border-radius: 4px;
+  outline: none;
+}
+
+/* 滑軌 */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  background: #d2b48c; /* 奶茶中間色 */
+  border-radius: 4px;
+}
+
+/* 滑塊 */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #a67c52; /* 奶茶深色 */
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -6px; /* 讓滑塊置中 */
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+/* Firefox 滑軌 */
+input[type="range"]::-moz-range-track {
+  height: 8px;
+  background: #d2b48c;
+  border-radius: 4px;
+}
+
+/* Firefox 滑塊 */
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #a67c52;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
 
 
 

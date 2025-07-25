@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import StarRating from "../component/StarRating"
-import { drinkReviewAddForm, Topping } from "../types/drinkReview"
+import { drinkReviewAddForm, Topping, drinkReviewType } from "../types/drinkReview"
 import { sugarOptions, iceOptions } from '../constants/drink'
+import { formatInTimeZone } from 'date-fns-tz';
+import { useNavigate } from 'react-router-dom';
 
 const DrinkAdd = () => {
   const initDrinkReview: drinkReviewAddForm = {
@@ -14,6 +16,31 @@ const DrinkAdd = () => {
     comment: ''
   }
   const [drinkData, setDrinkData] = useState<drinkReviewAddForm>(initDrinkReview);
+  const navigate = useNavigate();
+
+  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const currentData = localStorage.getItem('drink-reviews');
+    let currentList:drinkReviewType[] = currentData ? JSON.parse(currentData) : [];
+    const finalId = Math.max(...currentList.map(n => n.id));
+    const nowTimeUTC = formatInTimeZone(new Date(), 'UTC', "yyyy-MM-dd'T'HH:mm:ssXXX");
+    
+    const newReview = {
+      ...drinkData,
+      id: finalId + 1,
+      userId: 'testUser',
+      createdAt: nowTimeUTC
+    }
+    console.log(newReview)
+    currentList.push(newReview);
+    localStorage.setItem('drink-reviews', JSON.stringify(currentList));
+
+    navigate('/');
+  };
+
+  const handleCancel = () => {
+    navigate('/');
+  }
 
   return (
     <section className='flex justify-center'>
@@ -139,9 +166,19 @@ const DrinkAdd = () => {
             />
           </div>
 
-          <div>
-            Result:
-            {JSON.stringify(drinkData, null, 2)}
+          <div className="flex gap-2 mt-4">
+            <button
+              className="w-1/2 px-4 py-2 border rounded-lg text-sm text-text-secondary border-text-secondary hover:bg-surface"
+              onClick={() => handleCancel()}
+            >
+              Cancel
+            </button>
+            <button
+              className="w-1/2 px-4 py-2 rounded-lg text-sm text-white bg-primary hover:opacity-80 disabled:opacity-50"
+              onClick={(e) => handleAdd(e)}
+            >
+              Add
+            </button>
           </div>
         </form>
     </section>

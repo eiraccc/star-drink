@@ -10,7 +10,7 @@ export type Topping =
 
 export type DrinkRatingType = 0 | 1 | 2 | 3 | 4 | 5;
 
-export interface drinkReview {
+export interface drinkReviewType {
     id: number,
     drinkName: string,
     storeName: string,
@@ -23,4 +23,4 @@ export interface drinkReview {
     createdAt: string,
 }
 
-export type drinkReviewAddForm = Omit<drinkReview, 'id' | 'userId' | 'createdAt'>
+export type drinkReviewAddForm = Omit<drinkReviewType, 'id' | 'userId' | 'createdAt'>

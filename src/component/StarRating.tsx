@@ -5,7 +5,7 @@ import { DrinkRatingType } from "../types/drinkReview";
 type propsType = {
   readonly?: boolean,
   rating?: DrinkRatingType,
-  onChange: (newRating: DrinkRatingType) => void;
+  onChange?: (newRating: DrinkRatingType) => void;
 }
 
 const StarRating = ({
@@ -22,7 +22,7 @@ const StarRating = ({
   }, [rating]);
 
   useEffect(() => {
-    onChange(showRating)
+    if(onChange) onChange(showRating);
   }, [showRating])
 
   return (

@@ -19,12 +19,14 @@ export const sugarLabelMap: Record<number, string> = {
     100: 'Regular Ice',
   };
 
-export const sugarOptions = sugerLevels.map(level => ({
+export const sugarOptions = sugerLevels.map((level, index) => ({
     value: level,
-    label: sugarLabelMap[level].replace(' ', '\n')
+    label: sugarLabelMap[level].replace(' ', '\n'),
+    opacity: (index + 1) * 20
 }));
 
-export const iceOptions = iceLevels.map(level => ({
+export const iceOptions = iceLevels.map((level, index) => ({
     value: level,
-    label: iceLabelMap[level].replace(' ', '\n')
+    label: iceLabelMap[level].replace(' ', '\n'),
+    opacity: (index + 1) * 20
 }));

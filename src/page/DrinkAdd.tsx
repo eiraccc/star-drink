@@ -107,7 +107,7 @@ const DrinkAdd = () => {
                     {/* dot */}
                     <div
                       className={`w-5 h-5 rounded-full border-2 transition-colors 
-                        ${isSelected ? "bg-secondary border-secondary" : "bg-background border-primary"}
+                        ${isSelected ? "bg-secondary-sugar border-secondary-sugar" : "bg-background border-primary-sugar"}
                       `}
                     />
                     {/* label */}
@@ -117,7 +117,7 @@ const DrinkAdd = () => {
 
                     {/* line */}
                     {index !== sugarOptions.length - 1  && (
-                      <div className="absolute top-2 left-5 w-[72px] h-1 bg-primary pointer-events-none" />
+                      <div className="absolute top-2 left-5 w-[72px] h-1 bg-primary-sugar pointer-events-none" />
                     )}
                   </div>
                 )

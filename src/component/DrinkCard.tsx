@@ -26,8 +26,13 @@ const DrinkCard = ({ data }: DrinkCardProps) => {
                 <div className={`bg-primary-ice/${iceOpacity} text-background inline-block p-1 text-xs mr-1`}>{iceLabelMap[data.ice]}</div>
                 <div className={`bg-primary-sugar/${sugarOpacity} text-background inline-block p-1 text-xs`}>{sugarLabelMap[data.sugar]}</div>
             </div>
-            <p className="text-text-secondary text-sm">{data.comment}</p>
-            <p className="text-text-secondary text-xs text-right mt-2">{data.createdAt}</p>
+            <div className="min-h-[24px] mt-1">
+                {data.toppings.map(topping => {
+                    return <div key={topping} className={`bg-primary text-background inline-block p-1 text-xs mr-1`}>{topping}</div>
+                })}
+            </div>
+            <p className="text-text-secondary text-sm mt-2 min-h-[40px] line-clamp-2">{data.comment}</p>
+            <p className="text-background text-xs text-right mt-2">{data.createdAt}</p>
         </div>
     )
 }

@@ -21,7 +21,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     sugar: 100, // Regular Sugar
     ice: 0,     // No Ice
     toppings: ["Brown Sugar Boba"],
-    comment: "Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.",
+    comment: "Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.Rich flavor, perfect for cold daysRich flavor, perfect for cold days",
     userId: "tea_lover",
     createdAt: "2025-07-21T10:15:00Z",
   },

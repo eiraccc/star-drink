@@ -22,7 +22,7 @@ function App() {
             )} />
             <Route path="/drink/add" element={<DrinkAdd />} />
             <Route path="/drink/:drinkId" element={<DrinkDetail />} />
-            <Route path="/drink/:drinkId/edit" element={<DrinkEdit />} />
+            <Route path="/drink/:drinkId/edit" element={<DrinkAdd />} />
             <Route path="*" element={
               <section className='m-2'>
                 <h2 className='my-2'>Page not found.</h2>

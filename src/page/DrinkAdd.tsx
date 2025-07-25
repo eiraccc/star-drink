@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import StarRating from "../component/StarRating"
 import { drinkReviewAddForm, Topping, drinkReviewType } from "../types/drinkReview"
 import { sugarOptions, iceOptions } from '../constants/drink'
 import { formatInTimeZone } from 'date-fns-tz';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DrinkAdd = () => {
+  const { drinkId } = useParams<{ drinkId: string }>();
+  const isEdit = Boolean(drinkId);
+
   const initDrinkReview: drinkReviewAddForm = {
     drinkName: '',
     storeName: '',
@@ -16,13 +19,25 @@ const DrinkAdd = () => {
     comment: ''
   }
   const [drinkData, setDrinkData] = useState<drinkReviewAddForm>(initDrinkReview);
+  const [drinkList, setDrinkList] = useState<drinkReviewType[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedData = localStorage.getItem('drink-reviews');
+    const list: drinkReviewType[] = savedData ? JSON.parse(savedData) : [];
+    setDrinkList(list);
+  }, []);
+
+  useEffect(() => {
+    if (isEdit) {
+      const currentDrink = drinkList.find(n => n.id === Number(drinkId));
+      currentDrink && setDrinkData(currentDrink);
+    }
+  }, [drinkId, drinkList]);
 
   const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const currentData = localStorage.getItem('drink-reviews');
-    let currentList:drinkReviewType[] = currentData ? JSON.parse(currentData) : [];
-    const finalId = Math.max(...currentList.map(n => n.id));
+    const finalId = Math.max(...drinkList.map(n => n.id));
     const nowTimeUTC = formatInTimeZone(new Date(), 'UTC', "yyyy-MM-dd'T'HH:mm:ssXXX");
     
     const newReview = {
@@ -31,20 +46,35 @@ const DrinkAdd = () => {
       userId: 'testUser',
       createdAt: nowTimeUTC
     }
-    console.log(newReview)
-    currentList.push(newReview);
-    localStorage.setItem('drink-reviews', JSON.stringify(currentList));
+    console.log('new', newReview);
+
+    const newList = [...drinkList, newReview];
+    setDrinkList(newList);
+    localStorage.setItem('drink-reviews', JSON.stringify(newList));
 
     navigate('/');
   };
 
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const newList = drinkList.map(item => {
+      if(item.id === Number(drinkId)) return {...item, ...drinkData};
+      return item;
+    });
+
+    setDrinkList(newList);
+    localStorage.setItem('drink-reviews', JSON.stringify(newList));
+
+    navigate(`/drink/${drinkId}`);
+  };
+
   const handleCancel = () => {
-    navigate('/');
-  }
+    navigate(isEdit ? `/drink/${drinkId}` : '/');
+  };
 
   return (
     <section className='flex justify-center'>
-        <form action="" className='w-full md:max-w-[400px]'>
+        <div className='w-full md:max-w-[400px]'>
           <div className="mb-2">
             <label
               htmlFor="drinkName"
@@ -175,12 +205,12 @@ const DrinkAdd = () => {
             </button>
             <button
               className="w-1/2 px-4 py-2 rounded-lg text-sm text-white bg-primary hover:opacity-80 disabled:opacity-50"
-              onClick={(e) => handleAdd(e)}
+              onClick={(e) => isEdit ? handleEdit(e) : handleAdd(e)}
             >
-              Add
+              {isEdit ? 'Edit' : 'Add'}
             </button>
           </div>
-        </form>
+        </div>
     </section>
   )
 }

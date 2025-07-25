@@ -26,7 +26,7 @@ const StarRating = ({
   }, [showRating])
 
   return (
-    <div className="flex space-x-2">
+    <div className="flex space-x-2 py-1">
         {
           Array.from({ length: maxStar }, (_, i) => i + 1).map(index => {
             const ifFilled = (hoverIndex !== null) ? hoverIndex >= index : showRating >= index;

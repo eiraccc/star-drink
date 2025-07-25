@@ -4,16 +4,20 @@ import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constan
 import { RiDrinks2Fill } from "react-icons/ri";
 
 type DrinkCardProps = {
-  data: drinkReviewType;
+  data: drinkReviewType,
+  onClick?: () => void
 };
 
 
-const DrinkCard = ({ data }: DrinkCardProps) => {
+const DrinkCard = ({ data, onClick }: DrinkCardProps) => {
     const iceOpacity = iceOptions.find(n => n.value === data.ice)?.opacity;
     const sugarOpacity = sugarOptions.find(n => n.value === data.sugar)?.opacity;
 
     return (
-        <div className="bg-surface p-3 relative overflow-hidden shadow-lg rounded-lg">
+        <div
+            onClick={onClick}
+            className="bg-surface p-3 relative overflow-hidden shadow-lg rounded-lg cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out"
+        >
             <div className="absolute top-0 right-0 w-16 h-16 bg-background rounded-bl-full" />
             <div className="absolute top-3 right-3 rounded-full">
                 <RiDrinks2Fill size={30} className="text-surface" />

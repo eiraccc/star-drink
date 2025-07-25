@@ -21,8 +21,8 @@ function App() {
               <DrinkList />
             )} />
             <Route path="/drink/add" element={<DrinkAdd />} />
-            <Route path="/drink/:id" element={<DrinkDetail />} />
-            <Route path="/drink/:id/edit" element={<DrinkEdit />} />
+            <Route path="/drink/:drinkId" element={<DrinkDetail />} />
+            <Route path="/drink/:drinkId/edit" element={<DrinkEdit />} />
             <Route path="*" element={
               <section className='m-2'>
                 <h2 className='my-2'>Page not found.</h2>

@@ -56,11 +56,11 @@ const DrinkDetail = () => {
               <StarRating readonly={true} rating={drinkData.rating} />
               <div className='mt-1'>
                 <label htmlFor="ice" className='mr-2'>Ice:</label>
-                <div className={`bg-primary-ice/${iceOpacity} text-background inline-block p-1 text-xs mr-1`}>{iceLabelMap[drinkData.ice]}</div>
+                <div className={`bg-primary-ice/${iceOpacity} text-text-ice inline-block p-1 text-xs mr-1`}>{iceLabelMap[drinkData.ice]}</div>
               </div>
               <div className='mt-1'>
                 <label htmlFor="sugar" className='mr-2'>Sugar:</label>
-                <div className={`bg-primary-sugar/${sugarOpacity} text-background inline-block p-1 text-xs mr-1`}>{sugarLabelMap[drinkData.sugar]}</div>
+                <div className={`bg-primary-sugar/${sugarOpacity} text-text-sugar inline-block p-1 text-xs mr-1`}>{sugarLabelMap[drinkData.sugar]}</div>
               </div>
               <div className='mt-1'>
                 <label htmlFor="toppings" className='mr-2'>Toppings:</label>

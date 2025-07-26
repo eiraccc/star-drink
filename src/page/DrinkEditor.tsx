@@ -168,7 +168,7 @@ const DrinkAdd = () => {
                       `}
                     />
                     {/* label */}
-                    <span className="absolute top-7 w-12 text-[12px] text-center text-secondary whitespace-pre-line leading-tight">
+                    <span className="absolute top-7 w-12 text-[12px] text-center text-text-sugar whitespace-pre-line leading-tight">
                       { option.label }
                     </span>
 

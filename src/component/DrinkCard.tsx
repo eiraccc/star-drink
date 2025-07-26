@@ -27,8 +27,8 @@ const DrinkCard = ({ data, onClick }: DrinkCardProps) => {
             <p className="text-text-secondary italic">{data.storeName}</p>
             <StarRating readonly={true} rating={data.rating} />
             <div className="mt-2">
-                <div className={`bg-primary-ice/${iceOpacity} text-background inline-block p-1 text-xs mr-1`}>{iceLabelMap[data.ice]}</div>
-                <div className={`bg-primary-sugar/${sugarOpacity} text-background inline-block p-1 text-xs`}>{sugarLabelMap[data.sugar]}</div>
+                <div className={`bg-primary-ice/${iceOpacity} text-text-ice inline-block p-1 text-xs mr-1`}>{iceLabelMap[data.ice]}</div>
+                <div className={`bg-primary-sugar/${sugarOpacity} text-text-sugar inline-block p-1 text-xs`}>{sugarLabelMap[data.sugar]}</div>
             </div>
             <div className="min-h-[24px] mt-1">
                 {data.toppings.map(topping => {

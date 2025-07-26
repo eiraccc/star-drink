@@ -67,10 +67,10 @@
   --color-danger: #EF9A9A;
 
   /* ========== ICE ========== */
-  --color-primary-ice: #A8B7C7;       /* 與淺色版一致，偏中性明亮 */
-  --color-primary-ice-rgb: 168 183 199;   /* #A8B7C7 */
+  --color-primary-ice: #6F8CA0;       /* 與淺色版一致，偏中性明亮 */
+  --color-primary-ice-rgb: 111 140 160;   /* #A8B7C7 */
   --color-secondary-ice: #60728A;
-  --color-text-ice: #4A5A6A;
+  --color-text-ice: #bbd5ee;
 
   /* ========== SUGAR ========== */
   --color-primary-sugar: #AD7480;     /* 豆沙莓紅 */

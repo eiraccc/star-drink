@@ -8,7 +8,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     rating: 4,
     sugar: 50, // Half Sugar
     ice: 70,   // Less Ice
-    toppings: ["Boba", "Pudding"],
+    toppings: ["boba", "pudding"],
     comment: "Smooth and well-balanced sweetness.",
     userId: "user123",
     createdAt: "2025-07-20T14:30:00Z",
@@ -20,7 +20,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     rating: 5,
     sugar: 100, // Regular Sugar
     ice: 0,     // No Ice
-    toppings: ["Brown Sugar Boba"],
+    toppings: ["brown-sugar-boba"],
     comment: "Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.Rich flavor, perfect for cold daysRich flavor, perfect for cold days",
     userId: "tea_lover",
     createdAt: "2025-07-21T10:15:00Z",
@@ -44,7 +44,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     rating: 4,
     sugar: 75,
     ice: -1, // Hot
-    toppings: ["Grass Jelly"],
+    toppings: ["grass-jelly"],
     comment: "Creamy and comforting, nice temperature.",
     userId: "tarolover",
     createdAt: "2025-07-23T16:45:00Z",
@@ -56,7 +56,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     rating: 5,
     sugar: 50,
     ice: 30,
-    toppings: ["Aloe Vera"],
+    toppings: ["aloe-vera"],
     comment: "Perfect balance of sweet and sour, very refreshing.",
     userId: "freshfan",
     createdAt: "2025-07-24T11:20:00Z",
@@ -68,7 +68,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     rating: 4,
     sugar: 75,
     ice: 70,
-    toppings: ["Boba"],
+    toppings: ["boba"],
     comment: "Rich oolong flavor, not too sweet.",
     userId: "oolong_enthusiast",
     createdAt: "2025-07-24T13:00:00Z",
@@ -92,7 +92,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     rating: 5,
     sugar: 25,
     ice: 0,
-    toppings: ["Red Bean"],
+    toppings: ["red-bean"],
     comment: "Smooth and creamy, excellent matcha flavor.",
     userId: "matcha_queen",
     createdAt: "2025-07-25T14:50:00Z",
@@ -104,7 +104,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     rating: 4,
     sugar: 75,
     ice: 70,
-    toppings: ["Popping Boba"],
+    toppings: ["popping-Boba"],
     comment: "Sweet and tangy, loved the popping boba texture.",
     userId: "fruitfan",
     createdAt: "2025-07-26T12:30:00Z",

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { mockDrinkReviews } from "../data/mockDrinkReviews"
 import { drinkReviewType } from "../types/drinkReview";
-import { sugarOptions, iceOptions, SugarIceLabelType } from '../constants/drink'
+import { sugarOptions, iceOptions, SugarIceLabelType, toppingOptions, ToppingLabelType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
 import MultiSelect from "../component/MultiSelect";
 
@@ -16,6 +16,7 @@ const DrinkList = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
   const [selectedSugar, setSelectedSugar] = useState<SugarIceLabelType[]>(sugarOptions);
+  const [selectedTopping, setSelectedTopping] = useState<ToppingLabelType[]>([])
   
   type SortKey = 'rating' | 'postTime';;
   type SortOrder = 'desc' | 'asc';
@@ -56,9 +57,10 @@ const DrinkList = () => {
   const sortReviews = useMemo(() => {
     return [...reviews].filter(review => {
       const ifSearchMatch = review.drinkName.toLowerCase().includes(searchValue.toLowerCase());
-      const ifIceMatch = selectedIce.map(n => n.value).includes(review.ice);
-      const ifSugarMatch = selectedSugar.map(n => n.value).includes(review.sugar);
-      return ifSearchMatch && ifIceMatch && ifSugarMatch;
+      const iceFilter = selectedIce.map(n => n.value).includes(review.ice);
+      const sugarFilter = selectedSugar.map(n => n.value).includes(review.sugar);
+      const toppingFilter = selectedTopping.length ? selectedTopping.some(n => review.toppings.includes(n.value)) : true;
+      return ifSearchMatch && iceFilter && sugarFilter && toppingFilter;
     }).sort((a, b) => {
       if(sort.key === 'rating') {
         return sort.order === 'desc' ? b.rating - a.rating : a.rating - b.rating;
@@ -68,7 +70,7 @@ const DrinkList = () => {
         : a.createdAt.localeCompare(b.createdAt);
       }
     })
-  }, [reviews, sort, searchValue, selectedIce, selectedSugar]);
+  }, [reviews, sort, searchValue, selectedIce, selectedSugar, selectedTopping]);
 
   return (
     <section>
@@ -86,30 +88,38 @@ const DrinkList = () => {
             />
           </div>
           {/* filter */}
-          <div className="flex flex-col sm:flex-row items-center">
+          <div className="flex flex-col sm:flex-row items-start">
             <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
               <MultiSelect<SugarIceLabelType>
                 options={iceOptions}
                 selected={selectedIce}
                 setSelected={setSelectedIce}
-                placeholder="Select ice levels"
+                placeholder="Ice levels"
               />
             </div>
-            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
+            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
               <MultiSelect<SugarIceLabelType>
                 options={sugarOptions}
                 selected={selectedSugar}
                 setSelected={setSelectedSugar}
-                placeholder="Select sugar levels"
+                placeholder="Sugar levels"
               />
             </div>
-            <p
+            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
+              <MultiSelect<ToppingLabelType>
+                options={toppingOptions}
+                selected={selectedTopping}
+                setSelected={setSelectedTopping}
+                placeholder="Toppings (any)"
+              />
+            </div>
+            {/* <p
               onClick={() => {
                 setSelectedIce([]);
                 setSelectedSugar([]);
               }}
               className="underline cursor-pointer ml-0 sm:ml-2 mt-2 sm:mt-0"
-            >Clear Filters</p>
+            >Clear Filters</p> */}
           </div>
           {/* sort */}
           <div className="flex pl-2">

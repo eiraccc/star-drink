@@ -79,18 +79,27 @@ export const tagColorMap: Record<TagType, TagColorConfig> = {
 };
 
 const toppings: ToppingType[] = [
-    'Boba',
-    'Pudding',
-    'Brown Sugar Boba',
-    'Grass Jelly',
-    'Aloe Vera',
-    'Red Bean',
-    'Popping Boba'
+    'boba',
+    'pudding',
+    'brown-sugar-boba',
+    'grass-jelly',
+    'aloe-vera',
+    'red-Bean',
+    'popping-boba'
 ];
 
+
+// Convert a kebab-case string (e.g. "red-bean") to Title Case (e.g. "Red Bean")
+function kebabToTitleCase(input: string): string {
+  return input
+    .split('-') // Split the string by "-" to get each word
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+    .join(' '); // Join the words with a space
+};
+
 export const toppingOptions:ToppingLabelType[] = toppings.map(topping => ({
-    value: topping.trim().toLowerCase(),
-    label: topping.replace(/ /g, '\n'),
+    value: topping.trim().toLowerCase().replace(/\s+/g, '-'),
+    label: kebabToTitleCase(topping),
     type: 'topping'
 }));
 

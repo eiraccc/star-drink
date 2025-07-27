@@ -50,7 +50,7 @@ const DrinkAdd = () => {
   }, [toppingSelected])
 
   const addNewTopping = useCallback((newTopping:string)  => {
-    const newToppingValue = newTopping.trim().toLowerCase();
+    const newToppingValue = newTopping.trim().toLowerCase().replace(/\s+/g, '-');
     const newOption:ToppingLabelType = {
       value: newToppingValue,
       label: newTopping.replace(' ', '\n'),

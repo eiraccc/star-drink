@@ -1,8 +1,12 @@
 import { useState, useEffect, useMemo } from "react"
+import { useNavigate } from 'react-router-dom';
+
 import { mockDrinkReviews } from "../data/mockDrinkReviews"
 import { drinkReviewType } from "../types/drinkReview";
+import { sugarOptions, iceOptions, OptionType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
-import { useNavigate } from 'react-router-dom';
+import MultiSelect from "../component/MultiSelect";
+
 import { RxCaretSort } from "react-icons/rx";
 import { RiArrowDownSLine, RiArrowUpSLine, RiSearchLine, RiTimeLine } from "react-icons/ri";
 import { FaRegStar } from "react-icons/fa";
@@ -10,7 +14,9 @@ import { FaRegStar } from "react-icons/fa";
 const DrinkList = () => {
   const [reviews, setReviews] = useState<drinkReviewType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-
+  const [selectedIce, setSelectedIce] = useState<OptionType[]>(iceOptions);
+  const [selectedSugar, setSelectedSugar] = useState<OptionType[]>(sugarOptions);
+  
   type SortKey = 'rating' | 'postTime';;
   type SortOrder = 'desc' | 'asc';
   type SortType = {
@@ -20,7 +26,7 @@ const DrinkList = () => {
   const [sort, setSort] = useState<SortType>({
     key: 'rating',
     order: 'desc'
-  })
+  });
 
   const toggleSort = (key:SortKey) => {
     setSort(preSort => {
@@ -30,7 +36,7 @@ const DrinkList = () => {
         return {key, order: 'desc'}
       }
     })
-  }
+  };
 
   const navigate = useNavigate();
   const goToDrinkDetail = (id: number) => {
@@ -48,8 +54,11 @@ const DrinkList = () => {
   }, []);
 
   const sortReviews = useMemo(() => {
-    return [...reviews].filter(n => {
-      return n.drinkName.toLowerCase().includes(searchValue.toLowerCase());
+    return [...reviews].filter(review => {
+      const ifSearchMatch = review.drinkName.toLowerCase().includes(searchValue.toLowerCase());
+      const ifIceMatch = selectedIce.map(n => n.value).includes(review.ice);
+      const ifSugarMatch = selectedSugar.map(n => n.value).includes(review.sugar);
+      return ifSearchMatch && ifIceMatch && ifSugarMatch;
     }).sort((a, b) => {
       if(sort.key === 'rating') {
         return sort.order === 'desc' ? b.rating - a.rating : a.rating - b.rating;
@@ -59,7 +68,7 @@ const DrinkList = () => {
         : a.createdAt.localeCompare(b.createdAt);
       }
     })
-  }, [reviews, sort, searchValue]);
+  }, [reviews, sort, searchValue, selectedIce, selectedSugar]);
 
   return (
     <section>
@@ -75,6 +84,32 @@ const DrinkList = () => {
               placeholder="Search drinks..."
               className="flex-1 bg-transparent text-sm text-primary placeholder-surface outline-none"
             />
+          </div>
+          {/* filter */}
+          <div className="flex flex-col sm:flex-row items-center">
+            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
+              <MultiSelect
+                options={iceOptions}
+                selected={selectedIce}
+                setSelected={setSelectedIce}
+                placeholder="Select ice levels"
+              />
+            </div>
+            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
+              <MultiSelect
+                options={sugarOptions}
+                selected={selectedSugar}
+                setSelected={setSelectedSugar}
+                placeholder="Select sugar levels"
+              />
+            </div>
+            <p
+              onClick={() => {
+                setSelectedIce([]);
+                setSelectedSugar([]);
+              }}
+              className="underline cursor-pointer ml-0 sm:ml-2 mt-2 sm:mt-0"
+            >Clear Filters</p>
           </div>
           {/* sort */}
           <div className="flex pl-2">

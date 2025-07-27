@@ -11,22 +11,31 @@ export const sugarLabelMap: Record<number, string> = {
     100: 'Regular Sugar',
   };
   
-  export const iceLabelMap: Record<number, string> = {
-    [-1]: 'Hot 🔥',
-    0: 'No Ice',
-    30: 'Light Ice',
-    70: 'Less Ice',
-    100: 'Regular Ice',
-  };
+export const iceLabelMap: Record<number, string> = {
+  [-1]: 'Hot 🔥',
+  0: 'No Ice',
+  30: 'Light Ice',
+  70: 'Less Ice',
+  100: 'Regular Ice',
+};
 
-export const sugarOptions = sugerLevels.map((level, index) => ({
+export type OptionType = {
+    value: number,
+    label: string,
+    opacity: number,
+    type: 'sugar' | 'ice'
+}
+
+export const sugarOptions:OptionType[] = sugerLevels.map((level, index) => ({
     value: level,
     label: sugarLabelMap[level].replace(' ', '\n'),
-    opacity: (index + 1) * 20
+    opacity: (index + 1) * 20,
+    type: 'sugar'
 }));
 
-export const iceOptions = iceLevels.map((level, index) => ({
+export const iceOptions:OptionType[] = iceLevels.map((level, index) => ({
     value: level,
     label: iceLabelMap[level].replace(' ', '\n'),
-    opacity: (index + 1) * 20
+    opacity: (index + 1) * 20,
+    type: 'ice'
 }));

@@ -175,13 +175,14 @@ const DrinkAdd = () => {
           </div>
 
           <div className="mb-2">
-            <label htmlFor="toppings">Toppings:</label>
+            <label htmlFor="toppings" className='mb-1 block'>Toppings:</label>
             <MultiSelect<ToppingLabelType>
               options={showToppingOptions}
               selected={toppingSelected}
               setSelected={setToppingSelected}
               placeholder='Select toppings'
               maxToShow={10}
+              borderColor='primary'
               creatable={true}
               onCreateOption={(inputValue) => addNewTopping(inputValue)}
             />

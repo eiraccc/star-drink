@@ -10,6 +10,7 @@ type MultiSelectProps<T extends OptionType> = {
   setSelected: (val: T[]) => void
   placeholder?: string
   maxToShow?: number
+  borderColor?: string
   creatable?: boolean
   onCreateOption?: (input: string) => void
 }
@@ -20,12 +21,51 @@ const MultiSelect = <T extends OptionType>({
   setSelected,
   placeholder = 'Select options',
   maxToShow = 2,
+  borderColor = 'surface',
   creatable = false,
   onCreateOption,
 }: MultiSelectProps<T>) => {
   const WrappedMultiValue = (props: any) => <MultiValue {...props} maxToShow={maxToShow} />;
 
   const customStyles = {
+    // inout wrap before focus
+    control: (provided: any, state: any) => ({
+      ...provided,
+      backgroundColor: 'var(--color-background)',
+      borderColor: state.isFocused ? 'var(--color-primary)' : `var(--color-${borderColor})`,
+      borderWidth: '2px',
+      borderRadius: '10px',
+      boxShadow: 'none',
+      '&:hover': {
+        borderColor: 'var(--color-primary)'
+      }
+    }),
+    // down icon
+    dropdownIndicator: (provided: any, state: any) => ({
+      ...provided,
+      color: 'var(--color-primary)',
+      '&:hover': {
+        color: 'var(--color-secondary)'
+      }
+    }),
+    // divider
+    indicatorSeparator: (provided:any) => ({
+      ...provided,
+      backgroundColor: 'var(--color-surface)',
+      width: 2,
+    }),
+    // clear icon
+    clearIndicator: (provided: any, state: any) => ({
+      ...provided,
+      color: 'var(--color-primary)',
+      '&:hover': {
+        color: 'var(--color-secondary)'
+      }
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: 'var(--color-surface)'
+    }),
     // option
     option: (
       base: any,

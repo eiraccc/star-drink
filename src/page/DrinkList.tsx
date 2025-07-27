@@ -77,7 +77,7 @@ const DrinkList = () => {
       <div className="p-4 sm:p-6 lg:p-8">
         <div className="flex flex-col gap-4 p-3 mb-3">
           {/* input */}
-          <div className="flex items-center gap-2 border-2 border-surface rounded-full px-4 py-2 w-full">
+          <div className="flex items-center gap-2 border-2 border-surface focus-within:border-primary rounded-full px-4 py-2 w-full">
             <RiSearchLine className="text-text font-bold" />
             <input
               value={searchValue}

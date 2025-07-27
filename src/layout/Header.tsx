@@ -43,7 +43,7 @@ const Header = () => {
             </div>
             {location.pathname !== '/drink/add' && <Link
                 to="/drink/add"
-                className="sm:hidden fixed bottom-9 right-4 w-10 h-10 rounded-full bg-highlight text-white flex items-center justify-center shadow-lg hover:bg-primary/90"
+                className="sm:hidden fixed bottom-9 right-4 w-10 h-10 rounded-full bg-highlight text-white flex items-center justify-center shadow-lg hover:bg-primary/90 z-[9999]"
             >
                 <FaPlus />
             </Link>}

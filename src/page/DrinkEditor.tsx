@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import StarRating from "../component/StarRating"
-import { drinkReviewAddForm, drinkReviewType, IceLevel, SugarLevel, ToppingType } from "../types/drinkReview"
-import { sugarOptions, iceOptions, toppingOptions, OptionType, ToppingLabelType } from '../constants/drink'
+import { drinkReviewAddForm, drinkReviewType, IceLevel, SugarLevel } from "../types/drinkReview"
+import { sugarOptions, iceOptions, toppingOptions, ToppingLabelType } from '../constants/drink'
 import { formatInTimeZone } from 'date-fns-tz';
 import { useNavigate, useParams } from 'react-router-dom';
 import MultiSelect from '../component/MultiSelect';
+import StepSelector from '../component/StepSelector';
 
 const DrinkAdd = () => {
   const { drinkId } = useParams<{ drinkId: string }>();
@@ -103,7 +104,7 @@ const DrinkAdd = () => {
 
   return (
     <section className='flex justify-center'>
-        <div className='w-full md:max-w-[400px]'>
+        <div className='w-full md:max-w-[500px]'>
           <div className="mb-2">
             <label
               htmlFor="drinkName"
@@ -112,7 +113,7 @@ const DrinkAdd = () => {
             <input
               type="text"
               id="drinkName"
-              className='w-full md:max-w-[400px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
+              className='w-full md:max-w-[500px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
               value={ drinkData.drinkName }
               onChange={(e) => setDrinkData({...drinkData, drinkName: e.target.value})}
               required
@@ -126,7 +127,7 @@ const DrinkAdd = () => {
             <input
               type="text"
               id="storeName"
-              className='w-full md:max-w-[400px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
+              className='w-full md:max-w-[500px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
               value={drinkData.storeName}
               onChange={(e) => setDrinkData({...drinkData, storeName: e.target.value})}
               required
@@ -147,68 +148,30 @@ const DrinkAdd = () => {
               htmlFor="ice"
               className="mb-1"
             >Ice:</label>
-            <div className="relative flex items-center justify-between mt-2 px-2 pb-10">
-              {iceOptions.map((option, index) => {
-                const isSelected = drinkData.ice === option.value;
-                return (
-                  <div
-                    key={option.value}
-                    className="relative z-10 flex flex-col items-center cursor-pointer"
-                    onClick={() => setDrinkData({...drinkData, ice: option.value as IceLevel})}
-                  >
-                    {/* dot */}
-                    <div
-                      className={`w-5 h-5 rounded-full border-2 transition-colors 
-                        ${isSelected ? "bg-secondary-ice border-secondary-ice" : "bg-background border-primary-ice"}
-                      `}
-                    />
-                    {/* label */}
-                    <span className="absolute top-7 w-12 text-[12px] text-center text-text-ice whitespace-pre-line leading-tight">
-                      { option.label }
-                    </span>
-
-                    {/* line */}
-                    {index !== iceOptions.length - 1  && (
-                      <div className="absolute top-2 left-5 w-[72px] h-1 bg-primary-ice pointer-events-none" />
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+            <StepSelector
+              options={iceOptions}
+              selectedValue={drinkData.ice}
+              onChange={(val) => setDrinkData({ ...drinkData, ice: val as IceLevel })}
+              activeColorClass="bg-secondary-ice border-secondary-ice"
+              baseColorClass="bg-background border-primary-ice"
+              lineColorClass="bg-primary-ice"
+              labelColorClass="text-text-ice"
+            />
           </div>
           <div className="mb-2">
             <label
               htmlFor="sugar"
               className="mb-1"
             >Sugar:</label>
-            <div className="relative flex items-center justify-between mt-2 px-2 pb-10">
-              {sugarOptions.map((option, index) => {
-                const isSelected = drinkData.sugar === option.value;
-                return (
-                  <div
-                    key={option.value}
-                    className="relative z-10 flex flex-col items-center cursor-pointer"
-                    onClick={() => setDrinkData({...drinkData, sugar: option.value as SugarLevel})}
-                  >
-                    {/* dot */}
-                    <div
-                      className={`w-5 h-5 rounded-full border-2 transition-colors 
-                        ${isSelected ? "bg-secondary-sugar border-secondary-sugar" : "bg-background border-primary-sugar"}
-                      `}
-                    />
-                    {/* label */}
-                    <span className="absolute top-7 w-12 text-[12px] text-center text-text-sugar whitespace-pre-line leading-tight">
-                      { option.label }
-                    </span>
-
-                    {/* line */}
-                    {index !== sugarOptions.length - 1  && (
-                      <div className="absolute top-2 left-5 w-[72px] h-1 bg-primary-sugar pointer-events-none" />
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+            <StepSelector
+              options={sugarOptions}
+              selectedValue={drinkData.sugar}
+              onChange={(val) => setDrinkData({ ...drinkData, sugar: val as SugarLevel })}
+              activeColorClass="bg-secondary-sugar border-secondary-sugar"
+              baseColorClass="bg-background border-primary-sugar"
+              lineColorClass="bg-primary-sugar"
+              labelColorClass="text-text-sugar"
+            />
           </div>
 
           <div className="mb-2">
@@ -231,7 +194,7 @@ const DrinkAdd = () => {
             >Comment:</label>
             <textarea
               id="comment"
-              className='w-full md:max-w-[400px] border-2 border-primary rounded-xl py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
+              className='w-full md:max-w-[500px] border-2 border-primary rounded-xl py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
               value={drinkData.comment}
               onChange={(e) => setDrinkData({...drinkData, comment: e.target.value})}
               required

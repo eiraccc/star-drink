@@ -1,5 +1,6 @@
 import { OptionType } from '../constants/drink'
 import Select, { components } from 'react-select';
+import { tagColorMap } from '../constants/drink';
 
 type MultiSelectProps = {
   options: OptionType[];
@@ -15,7 +16,7 @@ const MultiSelectDropdown = ({
   setSelected,
   placeholder = 'Select options',
   maxToShow = 2
-}:MultiSelectProps ) => {
+}: MultiSelectProps) => {
     const MultiValue = (props: any) => {
         const { index, getValue, data } = props;
         const selectedValues = getValue();
@@ -50,37 +51,28 @@ const MultiSelectDropdown = ({
     
       const customStyles = {
         // option
-        option: (base: any, { data, isFocused, isSelected }: any) => {
-          let bgColor = 'transparent';
-          if (isFocused) {
-            // 滑鼠hover時底色，可以用淡色或稍微調整透明度
-            if (data.type === 'sugar') {
-              bgColor = `rgba(216, 167, 177, ${data.opacity / 100})`;
-            } else if (data.type === 'ice') {
-              bgColor = `rgba(168, 183, 199, ${data.opacity / 100})`;
-            }
-          }
+        option: (base: any, { data, isFocused, isSelected }: {
+          data: OptionType,
+          isFocused: boolean,
+          isSelected: boolean
+        }) => {
+          const type = data.type;
+          const bgColor = isFocused && type ? tagColorMap[type]?.bg(data.opacity / 100) : 'transparent';
+          const textColor = type ? tagColorMap[type]?.text : 'inherit';
         
           return {
             ...base,
             backgroundColor: bgColor,
-            color: data.type === 'sugar' ? 'var(--color-text-sugar)' : 'var(--color-text-ice)',
+            color: textColor,
             cursor: 'pointer',
             fontWeight: isSelected ? 'bold' : 'normal',
           };
         },
         // selected item tag
         multiValue: (base: any, { data }: { data: OptionType }) => {
-          let bgColor = '#000';
-          let textColor = '#333';
-      
-          if (data.type === 'sugar') {
-            bgColor = `rgb(var(--color-primary-sugar-rgb) / ${data.opacity / 100})`;
-            textColor = 'var(--color-text-sugar)';
-          } else if (data.type === 'ice') {
-            bgColor = `rgb(var(--color-primary-ice-rgb) / ${data.opacity / 100})`;
-            textColor = 'var(--color-text-ice)';
-          }
+          const type = data.type;
+          const bgColor = type ? tagColorMap[type]?.bg(data.opacity / 100) : '#eee';
+          const textColor = type ? tagColorMap[type]?.text : '#333';
       
           return {
             ...base,
@@ -100,7 +92,7 @@ const MultiSelectDropdown = ({
         multiValueRemove: (base: any) => ({
           ...base,
           ':hover': {
-            color: '#9C7B5F',
+            color: 'var(--color-secondary)',
           },
         }),
       };

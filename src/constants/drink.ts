@@ -19,11 +19,13 @@ export const iceLabelMap: Record<number, string> = {
   100: 'Regular Ice',
 };
 
+type TagType = 'sugar' | 'ice';
+
 export type OptionType = {
     value: number,
     label: string,
     opacity: number,
-    type: 'sugar' | 'ice'
+    type: TagType
 }
 
 export const sugarOptions:OptionType[] = sugerLevels.map((level, index) => ({
@@ -39,3 +41,19 @@ export const iceOptions:OptionType[] = iceLevels.map((level, index) => ({
     opacity: (index + 1) * 20,
     type: 'ice'
 }));
+
+type TagColorConfig = {
+  text: string;
+  bg: (opacity?: number) => string;
+};
+
+export const tagColorMap: Record<TagType, TagColorConfig> = {
+    sugar: {
+      text: 'var(--color-text-sugar)',
+      bg: (opacity = 1) => `rgb(var(--color-primary-sugar-rgb) / ${opacity})`,
+    },
+    ice: {
+      text: 'var(--color-text-ice)',
+      bg: (opacity = 1) => `rgb(var(--color-primary-ice-rgb) / ${opacity})`,
+    },
+};

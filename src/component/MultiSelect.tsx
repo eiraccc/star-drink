@@ -1,8 +1,8 @@
-import {OptionType} from '../constants/drink'
-import Select, {components} from 'react-select'
+import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import {tagColorMap} from '../constants/drink'
-import {FaCheck} from 'react-icons/fa6'
+import { OptionType } from '../constants/drink'
+import { tagColorMap } from '../constants/drink'
+import { Option, MultiValue } from './MultiSelectCustom'
 
 type MultiSelectProps<T extends OptionType> = {
   options: T[]
@@ -23,43 +23,7 @@ const MultiSelect = <T extends OptionType>({
   creatable = false,
   onCreateOption,
 }: MultiSelectProps<T>) => {
-  const Option = (props: any) => {
-    return (
-      <components.Option {...props}>
-        <div className="flex justify-between items-center">
-          <span>{props.data.label}</span>
-          {props.isSelected && <FaCheck />}
-        </div>
-      </components.Option>
-    )
-  }
-  const MultiValue = (props: any) => {
-    const {index, getValue, data} = props
-    const selectedValues = getValue()
-
-    if (index < maxToShow) {
-      // 顯示前幾個選項的標籤
-      return <components.MultiValue {...props} />
-    }
-
-    if (index === maxToShow) {
-      // 超過的顯示 "+N more" 標籤
-      const moreCount = selectedValues.length - maxToShow
-      return (
-        <div
-          className="text-xs text-text-secondary ml-1 cursor-default select-none"
-          title={selectedValues
-            .slice(maxToShow)
-            .map((v: any) => v.label)
-            .join(', ')}>
-          +{moreCount} more
-        </div>
-      )
-    }
-
-    // 其他多餘的標籤不渲染
-    return null
-  }
+  const WrappedMultiValue = (props: any) => <MultiValue {...props} maxToShow={maxToShow} />;
 
   const customStyles = {
     // option
@@ -132,7 +96,7 @@ const MultiSelect = <T extends OptionType>({
       onChange={newVal => setSelected([...newVal])}
       placeholder={placeholder}
       styles={customStyles}
-      components={{MultiValue, Option}}
+      components={{MultiValue: WrappedMultiValue, Option}}
       hideSelectedOptions={false}
       closeMenuOnSelect={false}
       className="w-full text-m"

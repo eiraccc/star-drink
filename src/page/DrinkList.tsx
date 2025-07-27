@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { mockDrinkReviews } from "../data/mockDrinkReviews"
 import { drinkReviewType } from "../types/drinkReview";
-import { sugarOptions, iceOptions, OptionType } from '../constants/drink'
+import { sugarOptions, iceOptions, SugarIceLabelType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
 import MultiSelect from "../component/MultiSelect";
 
@@ -14,8 +14,8 @@ import { FaRegStar } from "react-icons/fa";
 const DrinkList = () => {
   const [reviews, setReviews] = useState<drinkReviewType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [selectedIce, setSelectedIce] = useState<OptionType[]>(iceOptions);
-  const [selectedSugar, setSelectedSugar] = useState<OptionType[]>(sugarOptions);
+  const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
+  const [selectedSugar, setSelectedSugar] = useState<SugarIceLabelType[]>(sugarOptions);
   
   type SortKey = 'rating' | 'postTime';;
   type SortOrder = 'desc' | 'asc';
@@ -88,7 +88,7 @@ const DrinkList = () => {
           {/* filter */}
           <div className="flex flex-col sm:flex-row items-center">
             <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
-              <MultiSelect
+              <MultiSelect<SugarIceLabelType>
                 options={iceOptions}
                 selected={selectedIce}
                 setSelected={setSelectedIce}
@@ -96,7 +96,7 @@ const DrinkList = () => {
               />
             </div>
             <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
-              <MultiSelect
+              <MultiSelect<SugarIceLabelType>
                 options={sugarOptions}
                 selected={selectedSugar}
                 setSelected={setSelectedSugar}

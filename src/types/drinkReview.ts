@@ -1,7 +1,7 @@
 export type SugarLevel = 0 | 25 | 50 | 75 | 100;
 export type IceLevel = -1 | 0 | 30 | 70 | 100;
 
-export type Topping = 
+export type ToppingType = 
   | 'Pearls' 
   | 'Coconut Jelly' 
   | 'Pudding' 
@@ -17,7 +17,7 @@ export interface drinkReviewType {
     rating: DrinkRatingType,
     sugar: SugarLevel,
     ice: IceLevel,
-    toppings: Topping[],
+    toppings: ToppingType[],
     comment: string,
     userId: string,
     createdAt: string,

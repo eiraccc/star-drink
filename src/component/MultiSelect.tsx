@@ -1,28 +1,33 @@
 import { OptionType } from '../constants/drink'
 import Select, { components } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import { tagColorMap } from '../constants/drink';
 
-type MultiSelectProps = {
-  options: OptionType[];
-  selected: OptionType[];
-  setSelected: (val: OptionType[]) => void;
+type MultiSelectProps<T extends OptionType> = {
+  options: T[];
+  selected: T[];
+  setSelected: (val: T[]) => void;
   placeholder?: string;
   maxToShow?: number;
+  creatable?: boolean;
+  onCreateOption?: (input: string) => void;
 };
 
-const MultiSelectDropdown = ({
+const MultiSelect = <T extends OptionType>({
   options,
   selected,
   setSelected,
   placeholder = 'Select options',
-  maxToShow = 2
-}: MultiSelectProps) => {
-    const MultiValue = (props: any) => {
+  maxToShow = 2,
+  creatable = false,
+  onCreateOption
+}: MultiSelectProps<T>) => {
+      const MultiValue = (props: any) => {
         const { index, getValue, data } = props;
         const selectedValues = getValue();
     
         if (index < maxToShow) {
-          // 顯示前兩個選項的標籤
+          // 顯示前幾個選項的標籤
           return <components.MultiValue {...props} />;
         }
     
@@ -56,13 +61,15 @@ const MultiSelectDropdown = ({
           isFocused: boolean,
           isSelected: boolean
         }) => {
-          const type = data.type;
-          const bgColor = isFocused && type ? tagColorMap[type]?.bg(data.opacity / 100) : 'transparent';
-          const textColor = type ? tagColorMap[type]?.text : 'inherit';
-        
+          const tagColor = tagColorMap[data.type];
+          const bgColor = tagColor && data.opacity !== undefined 
+              ? tagColor.bg(data.opacity / 100) 
+              : 'var(--color-surface)';
+          const textColor = tagColor ? tagColor.text : 'var(--color-text)';
+          
           return {
             ...base,
-            backgroundColor: bgColor,
+            backgroundColor: isFocused ? bgColor : 'transparent',
             color: textColor,
             cursor: 'pointer',
             fontWeight: isSelected ? 'bold' : 'normal',
@@ -70,10 +77,12 @@ const MultiSelectDropdown = ({
         },
         // selected item tag
         multiValue: (base: any, { data }: { data: OptionType }) => {
-          const type = data.type;
-          const bgColor = type ? tagColorMap[type]?.bg(data.opacity / 100) : '#eee';
-          const textColor = type ? tagColorMap[type]?.text : '#333';
-      
+          const tagColor = tagColorMap[data.type];
+          const bgColor = tagColor && data.opacity !== undefined 
+              ? tagColor.bg(data.opacity / 100) 
+              : 'var(--color-surface)';
+          const textColor = tagColor ? tagColor.text : 'var(--color-text)';
+
           return {
             ...base,
             backgroundColor: bgColor,
@@ -97,20 +106,23 @@ const MultiSelectDropdown = ({
         }),
       };
 
+      const SelectComponent = creatable ? CreatableSelect : Select;
+
     return (
-        <Select
+        <SelectComponent
             isMulti
             options={options}
             value={selected}
-            onChange={(newVal) => setSelected(newVal as OptionType[])}
+            onChange={(newVal) => setSelected([...newVal])}
             placeholder={placeholder}
             styles={customStyles}
             components={{ MultiValue }}
             hideSelectedOptions={false}
             closeMenuOnSelect={false}
             className="w-full text-m"
+            onCreateOption={creatable ? onCreateOption : undefined}
         />
     )
 }
 
-export default MultiSelectDropdown
+export default MultiSelect

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import StarRating from "../component/StarRating"
-import { drinkReviewAddForm, Topping, drinkReviewType } from "../types/drinkReview"
-import { sugarOptions, iceOptions } from '../constants/drink'
+import { drinkReviewAddForm, drinkReviewType, IceLevel, SugarLevel, ToppingType } from "../types/drinkReview"
+import { sugarOptions, iceOptions, toppingOptions, OptionType, ToppingLabelType } from '../constants/drink'
 import { formatInTimeZone } from 'date-fns-tz';
 import { useNavigate, useParams } from 'react-router-dom';
+import MultiSelect from '../component/MultiSelect';
 
 const DrinkAdd = () => {
   const { drinkId } = useParams<{ drinkId: string }>();
@@ -20,6 +21,8 @@ const DrinkAdd = () => {
   }
   const [drinkData, setDrinkData] = useState<drinkReviewAddForm>(initDrinkReview);
   const [drinkList, setDrinkList] = useState<drinkReviewType[]>([]);
+  const [showToppingOptions, setShowToppingOptions] = useState<ToppingLabelType[]>(toppingOptions);
+  const [toppingSelected, setToppingSelected] = useState<ToppingLabelType[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,9 +34,35 @@ const DrinkAdd = () => {
   useEffect(() => {
     if (isEdit) {
       const currentDrink = drinkList.find(n => n.id === Number(drinkId));
-      currentDrink && setDrinkData(currentDrink);
+      if(currentDrink) {
+        setDrinkData(currentDrink);
+        
+        currentDrink.toppings.forEach(topping => {
+          addNewTopping(topping);
+        });
+      };
+      
     }
   }, [drinkId, drinkList]);
+
+  useEffect(() => {
+    setDrinkData({...drinkData, toppings: toppingSelected.map(n => n.value)})
+  }, [toppingSelected])
+
+  const addNewTopping = useCallback((newTopping:string)  => {
+    const newToppingValue = newTopping.trim().toLowerCase();
+    const newOption:ToppingLabelType = {
+      value: newToppingValue,
+      label: newTopping.replace(' ', '\n'),
+      type: 'topping'
+    };
+
+    const alreadyExist = showToppingOptions.some(n => n.value === newToppingValue);
+    if(!alreadyExist) setShowToppingOptions(prev => [...prev, newOption]);
+
+    const alreadySelected = toppingSelected.some(n => n.value === newToppingValue);
+    if(!alreadySelected) setToppingSelected(prev => [...prev, newOption]);
+  }, [toppingSelected, setToppingSelected, setShowToppingOptions])
 
   const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -125,7 +154,7 @@ const DrinkAdd = () => {
                   <div
                     key={option.value}
                     className="relative z-10 flex flex-col items-center cursor-pointer"
-                    onClick={() => setDrinkData({...drinkData, ice: option.value})}
+                    onClick={() => setDrinkData({...drinkData, ice: option.value as IceLevel})}
                   >
                     {/* dot */}
                     <div
@@ -159,7 +188,7 @@ const DrinkAdd = () => {
                   <div
                     key={option.value}
                     className="relative z-10 flex flex-col items-center cursor-pointer"
-                    onClick={() => setDrinkData({...drinkData, sugar: option.value})}
+                    onClick={() => setDrinkData({...drinkData, sugar: option.value as SugarLevel})}
                   >
                     {/* dot */}
                     <div
@@ -180,6 +209,19 @@ const DrinkAdd = () => {
                 )
               })}
             </div>
+          </div>
+
+          <div className="mb-2">
+            <label htmlFor="toppings">Toppings:</label>
+            <MultiSelect<ToppingLabelType>
+              options={showToppingOptions}
+              selected={toppingSelected}
+              setSelected={setToppingSelected}
+              placeholder='Select toppings'
+              maxToShow={10}
+              creatable={true}
+              onCreateOption={(inputValue) => addNewTopping(inputValue)}
+            />
           </div>
 
           <div className="mb-2">

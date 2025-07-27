@@ -1,9 +1,9 @@
-import { SugarLevel, IceLevel } from '../types/drinkReview';
+import { SugarLevel, IceLevel, ToppingType } from '../types/drinkReview';
 
-export const sugerLevels: SugarLevel[] = [0, 25, 50, 75, 100];
+export const sugarLevels: SugarLevel[] = [0, 25, 50, 75, 100];
 export const iceLevels: IceLevel[] = [-1, 0, 30, 70, 100];
 
-export const sugarLabelMap: Record<number, string> = {
+export const sugarLabelMap: Record<SugarLevel, string> = {
     0: 'No Sugar',
     25: 'Light Sugar',
     50: 'Half Sugar',
@@ -11,7 +11,7 @@ export const sugarLabelMap: Record<number, string> = {
     100: 'Regular Sugar',
   };
   
-export const iceLabelMap: Record<number, string> = {
+export const iceLabelMap: Record<IceLevel, string> = {
   [-1]: 'Hot 🔥',
   0: 'No Ice',
   30: 'Light Ice',
@@ -19,25 +19,39 @@ export const iceLabelMap: Record<number, string> = {
   100: 'Regular Ice',
 };
 
-type TagType = 'sugar' | 'ice';
+export type SugarIceLabelType = 
+    | {
+        type: 'ice';
+        value: IceLevel;
+        label: string;
+        opacity?: number;
+      }
+    | {
+        type: 'sugar';
+        value: SugarLevel;
+        label: string;
+        opacity?: number;
+      };
 
-export type OptionType = {
-    value: number,
+export type ToppingLabelType = {
+    value: string,
     label: string,
-    opacity: number,
-    type: TagType
+    opacity?: number,
+    type: 'topping'
 }
 
-export const sugarOptions:OptionType[] = sugerLevels.map((level, index) => ({
-    value: level,
-    label: sugarLabelMap[level].replace(' ', '\n'),
+export type OptionType = SugarIceLabelType | ToppingLabelType;
+
+export const sugarOptions:SugarIceLabelType[] = sugarLevels.map((level, index) => ({
+    value: level as SugarLevel,
+    label: sugarLabelMap[level].replace(/ /g, '\n'),
     opacity: (index + 1) * 20,
     type: 'sugar'
 }));
 
-export const iceOptions:OptionType[] = iceLevels.map((level, index) => ({
-    value: level,
-    label: iceLabelMap[level].replace(' ', '\n'),
+export const iceOptions:SugarIceLabelType[] = iceLevels.map((level, index) => ({
+    value: level as IceLevel,
+    label: iceLabelMap[level].replace(/ /g, '\n'),
     opacity: (index + 1) * 20,
     type: 'ice'
 }));
@@ -47,13 +61,36 @@ type TagColorConfig = {
   bg: (opacity?: number) => string;
 };
 
+type TagType = 'sugar' | 'ice' | 'topping';
+
 export const tagColorMap: Record<TagType, TagColorConfig> = {
     sugar: {
-      text: 'var(--color-text-sugar)',
-      bg: (opacity = 1) => `rgb(var(--color-primary-sugar-rgb) / ${opacity})`,
+        text: 'var(--color-text-sugar)',
+        bg: (opacity = 1) => `rgb(var(--color-primary-sugar-rgb) / ${opacity})`,
     },
     ice: {
-      text: 'var(--color-text-ice)',
-      bg: (opacity = 1) => `rgb(var(--color-primary-ice-rgb) / ${opacity})`,
+        text: 'var(--color-text-ice)',
+        bg: (opacity = 1) => `rgb(var(--color-primary-ice-rgb) / ${opacity})`,
     },
+    topping: {
+        text: 'var(--color-text)',
+        bg: () => 'var(--color-surface)'
+    }
 };
+
+const toppings: ToppingType[] = [
+    'Boba',
+    'Pudding',
+    'Brown Sugar Boba',
+    'Grass Jelly',
+    'Aloe Vera',
+    'Red Bean',
+    'Popping Boba'
+];
+
+export const toppingOptions:ToppingLabelType[] = toppings.map(topping => ({
+    value: topping.trim().toLowerCase(),
+    label: topping.replace(/ /g, '\n'),
+    type: 'topping'
+}));
+

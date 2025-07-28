@@ -2,29 +2,27 @@ import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import StarRating from '../component/StarRating';
 import ErrorSection from '../component/ErrorSection';
+import LoadingSection from '../component/LoadingSection';
 import { drinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { MdArrowBackIos } from "react-icons/md";
 import { RiDrinks2Fill } from "react-icons/ri";
 import { ImCross } from "react-icons/im";
+import { useDrinkReview } from "../context/DrinkReviewContext";
 
 
 const DrinkDetail = () => {
   const { drinkId } = useParams<{drinkId: string}>();
   const navigate = useNavigate();
   
-  const [drinkList, setDrinkList] = useState<drinkReviewType[]>([]);
   const [drinkData, setDrinkData] = useState<drinkReviewType | null>(null);
+  const { reviews, deleteReview, isLoading } = useDrinkReview();
 
   useEffect(() => {
     // get data
-    const savedData = localStorage.getItem('drink-reviews');
-    const savedList:drinkReviewType[] = savedData ? JSON.parse(savedData) : [];
-    setDrinkList(savedList);
-
-    const drinkData = savedList.find(n => n.id === Number(drinkId)) || null;
+    const drinkData = reviews.find(n => n.id === Number(drinkId)) || null;
     setDrinkData(drinkData);
-  }, []);
+  }, [reviews]);
 
   const iceOpacity:number = drinkData ? (iceOptions.find(n => n.value === drinkData.ice)?.opacity || 0) : 0;
   const sugarOpacity:number = drinkData ? (sugarOptions.find(n => n.value === drinkData.sugar)?.opacity || 0) : 0;
@@ -33,10 +31,8 @@ const DrinkDetail = () => {
     navigate(`/drink/${drinkId}/edit`);
   };
 
-  const handleDelete = () => {
-    const newList = drinkList.filter(n => n.id !== Number(drinkId));
-    setDrinkList(newList);
-    localStorage.setItem('drink-reviews', JSON.stringify(newList));
+  const handleDelete = async () => {
+    await deleteReview(Number(drinkId));
     navigate('/');
   };
 
@@ -47,8 +43,9 @@ const DrinkDetail = () => {
           <MdArrowBackIos />Back home
         </Link>
 
+
         {
-          drinkData ? (
+          isLoading ? <LoadingSection /> : drinkData ? (
             <div className='p-4'>
               {/* <RiDrinks2Fill size={30} className="text-primary" /> */}
               <h2 className="text-text text-lg font-bold flex items-center">

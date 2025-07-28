@@ -1,16 +1,14 @@
 import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from 'react-router-dom';
-import { mockDrinkReviews } from "../data/mockDrinkReviews"
-import { drinkReviewType } from "../types/drinkReview";
 import { SortKey, SortType } from "../types/sorting";
 import { sugarOptions, iceOptions, SugarIceLabelType, toppingOptions, ToppingLabelType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
 import ErrorSection from "../component/ErrorSection";
 import FilterBar from "../component/FilterBar";
+import LoadingSection from "../component/LoadingSection";
+import { useDrinkReview } from "../context/DrinkReviewContext";
 
 const DrinkList = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [reviews, setReviews] = useState<drinkReviewType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
   const [selectedSugar, setSelectedSugar] = useState<SugarIceLabelType[]>(sugarOptions);
@@ -19,6 +17,8 @@ const DrinkList = () => {
     key: 'rating',
     order: 'desc'
   });
+
+  const { reviews, isLoading, fetchReviews, loadDemoReviews } = useDrinkReview();
 
   const toggleSort = (key:SortKey) => {
     setSort(preSort => {
@@ -34,21 +34,6 @@ const DrinkList = () => {
   const goToDrinkDetail = (id: number) => {
     navigate(`/drink/${id}`);
   };
-
-  // init data
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const dataFromStorage = localStorage.getItem('drink-reviews');
-      if(dataFromStorage) setReviews(JSON.parse(dataFromStorage));
-      setIsLoading(false);
-    }, 2000);
-  }, []);
-
-  const loadDemoData = () => {
-    localStorage.setItem('drink-reviews', JSON.stringify(mockDrinkReviews));
-    setReviews(mockDrinkReviews);
-  }
 
   const sortReviews = useMemo(() => {
     return [...reviews].filter(review => {
@@ -84,11 +69,7 @@ const DrinkList = () => {
           toggleSort={toggleSort}
         />
 
-        {isLoading && (
-          <div className="flex justify-center items-center py-8">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"></div>
-          </div>
-        )}
+        {isLoading && <LoadingSection />}
         
         {sortReviews.length > 0 && !isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -111,7 +92,7 @@ const DrinkList = () => {
             <ErrorSection
               errorMsg={`Oops! No drinks here yet. Let's add some delicious ones!`}
               btnText='Load Demo Data'
-              btnAction={loadDemoData}
+              btnAction={loadDemoReviews}
             />
           )
         )}

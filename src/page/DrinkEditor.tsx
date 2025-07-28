@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom';
 import StarRating from "../component/StarRating"
-import { drinkReviewAddForm, drinkReviewType, IceLevel, SugarLevel } from "../types/drinkReview"
+import { drinkReviewAddForm, IceLevel, SugarLevel } from "../types/drinkReview"
 import { sugarOptions, iceOptions, toppingOptions, ToppingLabelType } from '../constants/drink'
-import { formatInTimeZone } from 'date-fns-tz';
 import { MdArrowBackIos } from "react-icons/md";
 import { useNavigate, useParams } from 'react-router-dom';
 import MultiSelect from '../component/MultiSelect';
 import StepSelector from '../component/StepSelector';
+import LoadingSection from '../component/LoadingSection';
+import { useDrinkReview } from "../context/DrinkReviewContext";
 
-const DrinkAdd = () => {
+const DrinkEditor = () => {
   const { drinkId } = useParams<{ drinkId: string }>();
   const isEdit = Boolean(drinkId);
+  const { reviews, addReview, editReview, isLoading } = useDrinkReview();
 
   const initDrinkReview: drinkReviewAddForm = {
     drinkName: '',
@@ -23,34 +25,28 @@ const DrinkAdd = () => {
     comment: ''
   }
   const [drinkData, setDrinkData] = useState<drinkReviewAddForm>(initDrinkReview);
-  const [drinkList, setDrinkList] = useState<drinkReviewType[]>([]);
   const [showToppingOptions, setShowToppingOptions] = useState<ToppingLabelType[]>(toppingOptions);
   const [toppingSelected, setToppingSelected] = useState<ToppingLabelType[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedData = localStorage.getItem('drink-reviews');
-    const list: drinkReviewType[] = savedData ? JSON.parse(savedData) : [];
-    setDrinkList(list);
-  }, []);
+    if (!isEdit || isLoading) return;
 
-  useEffect(() => {
-    if (isEdit) {
-      const currentDrink = drinkList.find(n => n.id === Number(drinkId));
-      if(currentDrink) {
-        setDrinkData(currentDrink);
-        
-        currentDrink.toppings.forEach(topping => {
-          addNewTopping(topping);
-        });
-      };
-      
+    const currentDrink = reviews.find(n => n.id === Number(drinkId));
+    if (currentDrink) {
+      setDrinkData(currentDrink);
+      currentDrink.toppings.forEach(topping => {
+        addNewTopping(topping);
+      });
     }
-  }, [drinkId, drinkList]);
+  }, [drinkId, reviews, isEdit, isLoading]);
 
   useEffect(() => {
-    setDrinkData({...drinkData, toppings: toppingSelected.map(n => n.value)})
-  }, [toppingSelected])
+    if (!isEdit) {
+      setDrinkData(initDrinkReview);
+      setToppingSelected([]);
+    }
+  }, [isEdit, drinkId]);
 
   const addNewTopping = useCallback((newTopping:string)  => {
     const newToppingValue = newTopping.trim().toLowerCase().replace(/\s+/g, '-');
@@ -60,49 +56,30 @@ const DrinkAdd = () => {
       type: 'topping'
     };
 
-    const alreadyExist = showToppingOptions.some(n => n.value === newToppingValue);
-    if(!alreadyExist) setShowToppingOptions(prev => [...prev, newOption]);
+    setShowToppingOptions(prev => {
+      if (!prev.some(n => n.value === newToppingValue)) {
+        return [...prev, newOption];
+      }
+      return prev;
+    });
+  
+    setToppingSelected(prev => {
+      if (!prev.some(n => n.value === newToppingValue)) {
+        return [...prev, newOption];
+      }
+      return prev;
+    });
+  }, [setToppingSelected, setShowToppingOptions])
 
-    const alreadySelected = toppingSelected.some(n => n.value === newToppingValue);
-    if(!alreadySelected) setToppingSelected(prev => [...prev, newOption]);
-  }, [toppingSelected, setToppingSelected, setShowToppingOptions])
-
-  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const finalId = Math.max(...drinkList.map(n => n.id));
-    const nowTimeUTC = formatInTimeZone(new Date(), 'UTC', "yyyy-MM-dd'T'HH:mm:ssXXX");
-    
-    const newReview = {
-      ...drinkData,
-      id: finalId + 1,
-      userId: 'testUser',
-      createdAt: nowTimeUTC,
-      updatedAt: nowTimeUTC
-    }
-    console.log('new', newReview);
-
-    const newList = [...drinkList, newReview];
-    setDrinkList(newList);
-    localStorage.setItem('drink-reviews', JSON.stringify(newList));
-
+    await addReview(drinkData);
     navigate('/');
   };
 
-  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const nowTimeUTC = formatInTimeZone(new Date(), 'UTC', "yyyy-MM-dd'T'HH:mm:ssXXX");
-    const newList = drinkList.map(item => {
-      if(item.id === Number(drinkId)) return {
-        ...item,
-        ...drinkData,
-        updatedAt: nowTimeUTC
-      };
-      return item;
-    });
-
-    setDrinkList(newList);
-    localStorage.setItem('drink-reviews', JSON.stringify(newList));
-
+    await editReview(Number(drinkId), drinkData);
     navigate(`/drink/${drinkId}`);
   };
 
@@ -232,4 +209,4 @@ const DrinkAdd = () => {
   )
 }
 
-export default DrinkAdd
+export default DrinkEditor

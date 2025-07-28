@@ -5,6 +5,9 @@ Welcome to **Star Drink**, your personal and social drink journal.
 Forget what you drank or how it tasted? Star Drink helps you record and rate every drink, from sugar and ice levels to toppings. Discover favorites through community reviews, search, and filters.
 Built with React, Vite, Tailwind CSS, and TypeScript to deliver a modern, fast, and reliable experience.
 
+## 📷 Screenshot
+![Star Drink Screenshot](public/screenshot.png)
+
 ## 🚀 Features
 
 - 🔍 Filter drinks by ice level, sugar level, and toppings

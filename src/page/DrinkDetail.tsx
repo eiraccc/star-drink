@@ -1,11 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import StarRating from '../component/StarRating';
+import ErrorSection from '../component/ErrorSection';
 import { drinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { MdArrowBackIos } from "react-icons/md";
 import { RiDrinks2Fill } from "react-icons/ri";
 import { ImCross } from "react-icons/im";
-import { useEffect, useState } from 'react';
+
 
 const DrinkDetail = () => {
   const { drinkId } = useParams<{drinkId: string}>();
@@ -91,7 +93,12 @@ const DrinkDetail = () => {
               </div>
               
             </div>
-          ) : <p>Drink not fonud</p>
+          ) : (
+            <ErrorSection
+              errorMsg='Uh-oh, no drinks here yet!'
+              btnActionHome={true}
+            />
+          )
         }
       </div>
     </section>

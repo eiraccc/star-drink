@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom';
 import StarRating from "../component/StarRating"
 import { drinkReviewAddForm, drinkReviewType, IceLevel, SugarLevel } from "../types/drinkReview"
 import { sugarOptions, iceOptions, toppingOptions, ToppingLabelType } from '../constants/drink'
 import { formatInTimeZone } from 'date-fns-tz';
+import { MdArrowBackIos } from "react-icons/md";
 import { useNavigate, useParams } from 'react-router-dom';
 import MultiSelect from '../component/MultiSelect';
 import StepSelector from '../component/StepSelector';
@@ -105,6 +107,9 @@ const DrinkAdd = () => {
   return (
     <section className='flex justify-center'>
         <div className='w-full md:max-w-[500px]'>
+          <Link to="/" className='text-secondary flex items-center mb-4'>
+            <MdArrowBackIos />Back home
+          </Link>
           <div className="mb-2">
             <label
               htmlFor="drinkName"

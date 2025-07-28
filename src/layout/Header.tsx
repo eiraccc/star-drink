@@ -23,7 +23,9 @@ const Header = () => {
                     <CupSoda size="36" />
                 </div>
             </Link>
-            <h1 className='text-primary text-xl absolute left-1/2 transform -translate-x-1/2'>Drink</h1>
+            <h1 className='text-primary text-xl absolute left-1/2 transform -translate-x-1/2'>
+                Drink
+            </h1>
             <div className='flex items-center'>
                 {location.pathname !== '/drink/add' && <Link to="/drink/add">
                     <button

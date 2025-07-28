@@ -6,12 +6,14 @@ import { drinkReviewType } from "../types/drinkReview";
 import { sugarOptions, iceOptions, SugarIceLabelType, toppingOptions, ToppingLabelType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
 import MultiSelect from "../component/MultiSelect";
+import ErrorSection from "../component/ErrorSection";
 
 import { RxCaretSort } from "react-icons/rx";
 import { RiArrowDownSLine, RiArrowUpSLine, RiSearchLine, RiTimeLine } from "react-icons/ri";
 import { FaRegStar } from "react-icons/fa";
 
 const DrinkList = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [reviews, setReviews] = useState<drinkReviewType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
@@ -44,15 +46,20 @@ const DrinkList = () => {
     navigate(`/drink/${id}`);
   };
 
+  // init data
   useEffect(() => {
-    const dataFromStorage = localStorage.getItem('drink-reviews');
-    if(dataFromStorage) {
-      setReviews(JSON.parse(dataFromStorage));
-    } else {
-      localStorage.setItem('drink-reviews', JSON.stringify(mockDrinkReviews));
-      setReviews(mockDrinkReviews);
-    }
+    setIsLoading(true);
+    setTimeout(() => {
+      const dataFromStorage = localStorage.getItem('drink-reviews');
+      if(dataFromStorage) setReviews(JSON.parse(dataFromStorage));
+      setIsLoading(false);
+    }, 2000);
   }, []);
+
+  const loadDemoData = () => {
+    localStorage.setItem('drink-reviews', JSON.stringify(mockDrinkReviews));
+    setReviews(mockDrinkReviews);
+  }
 
   const sortReviews = useMemo(() => {
     return [...reviews].filter(review => {
@@ -145,12 +152,38 @@ const DrinkList = () => {
             </button>
           </div>
         </div>
+
+        {isLoading && (
+          <div className="flex justify-center items-center py-8">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"></div>
+          </div>
+        )}
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortReviews.map((review) => (
-            <DrinkCard key={review.id} data={review} onClick={() => goToDrinkDetail(review.id)} />
-          ))}
-        </div>
+        {sortReviews.length > 0 && !isLoading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sortReviews.map((review) => (
+              <DrinkCard
+                key={review.id}
+                data={review}
+                onClick={() => goToDrinkDetail(review.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {!sortReviews.length && !isLoading &&  (
+          reviews.length > 0 ? (
+            <ErrorSection
+              errorMsg='Hmm… no drinks found. Maybe try different filters.'
+            />
+          ) : (
+            <ErrorSection
+              errorMsg={`Oops! No drinks here yet. Let's add some delicious ones!`}
+              btnText='Load Demo Data'
+              btnAction={loadDemoData}
+            />
+          )
+        )}
       </div>
     </section>
   )

@@ -6,6 +6,7 @@ import DrinkList from './page/DrinkList';
 import DrinkEditor from './page/DrinkEditor';
 import DrinkDetail from './page/DrinkDetail';
 import Footer from './layout/Footer';
+import ErrorSection from './component/ErrorSection';
 
 function App() {
 
@@ -23,11 +24,11 @@ function App() {
             <Route path="/drink/:drinkId" element={<DrinkDetail />} />
             <Route path="/drink/:drinkId/edit" element={<DrinkEditor />} />
             <Route path="*" element={
-              <section className='m-2'>
-                <h2 className='my-2'>Page not found.</h2>
-                <Link to="/">
-                  <button className='rounded-full bg-primary text-background p-2'>Back to home</button>
-                </Link>
+              <section>
+                <ErrorSection
+                  errorMsg='Uh-oh, this page took a day off!'
+                  btnActionHome={true}
+                />
               </section>
             } />
           </Route>

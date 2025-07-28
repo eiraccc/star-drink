@@ -1,16 +1,12 @@
 import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from 'react-router-dom';
-
 import { mockDrinkReviews } from "../data/mockDrinkReviews"
 import { drinkReviewType } from "../types/drinkReview";
+import { SortKey, SortType } from "../types/sorting";
 import { sugarOptions, iceOptions, SugarIceLabelType, toppingOptions, ToppingLabelType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
-import MultiSelect from "../component/MultiSelect";
 import ErrorSection from "../component/ErrorSection";
-
-import { RxCaretSort } from "react-icons/rx";
-import { RiArrowDownSLine, RiArrowUpSLine, RiSearchLine, RiTimeLine } from "react-icons/ri";
-import { FaRegStar } from "react-icons/fa";
+import FilterBar from "../component/FilterBar";
 
 const DrinkList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -19,13 +15,6 @@ const DrinkList = () => {
   const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
   const [selectedSugar, setSelectedSugar] = useState<SugarIceLabelType[]>(sugarOptions);
   const [selectedTopping, setSelectedTopping] = useState<ToppingLabelType[]>([])
-  
-  type SortKey = 'rating' | 'postTime';;
-  type SortOrder = 'desc' | 'asc';
-  type SortType = {
-    key: SortKey,
-    order: SortOrder
-  };
   const [sort, setSort] = useState<SortType>({
     key: 'rating',
     order: 'desc'
@@ -33,11 +22,11 @@ const DrinkList = () => {
 
   const toggleSort = (key:SortKey) => {
     setSort(preSort => {
-      if(key === preSort.key) {
+    if(key === preSort.key) {
         return {key, order: preSort.order === 'desc' ? 'asc' : 'desc'}
-      } else {
+    } else {
         return {key, order: 'desc'}
-      }
+    }
     })
   };
 
@@ -82,76 +71,18 @@ const DrinkList = () => {
   return (
     <section>
       <div className="p-4 sm:p-6 lg:p-8">
-        <div className="flex flex-col gap-4 p-3 mb-3">
-          {/* input */}
-          <div className="flex items-center gap-2 border-2 border-surface focus-within:border-primary rounded-full px-4 py-2 w-full">
-            <RiSearchLine className="text-text font-bold" />
-            <input
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              type="text"
-              placeholder="Search drinks..."
-              className="flex-1 bg-transparent text-sm text-primary placeholder-surface outline-none"
-            />
-          </div>
-          {/* filter */}
-          <div className="flex flex-col sm:flex-row items-start">
-            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
-              <MultiSelect<SugarIceLabelType>
-                options={iceOptions}
-                selected={selectedIce}
-                setSelected={setSelectedIce}
-                placeholder="Ice levels"
-              />
-            </div>
-            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
-              <MultiSelect<SugarIceLabelType>
-                options={sugarOptions}
-                selected={selectedSugar}
-                setSelected={setSelectedSugar}
-                placeholder="Sugar levels"
-              />
-            </div>
-            <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
-              <MultiSelect<ToppingLabelType>
-                options={toppingOptions}
-                selected={selectedTopping}
-                setSelected={setSelectedTopping}
-                placeholder="Toppings (any)"
-              />
-            </div>
-            {/* <p
-              onClick={() => {
-                setSelectedIce([]);
-                setSelectedSugar([]);
-              }}
-              className="underline cursor-pointer ml-0 sm:ml-2 mt-2 sm:mt-0"
-            >Clear Filters</p> */}
-          </div>
-          {/* sort */}
-          <div className="flex pl-2">
-            <button
-              onClick={() => toggleSort('rating')}
-              className={`mr-3 flex items-center justify-center ${sort.key === 'rating' && 'font-bold'}`}
-            >
-              <FaRegStar className="mr-1" />Rating
-              {
-                sort.key !== 'rating' ? <RxCaretSort /> :
-                  sort.order === 'desc' ? <RiArrowUpSLine /> : <RiArrowDownSLine />
-              } 
-            </button>
-            <button
-              onClick={() => toggleSort('postTime')}
-              className={`flex items-center justify-center ${sort.key === 'postTime' && 'font-bold'}`}
-            >
-              <RiTimeLine className="mr-1" />Post Time
-              {
-                sort.key !== 'postTime' ? <RxCaretSort /> :
-                  sort.order === 'desc' ? <RiArrowUpSLine /> : <RiArrowDownSLine />
-              } 
-            </button>
-          </div>
-        </div>
+        <FilterBar
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          selectedIce={selectedIce}
+          setSelectedIce={setSelectedIce}
+          selectedSugar={selectedSugar}
+          setSelectedSugar={setSelectedSugar}
+          selectedTopping={selectedTopping}
+          setSelectedTopping={setSelectedTopping}
+          sort={sort}
+          toggleSort={toggleSort}
+        />
 
         {isLoading && (
           <div className="flex justify-center items-center py-8">

@@ -21,6 +21,7 @@ export interface drinkReviewType {
     comment: string,
     userId: string,
     createdAt: string,
+    updatedAt: string,
 }
 
-export type drinkReviewAddForm = Omit<drinkReviewType, 'id' | 'userId' | 'createdAt'>
+export type drinkReviewAddForm = Omit<drinkReviewType, 'id' | 'userId' | 'createdAt' | 'updatedAt'>

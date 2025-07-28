@@ -12,6 +12,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Smooth and well-balanced sweetness.",
     userId: "user123",
     createdAt: "2025-07-20T14:30:00Z",
+    updatedAt: "2025-07-20T14:30:00Z"
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.Rich flavor, perfect for cold days.Rich flavor, perfect for cold daysRich flavor, perfect for cold days",
     userId: "tea_lover",
     createdAt: "2025-07-21T10:15:00Z",
+    updatedAt: "2025-07-21T10:15:00Z"
   },
   {
     id: 3,
@@ -36,6 +38,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Refreshing but a bit too sweet for me.",
     userId: "greenfan",
     createdAt: "2025-07-22T08:00:00Z",
+    updatedAt: "2025-07-22T08:00:00Z"
   },
   {
     id: 4,
@@ -48,6 +51,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Creamy and comforting, nice temperature.",
     userId: "tarolover",
     createdAt: "2025-07-23T16:45:00Z",
+    updatedAt: "2025-07-23T16:45:00Z"
   },
   {
     id: 5,
@@ -60,6 +64,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Perfect balance of sweet and sour, very refreshing.",
     userId: "freshfan",
     createdAt: "2025-07-24T11:20:00Z",
+    updatedAt: "2025-07-24T11:20:00Z"
   },
   {
     id: 6,
@@ -72,6 +77,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Rich oolong flavor, not too sweet.",
     userId: "oolong_enthusiast",
     createdAt: "2025-07-24T13:00:00Z",
+    updatedAt: "2025-07-24T13:00:00Z"
   },
   {
     id: 7,
@@ -84,6 +90,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Classic taste but a bit too sweet for me.",
     userId: "winterlover",
     createdAt: "2025-07-25T09:15:00Z",
+    updatedAt: "2025-07-25T09:15:00Z"
   },
   {
     id: 8,
@@ -96,6 +103,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Smooth and creamy, excellent matcha flavor.",
     userId: "matcha_queen",
     createdAt: "2025-07-25T14:50:00Z",
+    updatedAt: "2025-07-25T14:50:00Z"
   },
   {
     id: 9,
@@ -108,6 +116,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Sweet and tangy, loved the popping boba texture.",
     userId: "fruitfan",
     createdAt: "2025-07-26T12:30:00Z",
+    updatedAt: "2025-07-26T12:30:00Z"
   },
   {
     id: 10,
@@ -120,5 +129,6 @@ export const mockDrinkReviews: drinkReviewType[] = [
     comment: "Strong tea flavor, perfect for those who like it unsweetened.",
     userId: "blacktea_guy",
     createdAt: "2025-07-26T15:45:00Z",
+    updatedAt: "2025-07-26T15:45:00Z"
   }
 ];

@@ -76,7 +76,8 @@ const DrinkAdd = () => {
       ...drinkData,
       id: finalId + 1,
       userId: 'testUser',
-      createdAt: nowTimeUTC
+      createdAt: nowTimeUTC,
+      updatedAt: nowTimeUTC
     }
     console.log('new', newReview);
 
@@ -89,8 +90,13 @@ const DrinkAdd = () => {
 
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const nowTimeUTC = formatInTimeZone(new Date(), 'UTC', "yyyy-MM-dd'T'HH:mm:ssXXX");
     const newList = drinkList.map(item => {
-      if(item.id === Number(drinkId)) return {...item, ...drinkData};
+      if(item.id === Number(drinkId)) return {
+        ...item,
+        ...drinkData,
+        updatedAt: nowTimeUTC
+      };
       return item;
     });
 

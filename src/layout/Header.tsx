@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { CupSoda, Moon, Sun } from 'lucide-react';
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom';
+import { RiDrinks2Line } from "react-icons/ri";
 import { FaPlus } from 'react-icons/fa';
+import { FiSun, FiMoon } from "react-icons/fi";
 
 const Header = () => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
@@ -20,7 +21,7 @@ const Header = () => {
         <header className='relative flex items-center justify-between p-4 border-b-2 border-primary'>
             <Link to="/">
                 <div className='text-primary'>
-                    <CupSoda size="36" />
+                    <RiDrinks2Line size={35} />
                 </div>
             </Link>
             <h1 className='text-primary text-xl absolute left-1/2 transform -translate-x-1/2'>
@@ -40,7 +41,7 @@ const Header = () => {
                     aria-label="切換模式"
                     className="flex items-center gap-2 bg-primary text-white px-2 py-2 rounded-full hover:opacity-80 transition"
                 >
-                    { isDarkMode ? <Moon /> : <Sun /> }
+                    { isDarkMode ? <FiMoon size={23} /> : <FiSun size={23} /> }
                 </button>
             </div>
             {location.pathname !== '/drink/add' && <Link

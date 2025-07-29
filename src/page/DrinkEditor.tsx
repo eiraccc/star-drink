@@ -88,11 +88,12 @@ const DrinkEditor = () => {
   };
 
   return (
-    <section className='flex justify-center'>
+    <section className='flex justify-center p-6 pb-10'>
         <div className='w-full md:max-w-[500px]'>
           <Link to="/" className='text-secondary flex items-center mb-4'>
             <MdArrowBackIos />Back home
           </Link>
+
           <div className="mb-2">
             <label
               htmlFor="drinkName"

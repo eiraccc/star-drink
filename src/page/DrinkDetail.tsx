@@ -37,7 +37,7 @@ const DrinkDetail = () => {
   };
 
   return (
-    <section className='flex justify-center'>
+    <section className='flex justify-center p-6 pb-10'>
       <div className='w-full md:max-w-[500px]'>
         <Link to="/" className='text-secondary flex items-center mb-4'>
           <MdArrowBackIos />Back home
@@ -46,7 +46,7 @@ const DrinkDetail = () => {
 
         {
           isLoading ? <LoadingSection /> : drinkData ? (
-            <div className='p-4'>
+            <div>
               {/* <RiDrinks2Fill size={30} className="text-primary" /> */}
               <h2 className="text-text text-lg font-bold flex items-center">
                 {drinkData.drinkName}

@@ -54,8 +54,8 @@ const DrinkList = () => {
   }, [reviews, sort, searchValue, selectedIce, selectedSugar, selectedTopping]);
 
   return (
-    <section>
-      <div className="p-4 sm:p-6 lg:p-8">
+    <section className="p-6 pb-10">
+      <div className="sm:p-6 lg:p-8">
         <FilterBar
           searchValue={searchValue}
           setSearchValue={setSearchValue}

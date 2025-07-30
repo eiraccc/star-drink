@@ -7,7 +7,7 @@ import { MdArrowBackIos } from "react-icons/md";
 import { useNavigate, useParams } from 'react-router-dom';
 import MultiSelect from '../component/MultiSelect';
 import StepSelector from '../component/StepSelector';
-import LoadingSection from '../component/LoadingSection';
+import LoadingOverlay from '../component/LoadingOverlay';
 import { useDrinkReview } from "../context/DrinkReviewContext";
 
 const DrinkEditor = () => {
@@ -96,6 +96,8 @@ const DrinkEditor = () => {
 
   return (
     <section className='flex justify-center p-6 pb-10'>
+        { isLoading && <LoadingOverlay /> }
+
         <div className='w-full md:max-w-[500px]'>
           <Link to="/" className='text-secondary flex items-center mb-4'>
             <MdArrowBackIos />Back home

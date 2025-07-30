@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import StarRating from '../component/StarRating';
 import ErrorSection from '../component/ErrorSection';
-import LoadingSection from '../component/LoadingSection';
+import LoadingOverlay from '../component/LoadingOverlay';
 import { DrinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { MdArrowBackIos } from "react-icons/md";
@@ -45,7 +45,7 @@ const DrinkDetail = () => {
 
 
         {
-          isLoading ? <LoadingSection /> : drinkData ? (
+          isLoading ? <LoadingOverlay /> : drinkData ? (
             <div>
               {/* <RiDrinks2Fill size={30} className="text-primary" /> */}
               <h2 className="text-text text-lg font-bold flex items-center">

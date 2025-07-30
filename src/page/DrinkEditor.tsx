@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom';
 import StarRating from "../component/StarRating"
-import { drinkReviewAddForm, IceLevel, SugarLevel } from "../types/drinkReview"
+import { DrinkReviewFormType, IceLevel, SugarLevel } from "../types/drinkReview"
 import { sugarOptions, iceOptions, toppingOptions, ToppingLabelType } from '../constants/drink'
 import { MdArrowBackIos } from "react-icons/md";
 import { useNavigate, useParams } from 'react-router-dom';
@@ -15,7 +15,7 @@ const DrinkEditor = () => {
   const isEdit = Boolean(drinkId);
   const { reviews, addReview, editReview, isLoading } = useDrinkReview();
 
-  const initDrinkReview: drinkReviewAddForm = {
+  const initDrinkReview: DrinkReviewFormType = {
     drinkName: '',
     storeName: '',
     rating: 0,
@@ -24,22 +24,23 @@ const DrinkEditor = () => {
     toppings: [],
     comment: ''
   }
-  const [drinkData, setDrinkData] = useState<drinkReviewAddForm>(initDrinkReview);
+  const [drinkData, setDrinkData] = useState<DrinkReviewFormType>(initDrinkReview);
   const [showToppingOptions, setShowToppingOptions] = useState<ToppingLabelType[]>(toppingOptions);
   const [toppingSelected, setToppingSelected] = useState<ToppingLabelType[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isEdit || isLoading) return;
+    if (!isEdit) return;
 
-    const currentDrink = reviews.find(n => n.id === Number(drinkId));
+    const currentDrink = reviews.find(n => n.id === drinkId);
     if (currentDrink) {
-      setDrinkData(currentDrink);
-      currentDrink.toppings.forEach(topping => {
+      const { createdAt, updatedAt, userId,...editData } = currentDrink;
+      setDrinkData(editData);
+      editData.toppings.forEach(topping => {
         addNewTopping(topping);
       });
     }
-  }, [drinkId, reviews, isEdit, isLoading]);
+  }, [drinkId, reviews, isEdit]);
 
   useEffect(() => {
     if (!isEdit) {
@@ -71,6 +72,12 @@ const DrinkEditor = () => {
     });
   }, [setToppingSelected, setShowToppingOptions])
 
+  // from selector update
+  const updataToppings = (newToppings: ToppingLabelType[]) => {
+    setToppingSelected(newToppings);
+    setDrinkData({...drinkData, toppings: newToppings.map(n => n.value)});
+  };
+
   const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await addReview(drinkData);
@@ -79,7 +86,7 @@ const DrinkEditor = () => {
 
   const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await editReview(Number(drinkId), drinkData);
+    drinkId && await editReview(drinkId, drinkData);
     navigate(`/drink/${drinkId}`);
   };
 
@@ -168,7 +175,7 @@ const DrinkEditor = () => {
             <MultiSelect<ToppingLabelType>
               options={showToppingOptions}
               selected={toppingSelected}
-              setSelected={setToppingSelected}
+              setSelected={updataToppings}
               placeholder='Select toppings'
               maxToShow={10}
               borderColor='primary'

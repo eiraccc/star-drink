@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import StarRating from '../component/StarRating';
 import ErrorSection from '../component/ErrorSection';
 import LoadingSection from '../component/LoadingSection';
-import { drinkReviewType } from "../types/drinkReview"
+import { DrinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { MdArrowBackIos } from "react-icons/md";
 import { RiDrinks2Fill } from "react-icons/ri";
@@ -15,12 +15,12 @@ const DrinkDetail = () => {
   const { drinkId } = useParams<{drinkId: string}>();
   const navigate = useNavigate();
   
-  const [drinkData, setDrinkData] = useState<drinkReviewType | null>(null);
+  const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
   const { reviews, deleteReview, isLoading } = useDrinkReview();
 
   useEffect(() => {
     // get data
-    const drinkData = reviews.find(n => n.id === Number(drinkId)) || null;
+    const drinkData = reviews.find(n => n.id === drinkId) || null;
     setDrinkData(drinkData);
   }, [reviews]);
 
@@ -32,7 +32,7 @@ const DrinkDetail = () => {
   };
 
   const handleDelete = async () => {
-    await deleteReview(Number(drinkId));
+    drinkId && await deleteReview(drinkId);
     navigate('/');
   };
 

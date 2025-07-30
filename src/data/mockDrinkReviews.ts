@@ -1,8 +1,8 @@
-import { drinkReviewType } from "../types/drinkReview";
+import { DrinkReviewType } from "../types/drinkReview";
 
-export const mockDrinkReviews: drinkReviewType[] = [
+export const mockDrinkReviews: DrinkReviewType[] = [
   {
-    id: 1,
+    id: 'review-1',
     drinkName: "Classic Milk Tea",
     storeName: "Tea Time",
     rating: 4,
@@ -15,7 +15,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-20T10:00:00Z"
   },
   {
-    id: 2,
+    id: 'review-2',
     drinkName: "Taro Milk Tea",
     storeName: "Happy Cup",
     rating: 5,
@@ -28,7 +28,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-21T12:30:00Z"
   },
   {
-    id: 3,
+    id: 'review-3',
     drinkName: "Wintermelon Green Tea",
     storeName: "Cool Drink Bar",
     rating: 3,
@@ -41,7 +41,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-22T09:15:00Z"
   },
   {
-    id: 4,
+    id: 'review-4',
     drinkName: "Brown Sugar Latte",
     storeName: "Sugar Rush",
     rating: 5,
@@ -54,7 +54,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-23T14:00:00Z"
   },
   {
-    id: 5,
+    id: 'review-5',
     drinkName: "Matcha Latte",
     storeName: "Green Leaf",
     rating: 4,
@@ -67,7 +67,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-24T11:00:00Z"
   },
   {
-    id: 6,
+    id: 'review-6',
     drinkName: "Fruit Tea",
     storeName: "Fruity World",
     rating: 2,
@@ -80,7 +80,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-24T15:20:00Z"
   },
   {
-    id: 7,
+    id: 'review-7',
     drinkName: "Coffee Milk Tea",
     storeName: "Café Boba",
     rating: 3,
@@ -93,7 +93,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-25T08:00:00Z"
   },
   {
-    id: 8,
+    id: 'review-8',
     drinkName: "Yakult Lemon Tea",
     storeName: "Cool Cup",
     rating: 4,
@@ -106,7 +106,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-25T17:45:00Z"
   },
   {
-    id: 9,
+    id: 'review-9',
     drinkName: "Thai Tea",
     storeName: "Thai Cha",
     rating: 5,
@@ -119,7 +119,7 @@ export const mockDrinkReviews: drinkReviewType[] = [
     updatedAt: "2025-07-26T13:10:00Z"
   },
   {
-    id: 10,
+    id: 'review-10',
     drinkName: "Oolong Milk Tea",
     storeName: "Tea Craft",
     rating: 3,

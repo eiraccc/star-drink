@@ -18,7 +18,7 @@ const DrinkList = () => {
     order: 'desc'
   });
 
-  const { reviews, isLoading, fetchReviews, loadDemoReviews } = useDrinkReview();
+  const { reviews, isLoading } = useDrinkReview();
 
   const toggleSort = (key:SortKey) => {
     setSort(preSort => {
@@ -31,7 +31,7 @@ const DrinkList = () => {
   };
 
   const navigate = useNavigate();
-  const goToDrinkDetail = (id: number) => {
+  const goToDrinkDetail = (id: string) => {
     navigate(`/drink/${id}`);
   };
 
@@ -91,8 +91,6 @@ const DrinkList = () => {
           ) : (
             <ErrorSection
               errorMsg={`Oops! No drinks here yet. Let's add some delicious ones!`}
-              btnText='Load Demo Data'
-              btnAction={loadDemoReviews}
             />
           )
         )}

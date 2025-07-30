@@ -1,10 +1,10 @@
 import StarRating from "./StarRating"
-import { drinkReviewType } from "../types/drinkReview"
+import { DrinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { RiDrinks2Fill } from "react-icons/ri";
 
 type DrinkCardProps = {
-  data: drinkReviewType,
+  data: DrinkReviewType,
   onClick?: () => void
 };
 

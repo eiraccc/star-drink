@@ -8,26 +8,33 @@ Built with React, Vite, Tailwind CSS, and TypeScript to deliver a modern, fast, 
 ## 📷 Screenshot
 ![Star Drink Screenshot](public/screenshot.png)
 
+
+> ⚠️ **Development Status:** This is version 1 (v1) and the project is under active development. Features and APIs may change.
+
+
 ## 🚀 Features
 
 - 🔍 Filter drinks by ice level, sugar level, and toppings
-- 🌟 Rate drinks with a 5-star system
-- 📜 Sort by rating or post time
-- 🧪 Load demo data
-- 🔁 Light/Dark mode toggle
-- 📦 LocalStorage persistence
-- ✨ Responsive UI
+- 🌟 Rate drinks using a 5-star system
+- 📜 Sort reviews by rating or creation time
+- 🔁 Toggle between light and dark mode
+- 🔄 Real-time data sync with Firebase Firestore
+- 💬 Show error messages when invalid drink ID is accessed
+- 🌀 Loading overlay during create, read, update, and delete operations
+- ✨ Fully responsive UI
 
 ## 🛠️ Tech Stack
 
-- **React** (18)
+- **React** (v18)
 - **TypeScript**
 - **Vite**
 - **Tailwind CSS**
 - **React Router DOM** (v7)
 - **React Icons**
 - **React Select**
-- **Date-fns** for formatting timestamps
+- **Firebase (Firestore)** – for managing drink reviews and store data
+- **Firebase serverTimestamp & Timestamp** – for consistent time handling
+- **date-fns / date-fns-tz** – for date formatting and timezone conversion
 
 ## 🚀 Getting Started
 

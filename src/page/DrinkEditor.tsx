@@ -141,6 +141,7 @@ const DrinkEditor = () => {
                 >Rating:</label>
                   <StarRating
                     rating={ drinkData.rating }
+                    iconSize={30}
                     onChange={(newRating) => setDrinkData({...drinkData, rating: newRating})}
                   />
               </div>

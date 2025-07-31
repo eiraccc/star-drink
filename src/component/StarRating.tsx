@@ -5,12 +5,14 @@ import { DrinkRatingType } from "../types/drinkReview";
 type propsType = {
   readonly?: boolean,
   rating?: DrinkRatingType,
+  iconSize?: number,
   onChange?: (newRating: DrinkRatingType) => void;
 }
 
 const StarRating = ({
   readonly = false,
   rating = 0,
+  iconSize = 20,
   onChange
 }:propsType) => {
   const maxStar:number = 5;
@@ -31,7 +33,7 @@ const StarRating = ({
             return (
               <StarIcon
                 key={index}
-                size={30}
+                size={iconSize}
                 className={`${!readonly ? 'cursor-pointer' : ''} text-yellow-500`}
                 onMouseEnter={() => !readonly && setHoverIndex(index)}
                 onMouseLeave={() => !readonly && setHoverIndex(null)}

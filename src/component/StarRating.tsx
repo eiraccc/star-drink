@@ -31,7 +31,7 @@ const StarRating = ({
             return (
               <StarIcon
                 key={index}
-                size={20}
+                size={30}
                 className={`${!readonly ? 'cursor-pointer' : ''} text-yellow-500`}
                 onMouseEnter={() => !readonly && setHoverIndex(index)}
                 onMouseLeave={() => !readonly && setHoverIndex(null)}

@@ -16,12 +16,14 @@ export interface storeNameSlugType {
 export interface StoreType extends storeSubmittedType, storeNameSlugType {
     id: string;
     description: string;
+    isApproved: boolean;
     createdAt: string;
     updatedAt: string;
 }
 
 export interface StoreTypeFirestore extends storeSubmittedType, storeNameSlugType {
     description: string;
+    isApproved: boolean;
     createdAt: Timestamp
     updatedAt: Timestamp | FieldValue;
 }

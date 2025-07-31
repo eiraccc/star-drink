@@ -5,6 +5,7 @@ import Section from './layout/Section';
 import DrinkList from './page/DrinkList';
 import DrinkEditor from './page/DrinkEditor';
 import DrinkDetail from './page/DrinkDetail';
+import AdminStore from './page/AdminStore';
 import Footer from './layout/Footer';
 import ErrorSection from './component/ErrorSection';
 import { DrinkReviewProvider } from './context/DrinkReviewContext';
@@ -25,6 +26,7 @@ function App() {
               <Route path="/drink/add" element={<DrinkEditor />} />
               <Route path="/drink/:drinkId" element={<DrinkDetail />} />
               <Route path="/drink/:drinkId/edit" element={<DrinkEditor />} />
+              <Route path="/admin/store" element={<AdminStore />} />
               <Route path="*" element={
                 <section>
                   <ErrorSection

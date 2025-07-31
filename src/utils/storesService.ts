@@ -43,6 +43,7 @@ export async function getStores(): Promise<StoreType[]> {
         submittedNote,
         submittedBy,
         description: '',
+        isApproved: false,
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
       };

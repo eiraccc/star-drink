@@ -11,25 +11,18 @@ import {
   DocumentData
 } from "firebase/firestore";
 import { db } from "./firebase";
-import { formatInTimeZone } from "date-fns-tz";
 import {
   DrinkReviewType,
   DrinkReviewFormType,
   DrinkReviewFirestoreData
 } from "../types/drinkReview";
+import { formatTimestampToUserLocalString } from "./timeFormat";
 
-const reviewsCollection = collection(db, "drinkReviews");
-
-// Format the time according to the user's time zone
-function formatTimestampToUserLocalString(timestamp: Timestamp | undefined | null): string {
-  if (!timestamp) return '';
-  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-  return formatInTimeZone(timestamp.toDate(), userTimeZone, "yyyy-MM-dd HH:mm:ss");
-}
+const reviewsRef = collection(db, "drinkReviews");
 
 export async function getReviews(): Promise<DrinkReviewType[]> {
   try {
-    const snapshot = await getDocs(reviewsCollection);
+    const snapshot = await getDocs(reviewsRef);
     return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
       const data = doc.data() as Omit<DrinkReviewType, "id" | "createdAt" | "updatedAt"> & {
         createdAt: Timestamp;
@@ -55,7 +48,7 @@ export async function addReview(data: Omit<DrinkReviewType, "id" | "createdAt" |
       createdAt: serverTimestamp() as Timestamp,
       updatedAt: serverTimestamp() as Timestamp,
     };
-    await addDoc(reviewsCollection, reviewData);
+    await addDoc(reviewsRef, reviewData);
   } catch (error) {
     console.error("add error:", error);
     throw error;

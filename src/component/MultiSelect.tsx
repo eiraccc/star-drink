@@ -1,8 +1,9 @@
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { OptionType } from '../constants/drink'
-import { tagColorMap } from '../constants/drink'
+import { tagColorMap, SugarIceLabelType, ToppingLabelType } from '../constants/drink'
 import { Option, MultiValue } from './MultiSelectCustom'
+
+export type OptionType = SugarIceLabelType | ToppingLabelType;
 
 type MultiSelectProps<T extends OptionType> = {
   options: T[]

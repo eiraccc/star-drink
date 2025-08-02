@@ -28,7 +28,7 @@ const Header = () => {
                 Drink
             </h1>
             <div className='flex items-center'>
-                {location.pathname !== '/drink/add' && <Link to="/drink/add">
+                {location.pathname !== '/drink/add' && !location.pathname.includes('admin') && <Link to="/drink/add">
                     <button
                         className='hidden sm:flex bg-highlight text-white rounded-full px-2 py-2 mr-2 items-center hover:opacity-80'
                     >

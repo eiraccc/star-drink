@@ -4,6 +4,7 @@ export interface storeSubmittedType {
     submittedName: string;
     submittedNote: string;
     submittedBy: string;
+    submittedByRole: 'user' | 'admin'
 }
 
 export interface storeNameSlugType {
@@ -26,4 +27,11 @@ export interface StoreTypeFirestore extends storeSubmittedType, storeNameSlugTyp
     isApproved: boolean;
     createdAt: Timestamp
     updatedAt: Timestamp | FieldValue;
+}
+
+export type StoreTypeFormType = Omit<StoreType, 'id' | 'createdAt' | 'updatedAt'>
+
+export interface AliasLabelType {
+  value: string;
+  label: string;
 }

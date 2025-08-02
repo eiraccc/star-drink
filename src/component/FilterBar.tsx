@@ -75,9 +75,8 @@ const FilterBar = ({
       {/* filter */}
       <div
         className={`
-          flex flex-col sm:flex-row items-start
-          transition-all duration-300 ease-in-out
-          overflow-hidden transform
+          flex flex-col sm:flex-row items-start z-10
+          transition-all duration-300 ease-in-out transform
           sm:max-h-none sm:opacity-100 sm:translate-y-0
           ${isMobileFilterOpen ? 'max-h-96 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'}
         `}

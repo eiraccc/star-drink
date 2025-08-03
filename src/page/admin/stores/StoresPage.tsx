@@ -26,7 +26,7 @@ const StoresPage = () => {
     ];
     
     const [filterSelected, setFilterSelected] = useState<OptionType>(filterOptions[0]);
-    const filterType = filterSelected.value;
+    const filterType = filterSelected.value as 'all' | 'approved' | 'pending';
     const filterStores = stores.filter(n => {
         if(filterType === 'all') return n;
         return n.isApproved === (filterType === 'approved')
@@ -173,7 +173,7 @@ const StoresPage = () => {
            
             <div className="flex justify-between p-2">
                 <div className="flex items-center">
-                    <p className="mr-2">Filter:</p>
+                    <p className="mr-2">Approval Status:</p>
                     <SingleSelect
                         options={filterOptions}
                         value={filterSelected}

@@ -32,6 +32,9 @@ export default {
         background: {
           DEFAULT: 'var(--color-background)',
         },
+        contrast: {
+          DEFAULT: 'var(--color-contrast)',
+        },
         surface: {
           DEFAULT: 'var(--color-surface)',
         },

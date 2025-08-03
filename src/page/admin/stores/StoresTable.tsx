@@ -67,8 +67,8 @@ const StoresTable = ({
     
     return (
         <div className="overflow-x-auto rounded-xl shadow border border-gray-200">
-            <table className="min-w-full divide-y divide-gray-200 bg-white text-sm text-center">
-                <thead className="bg-surface text-gray-600 font-semibold">
+            <table className="min-w-full divide-y divide-gray-200 bg-contrast text-sm text-center">
+                <thead className="bg-surface text-text-secondary font-semibold">
                 <tr>
                     {columns.filter(col => visableKeys.includes(col.key)).map(col => (
                         <th key={col.key} className="px-4 py-2">{ col.label }</th>
@@ -80,7 +80,7 @@ const StoresTable = ({
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                     {stores.map((store) => (
-                        <tr key={store.id} className="hover:bg-gray-50">
+                        <tr key={store.id} className="hover:bg-background">
                             {columns.filter(col => visableKeys.includes(col.key)).map(col => (
                                 <td key={col.key} className={`px-4 py-2 ${col.key==='slug' && 'whitespace-nowrap'}`}>
                                     {col.render

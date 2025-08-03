@@ -30,7 +30,7 @@ const Header = () => {
             <div className='flex items-center'>
                 {location.pathname !== '/drink/add' && !location.pathname.includes('admin') && <Link to="/drink/add">
                     <button
-                        className='hidden sm:flex bg-highlight text-white rounded-full px-2 py-2 mr-2 items-center hover:opacity-80'
+                        className='hidden sm:flex bg-highlight text-contrast rounded-full px-2 py-2 mr-2 items-center hover:opacity-80'
                     >
                         <FaPlus className='mr-2'/>
                         Add Drink
@@ -39,14 +39,14 @@ const Header = () => {
                 <button
                     onClick={ collapseMode }
                     aria-label="切換模式"
-                    className="flex items-center gap-2 bg-primary text-white px-2 py-2 rounded-full hover:opacity-80 transition"
+                    className="flex items-center gap-2 bg-primary text-contrast px-2 py-2 rounded-full hover:opacity-80 transition"
                 >
                     { isDarkMode ? <FiMoon size={23} /> : <FiSun size={23} /> }
                 </button>
             </div>
             {location.pathname !== '/drink/add' && <Link
                 to="/drink/add"
-                className="sm:hidden fixed bottom-9 right-4 w-10 h-10 rounded-full bg-highlight text-white flex items-center justify-center shadow-lg hover:bg-primary/90 z-[9999]"
+                className="sm:hidden fixed bottom-9 right-4 w-10 h-10 rounded-full bg-highlight text-contrast flex items-center justify-center shadow-lg hover:bg-primary/90 z-[9999]"
             >
                 <FaPlus />
             </Link>}

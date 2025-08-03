@@ -22,7 +22,7 @@ const ErrorSection = ({
         </p>
         {(btnText || btnActionHome) && <button
             onClick={btnActionHome ? () => navigate('/') : btnAction}
-            className="px-4 py-2 bg-primary text-white rounded-full hover:bg-primary-dark transition"
+            className="px-4 py-2 bg-primary text-contrast rounded-full hover:bg-primary-dark transition"
         >
             { btnActionHome ? 'Back Home' : btnText }
         </button>}

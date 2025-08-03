@@ -179,12 +179,12 @@ const StoresPage = () => {
                         value={filterSelected}
                         onChange={setFilterSelected}
                         placeholder="Filter stores"
-                        backgroundColor='white'
+                        backgroundColor='var(--color-contrast)'
                     />
                 </div>
                 <button
                     onClick={() => openAdd()}
-                    className="flex items-center bg-highlight text-white rounded-full px-2 py-2 mr-2 hover:opacity-90"
+                    className="flex items-center bg-highlight text-contrast rounded-full px-2 py-2 mr-2 hover:opacity-90"
                 >
                     <FaPlus className='mr-2'/>
                     Add Store

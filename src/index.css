@@ -26,6 +26,7 @@
 /* ========= 淺色主題 ========= */
 :root {
   /* 基本色系 */
+  --color-contrast: #ffffff;
   --color-primary: #c49066;          /* 深奶茶主色，讓元素跳起來 */
   --color-secondary: #9C7B5F;        /* 次色，溫暖棕色 */
   --color-highlight: #A6C48A;        /* 抹茶綠，醒目 */
@@ -56,13 +57,14 @@
 /* ========= 深色主題 ========= */
 .dark {
   /* 基本色系 */
+  --color-contrast: #282828;
   --color-primary: #C1A78C;
   --color-secondary: #8C7763;
   --color-highlight: #A6C48A;
   --color-text: #EADDCB;
   --color-text-secondary: #B6A89B;
   --color-background: #1D1A17;
-  --color-surface: #3B322A;
+  --color-surface: #4a3f35;
   --color-success: #81C784;
   --color-danger: #EF9A9A;
 

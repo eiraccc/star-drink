@@ -31,6 +31,7 @@ const SingleSelect = ({
         control: (provided: any, state: any) => ({
             ...provided,
             width: '150px',
+            color: 'white',
             backgroundColor: backgroundColor,
             borderColor: state.isFocused ? focusColor : borderColor,
             borderWidth: '2px',
@@ -40,6 +41,11 @@ const SingleSelect = ({
                 borderColor: focusColor
             }
         }),
+        // after selected
+        singleValue: (provided: any) => ({
+            ...provided,
+            color: 'var(--color-text)',
+          }),
         // down icon
         dropdownIndicator: (provided: any, state: any) => ({
             ...provided,

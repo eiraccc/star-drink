@@ -61,7 +61,7 @@ const StoresEditModal = ({
                         name="description"
                         id="description"
                         rows={4}
-                        className="flex-1 border border-surface rounded-md p-2 focus:outline-none focus:ring-primary focus:border-primary resize-none"
+                        className="flex-1 bg-contrast border border-surface rounded-md p-2 focus:outline-none focus:ring-primary focus:border-primary resize-none"
                         value={editData.description}
                         onChange={(e) => setEditData({ ...editData, description: e.target.value })}
                     />
@@ -91,7 +91,7 @@ const StoresEditModal = ({
                         Cancel
                     </button>
                     <button
-                        className="w-1/2 px-4 py-2 rounded-lg text-sm text-white bg-primary hover:opacity-80 disabled:opacity-50"
+                        className="w-1/2 px-4 py-2 rounded-lg text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
                         onClick={(e) => onSave(e)}
                     >
                         Save

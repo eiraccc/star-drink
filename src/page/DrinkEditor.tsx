@@ -212,7 +212,7 @@ const DrinkEditor = () => {
                   Cancel
                 </button>
                 <button
-                  className="w-1/2 px-4 py-2 rounded-lg text-sm text-white bg-primary hover:opacity-80 disabled:opacity-50"
+                  className="w-1/2 px-4 py-2 rounded-lg text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
                   onClick={(e) => isEdit ? handleEdit(e) : handleAdd(e)}
                 >
                   {isEdit ? 'Edit' : 'Add'}

@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose, title, children }:ModalProps) => {
         onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4"
+        className="bg-contrast rounded-xl shadow-lg w-full max-w-2xl mx-4"
         onClick={(e) => e.stopPropagation()}
     >
         {/* Header */}

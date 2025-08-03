@@ -32,6 +32,7 @@ const MultiSelect = <T extends OptionType>({
     // inout wrap before focus
     control: (provided: any, state: any) => ({
       ...provided,
+      color: 'var(--color-text)',
       backgroundColor: 'var(--color-background)',
       borderColor: state.isFocused ? 'var(--color-primary)' : `var(--color-${borderColor})`,
       borderWidth: '2px',
@@ -40,6 +41,10 @@ const MultiSelect = <T extends OptionType>({
       '&:hover': {
         borderColor: 'var(--color-primary)'
       }
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: 'var(--color-text)',  // 選中後顯示的字色
     }),
     // down icon
     dropdownIndicator: (provided: any, state: any) => ({

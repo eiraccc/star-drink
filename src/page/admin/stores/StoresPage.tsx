@@ -5,8 +5,9 @@ import {
     addStore as addStoreToFB,
     editStore as editStoreToFB,
     deleteStore as deleteStoreInFB,
-    approveStore,
+    approveStore
 } from "../../../utils/storesService";
+import SingleSelect, { OptionType }  from "../../../component/SingleSelect";
 import StoresTable from "./StoresTable";
 import StoresEditModal from "./StoresEditModal";
 import LoadingOverlay from "../../../component/LoadingOverlay";
@@ -17,6 +18,19 @@ const StoresPage = () => {
     const [stores, setStores] = useState<StoreType[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<'edit' | 'add' | ''>('');
+
+    const filterOptions: OptionType[] = [
+      { value: 'all', label: 'All' },
+      { value: 'approved', label: 'Approved' },
+      { value: 'pending', label: 'Pending' },
+    ];
+    
+    const [filterSelected, setFilterSelected] = useState<OptionType>(filterOptions[0]);
+    const filterType = filterSelected.value;
+    const filterStores = stores.filter(n => {
+        if(filterType === 'all') return n;
+        return n.isApproved === (filterType === 'approved')
+    });
 
     const fetchStore = async () => {
       try {
@@ -157,7 +171,17 @@ const StoresPage = () => {
                 onCancel={handleCancel}
            />
            
-            <div className="flex justify-end p-2">
+            <div className="flex justify-between p-2">
+                <div className="flex items-center">
+                    <p className="mr-2">Filter:</p>
+                    <SingleSelect
+                        options={filterOptions}
+                        value={filterSelected}
+                        onChange={setFilterSelected}
+                        placeholder="Filter stores"
+                        backgroundColor='white'
+                    />
+                </div>
                 <button
                     onClick={() => openAdd()}
                     className="flex items-center bg-highlight text-white rounded-full px-2 py-2 mr-2 hover:opacity-90"
@@ -169,7 +193,8 @@ const StoresPage = () => {
 
             {isLoading ? <LoadingOverlay /> : stores.length ? (
                 <StoresTable
-                    stores={stores}
+                    stores={filterStores}
+                    type={filterType}
                     handleApprove={handleApprove}
                     openEdit={openEdit}
                     handleDelete={handleDelete}

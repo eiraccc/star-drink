@@ -125,9 +125,9 @@ const MultiSelect = <T extends OptionType>({
         color: 'var(--color-secondary)',
       },
     }),
-  }
+  };
 
-  const SelectComponent = creatable ? CreatableSelect : Select
+  const SelectComponent = creatable ? CreatableSelect : Select;
 
   return (
     <SelectComponent

@@ -3,6 +3,7 @@ import { StoreType } from "../../../types/store";
 
 interface propsType {
   stores: StoreType[];
+  type: 'all' | 'approved' | 'pending';
   handleApprove: (id: string, data: StoreType) => void;
   openEdit: (store: StoreType) => void;
   handleDelete: (id: string) => void;
@@ -12,6 +13,7 @@ interface propsType {
 
 const StoresTable = ({
     stores,
+    type,
     handleApprove,
     openEdit,
     handleDelete,
@@ -20,7 +22,7 @@ const StoresTable = ({
 }: propsType) => {
   return (
     <div className="overflow-x-auto rounded-xl shadow border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200 bg-white text-sm text-left">
+        <table className="min-w-full divide-y divide-gray-200 bg-white text-sm text-center">
             <thead className="bg-surface text-gray-600 font-semibold">
             <tr>
                 <th className="px-4 py-2">Store Name (EN)</th>
@@ -42,20 +44,20 @@ const StoresTable = ({
             <tbody className="divide-y divide-gray-100">
             {stores.map((store) => (
                 <tr key={store.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 text-center">{store.nameEn || '-'}</td>
-                    <td className="px-4 py-2 text-center">{store.nameZh || '-'}</td>
-                    <td className="px-4 py-2 text-center">{store.slug || '-'}</td>
-                    <td className="px-4 py-2 text-center">
+                    <td className="px-4 py-2">{store.nameEn || '-'}</td>
+                    <td className="px-4 py-2">{store.nameZh || '-'}</td>
+                    <td className="px-4 py-2">{store.slug || '-'}</td>
+                    <td className="px-4 py-2">
                         {store.alias.length ? store.alias.join(", ") : "-"}
                     </td>
-                    <td className="px-4 py-2 text-center">{store.submittedName || '-'}</td>
-                    <td className="px-4 py-2 text-center">{store.submittedNote || '-'}</td>
-                    <td className="px-4 py-2 text-center">{store.submittedBy || '-'}</td>
-                    <td className="px-4 py-2 text-center">{store.description || '-'}</td>
-                    <td className="px-4 py-2 text-center">{store.createdAt}</td>
-                    <td className="px-4 py-2 text-center">{store.updatedAt}</td>
-                    <td className="px-4 py-2 text-center">{store.isApproved ? 'Yes' : 'No'}</td>
-                    <td className="px-4 py-2 text-center">
+                    <td className="px-4 py-2">{store.submittedName || '-'}</td>
+                    <td className="px-4 py-2">{store.submittedNote || '-'}</td>
+                    <td className="px-4 py-2">{store.submittedBy || '-'}</td>
+                    <td className="px-4 py-2">{store.description || '-'}</td>
+                    <td className="px-4 py-2">{store.createdAt}</td>
+                    <td className="px-4 py-2">{store.updatedAt}</td>
+                    <td className="px-4 py-2">{store.isApproved ? 'Yes' : 'No'}</td>
+                    <td className="px-4 py-2">
                         <Tooltip
                             text={`Please complete: ${getApproveInvalidKey(store).join(',')}`}
                             show={!checkApproveValid(store)}

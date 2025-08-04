@@ -1,4 +1,5 @@
 import { Timestamp, FieldValue } from "firebase/firestore";
+import { DrinkReviewType } from "./drinkReview";
 
 export interface storeSubmittedType {
     submittedName: string;
@@ -27,6 +28,12 @@ export interface StoreTypeFirestore extends storeSubmittedType, storeNameSlugTyp
     isApproved: boolean;
     createdAt: Timestamp
     updatedAt: Timestamp | FieldValue;
+}
+
+export interface StoreTypeWithReview extends StoreType {
+    reviews: DrinkReviewType[];
+    totalReviews: number,
+    averageRating: number
 }
 
 export type StoreTypeFormType = Omit<StoreType, 'id' | 'createdAt' | 'updatedAt'>

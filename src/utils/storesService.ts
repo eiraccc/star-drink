@@ -4,6 +4,9 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  query,
+  where,
+  QueryConstraint,
   collection,
   serverTimestamp,
   Timestamp,
@@ -25,6 +28,43 @@ const storeRef = collection(db, 'stores');
 export async function getStores(): Promise<StoreType[]> {
   try {
     const snapshot = await getDocs(storeRef);
+    return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
+      const data = doc.data() as StoreTypeFirestore & {
+        createdAt: Timestamp;
+        updatedAt: Timestamp;
+      };
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: formatTimestampToUserLocalString(data.createdAt),
+        updatedAt: formatTimestampToUserLocalString(data.updatedAt),
+      };
+    });
+  } catch (error) {
+    console.error('get reviews error:', error);
+    throw error;
+  }
+}
+
+export async function getStoresByQuery({
+  storeId,
+  isApproved
+}: {
+  storeId?: string,
+  isApproved?: boolean
+}): Promise<StoreType[]> {
+  try {
+    const conditions: QueryConstraint[] = [];
+    if (storeId) {
+      conditions.push(where("id", "==", storeId));
+    }
+  
+    if (isApproved !== undefined) {
+      conditions.push(where("isApproved", "==", isApproved));
+    }
+  
+    const q = query(storeRef, ...conditions);
+    const snapshot = await getDocs(q);
     return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
       const data = doc.data() as StoreTypeFirestore & {
         createdAt: Timestamp;

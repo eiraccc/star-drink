@@ -5,6 +5,9 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  query,
+  where,
+  QueryConstraint,
   serverTimestamp,
   Timestamp,
   QueryDocumentSnapshot,
@@ -17,12 +20,35 @@ import {
   DrinkReviewFirestoreData
 } from "../types/drinkReview";
 import { formatTimestampToUserLocalString } from "./timeFormat";
+import { IoConstructOutline } from "react-icons/io5";
 
 const reviewsRef = collection(db, "drinkReviews");
 
-export async function getReviews(): Promise<DrinkReviewType[]> {
+export async function getReviews({
+  storeId,
+  storeSlug,
+  drinkName,
+}: {
+  storeId?: string,
+  storeSlug?: string,
+  drinkName?: string
+}): Promise<DrinkReviewType[]> {
   try {
-    const snapshot = await getDocs(reviewsRef);
+    const conditions: QueryConstraint[] = [];
+    if (storeId) {
+      conditions.push(where("storeId", "==", storeId));
+    }
+  
+    if (storeSlug) {
+      conditions.push(where("slug", "==", storeSlug));
+    }
+
+    if (drinkName) {
+      conditions.push(where("drinkName", "==", drinkName));
+    }
+  
+    const q = query(reviewsRef, ...conditions);
+    const snapshot = await getDocs(q);
     return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
       const data = doc.data() as Omit<DrinkReviewType, "id" | "createdAt" | "updatedAt"> & {
         createdAt: Timestamp;

@@ -37,6 +37,7 @@ export default {
         },
         surface: {
           DEFAULT: 'var(--color-surface)',
+          light: 'var(--color-surface-light)'
         },
         success: {
           DEFAULT: 'var(--color-success)',

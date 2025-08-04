@@ -43,7 +43,7 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
   const fetchReviews = async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const data = await getReviewsFromFB();
+      const data = await getReviewsFromFB({});
       console.log('get data', data);
       dispatch({ type: 'LOAD', payload: data });
     } catch (error) {

@@ -19,8 +19,12 @@ const Header = () => {
         setIsDarkMode(!isDarkMode)
     }
 
-    const pathArr = location.pathname.split('/');
-    const isShopPage = pathArr ? pathArr[1] === 'shop' : false;
+    const getPageTitle = () => {
+        const pathArr = location.pathname.split('/');
+        const mainPath = pathArr ? pathArr[1] : '';
+        if(!mainPath) return 'Drink';
+        return mainPath.charAt(0).toUpperCase() + mainPath.slice(1);
+    };
 
     return (
         <header className='relative flex items-center justify-between p-4 border-b-2 border-primary'>
@@ -38,7 +42,7 @@ const Header = () => {
             </div>
             
             <h1 className='text-primary text-xl absolute left-1/2 transform -translate-x-1/2'>
-                {isShopPage ? 'Shop' : 'Drink'}
+                {getPageTitle()}
             </h1>
             <div className='flex items-center'>
                 {location.pathname !== '/drink/add' && !location.pathname.includes('admin') && <Link to="/drink/add">

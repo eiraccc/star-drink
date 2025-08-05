@@ -51,7 +51,7 @@ const DrinkDetail = () => {
               <h2 className="text-text text-lg font-bold flex items-center">
                 {drinkData.drinkName}
               </h2>
-              <p className="text-text-secondary italic">{drinkData.storeName}</p>
+              <p className="text-text-secondary italic">{drinkData.shopName}</p>
               <StarRating readonly={true} rating={drinkData.rating} />
               <div className='mt-1'>
                 <label htmlFor="ice" className='mr-2'>Ice:</label>

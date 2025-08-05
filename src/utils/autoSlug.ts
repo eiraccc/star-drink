@@ -1,6 +1,6 @@
 import pinyin from 'pinyin';
 import slugify from 'slugify';
-import { storeNameSlugType } from '../types/store';
+import { ShopNameSlugType } from '../types/shop';
 
 function toPinyin(text: string): string {
   // 將中文轉拼音（空格合併，轉小寫）
@@ -8,7 +8,7 @@ function toPinyin(text: string): string {
   return pyArray.flat().join(' ').toLowerCase();
 }
 
-export const generateSlug = (input: string):storeNameSlugType => {
+export const generateSlug = (input: string):ShopNameSlugType => {
   const isPureEnglish = /^[a-zA-Z\s]+$/.test(input);
   const name = isPureEnglish ? input : toPinyin(input);
   const slug = slugify(name, { lower: true, strict: true });

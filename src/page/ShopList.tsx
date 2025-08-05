@@ -1,58 +1,55 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { getStoresByQuery } from "../utils/storesService"
-import { StoreTypeWithReview } from "../types/store";
+import { getShopsByQuery } from "../utils/shopService"
+import { ShopTypeWithReview } from "../types/shop";
 import { useDrinkReview } from "../context/DrinkReviewContext";
-import StoreCard from "../component/StoreCard";
+import ShopCard from "../component/ShopCard";
 import LoadingSection from "../component/LoadingSection";
 import ErrorSection from "../component/ErrorSection";
 import { RiSearchLine } from "react-icons/ri";
 
-const StoreList = () => {
-    const [stores, setStores] = useState<StoreTypeWithReview[]>([]);
+const ShopList = () => {
+    const [shops, setShops] = useState<ShopTypeWithReview[]>([]);
     const [searchValue, setSearchValue] = useState<string>('');
     const [isLoading, setIsLoading] =useState(false);
     const { reviews } = useDrinkReview();
 
-    const fetchStoreData = async() => {
+    const fetchShopData = async() => {
         setIsLoading(true);
         try {
-            const data = await getStoresByQuery({ isApproved: true });
-            const storesWithReviews = data.map(store => {
-                const storeReviews = reviews.filter(n => n.storeId === store.id);
-                const totalReviews = storeReviews.length;
+            const data = await getShopsByQuery({ isApproved: true });
+            const shopsWithReviews = data.map(shop => {
+                const shopReviews = reviews.filter(n => n.shopId === shop.id);
+                const totalReviews = shopReviews.length;
                 const averageRating =
                 totalReviews > 0
-                    ? storeReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
+                    ? shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
                     : 0;
         
                 return {
-                    ...store,
-                    reviews: storeReviews,
+                    ...shop,
+                    reviews: shopReviews,
                     totalReviews,
                     averageRating,
                 };
             });
 
-            setStores(storesWithReviews);
+            setShops(shopsWithReviews);
         } catch (error) {
-            console.log('get store error');
+            console.log('get shop error');
         } finally {
             setIsLoading(false);
         }
     }
 
     useEffect(() => {
-        fetchStoreData();
+        fetchShopData();
     }, [reviews]);
 
     const navigate = useNavigate();
-    const goToStoreDetail = (slug: string) => {
-        navigate(`/store/${slug}`);
-    };
 
-    const filterStores = stores.filter(store => {
-        return store.nameEn.toLowerCase().includes(searchValue.toLowerCase());
+    const filterShops = shops.filter(shop => {
+        return shop.nameEn.toLowerCase().includes(searchValue.toLowerCase());
     });
 
     return (
@@ -64,33 +61,33 @@ const StoreList = () => {
                         value={searchValue}
                         onChange={e => setSearchValue(e.target.value)}
                         type="text"
-                        placeholder="Search stores..."
+                        placeholder="Search shops..."
                         className="flex-1 bg-transparent text-sm text-primary placeholder-surface-light outline-none"
                     />
                 </div>
 
                 {isLoading && <LoadingSection />}
 
-                {filterStores.length > 0 && !isLoading && <>
+                {filterShops.length > 0 && !isLoading && <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filterStores.map(store => (
-                            <StoreCard
-                                key={store.id}
-                                data={store}
-                                onClick={() => goToStoreDetail(store.slug)}
+                        {filterShops.map(shop => (
+                            <ShopCard
+                                key={shop.id}
+                                data={shop}
+                                onClick={() => navigate(`/shop/${shop.slug}`)}
                             />
                         ))}
                     </div>
                 </>}
 
-                {!filterStores.length && !isLoading &&  (
-                    stores.length > 0 ? (
+                {!filterShops.length && !isLoading &&  (
+                    shops.length > 0 ? (
                         <ErrorSection
-                            errorMsg='Hmm… no stores found. Maybe try different filters.'
+                            errorMsg='Hmm… no shops found. Maybe try different filters.'
                         />
                     ) : (
                         <ErrorSection
-                            errorMsg={`Oops! No stores here yet.`}
+                            errorMsg={`Oops! No shop here yet.`}
                         />
                     )
                 )}
@@ -99,4 +96,4 @@ const StoreList = () => {
     )
 }
 
-export default StoreList
+export default ShopList

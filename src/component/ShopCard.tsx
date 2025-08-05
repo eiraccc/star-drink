@@ -1,15 +1,15 @@
-import { StoreTypeWithReview } from "../types/store";
+import { ShopTypeWithReview } from "../types/shop";
 import StarRating from "./StarRating";
 import { MdStorefront } from "react-icons/md";
 import { FaStar, FaComment } from "react-icons/fa"
 import { RiDrinks2Fill } from "react-icons/ri";
 
-type StoreCardProps = {
-  data: StoreTypeWithReview,
+type ShopCardProps = {
+  data: ShopTypeWithReview,
   onClick?: () => void
 };
 
-const StoreCard = ({ data, onClick }: StoreCardProps) => {
+const ShopCard = ({ data, onClick }: ShopCardProps) => {
   return (
     <div
         onClick={onClick}
@@ -60,4 +60,4 @@ const StoreCard = ({ data, onClick }: StoreCardProps) => {
   )
 }
 
-export default StoreCard
+export default ShopCard

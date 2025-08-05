@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react"
-import { StoreType, StoreTypeFormType } from "../../../types/store";
+import { ShopType, ShopFormType } from "../../../types/shop";
 import {
-    getStores as getStoresFromFB,
-    addStore as addStoreToFB,
-    editStore as editStoreToFB,
-    deleteStore as deleteStoreInFB,
-    approveStore
-} from "../../../utils/storesService";
+    getShops as getShopsFromFB,
+    addShop as addShopToFB,
+    editShop as editShopToFB,
+    deleteShop as deleteShopInFB,
+    approveShop
+} from "../../../utils/shopService";
 import SingleSelect, { OptionType }  from "../../../component/SingleSelect";
-import StoresTable from "./StoresTable";
-import StoresEditModal from "./StoresEditModal";
+import ShopTable from "./ShopTable";
+import ShopEditModal from "./ShopEditModal";
 import LoadingOverlay from "../../../component/LoadingOverlay";
 import ErrorSection from "../../../component/ErrorSection";
 import { FaPlus } from 'react-icons/fa';
 
-const StoresPage = () => {
-    const [stores, setStores] = useState<StoreType[]>([]);
+const ShopPage = () => {
+    const [shops, setShops] = useState<ShopType[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<'edit' | 'add' | ''>('');
 
@@ -27,51 +27,51 @@ const StoresPage = () => {
     
     const [filterSelected, setFilterSelected] = useState<OptionType>(filterOptions[0]);
     const filterType = filterSelected.value as 'all' | 'approved' | 'pending';
-    const filterStores = stores.filter(n => {
+    const filtershops = shops.filter(n => {
         if(filterType === 'all') return n;
         return n.isApproved === (filterType === 'approved')
     });
 
-    const fetchStore = async () => {
+    const fetchShop = async () => {
       try {
-        const data = await getStoresFromFB();
-        data && setStores(data);
+        const data = await getShopsFromFB();
+        data && setShops(data);
         console.log('get data', data);
       } catch (error) {
-        console.error('get stores error', error);
+        console.error('get shops error', error);
       } finally {
       }
     };
 
-    const initGetStore = async () => {
+    const initGetShop = async () => {
         setIsLoading(true);
-        await fetchStore();
+        await fetchShop();
         setIsLoading(false);
     };
 
     useEffect(() => {
-        initGetStore();
+        initGetShop();
     }, [])
 
-    const checkKeys: (keyof StoreType)[] = ['nameEn', 'nameZh', 'slug', 'description'];
+    const checkKeys: (keyof ShopType)[] = ['nameEn', 'nameZh', 'slug', 'description'];
 
-    const checkApproveValid = (data: StoreType) => {
+    const checkApproveValid = (data: ShopType) => {
         return checkKeys.every(key => data[key] !== '') && data.alias.length > 0
     }
 
-    const getApproveInvalidKey = (data: StoreType) => {
+    const getApproveInvalidKey = (data: ShopType) => {
         let invalidKeys = checkKeys.filter(key => data[key] === '');
         if(!data.alias.length) invalidKeys.push('alias');
         return invalidKeys;
     }
 
-    const handleApprove = async (storeId: string, data: StoreType) => {
+    const handleApprove = async (shopId: string, data: ShopType) => {
         if(!checkApproveValid(data) || data.isApproved) return;
 
         setIsLoading(true);
         try {
-            await approveStore(storeId);
-            await fetchStore();
+            await approveShop(shopId);
+            await fetchShop();
         } catch (error) {
             console.error('set isApproved error', error);
         } finally {
@@ -80,15 +80,15 @@ const StoresPage = () => {
     };
 
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
-    const [editData, setEditData] = useState<StoreType | StoreTypeFormType | null>(null);
+    const [editData, setEditData] = useState<ShopType | ShopFormType | null>(null);
 
-    const openEdit = (data: StoreType) => {
+    const openEdit = (data: ShopType) => {
         setEditMode('edit');
         setShowEditModal(true);
         setEditData(data);
     };
 
-    const initAddData: StoreTypeFormType = {
+    const initAddData: ShopFormType = {
         nameEn: '',
         nameZh: '',
         slug: '',
@@ -112,12 +112,12 @@ const StoresPage = () => {
         if(!editData) return;
         setIsLoading(true);
         try {
-            const {createdAt, ...editItem} = editData as StoreType;
-            await editStoreToFB(editItem);
+            const {createdAt, ...editItem} = editData as ShopType;
+            await editShopToFB(editItem);
             setEditMode('');
             setShowEditModal(false);
             setEditData(null);
-            await fetchStore();
+            await fetchShop();
         } catch (error) {
             console.log('edit error');
         } finally {
@@ -130,11 +130,11 @@ const StoresPage = () => {
         if(!editData) return;
         setIsLoading(true);
         try {
-            await addStoreToFB(editData);
+            await addShopToFB(editData);
             setEditMode('');
             setShowEditModal(false);
             setEditData(null);
-            await fetchStore();
+            await fetchShop();
         } catch (error) {
             console.log('edit error');
         } finally {
@@ -148,11 +148,11 @@ const StoresPage = () => {
         setEditData(null);
     };
 
-    const handleDelete = async (storeId: string) => {
+    const handleDelete = async (shopId: string) => {
         setIsLoading(true);
         try {
-            await deleteStoreInFB(storeId);
-            await fetchStore();
+            await deleteShopInFB(shopId);
+            await fetchShop();
         } catch (error) {
             console.log('delete error')
         } finally {
@@ -162,7 +162,7 @@ const StoresPage = () => {
 
     return (
         <section>
-           <StoresEditModal
+           <ShopEditModal
                 editMode={editMode}
                 isOpen={showEditModal}
                 editData={editData}
@@ -178,7 +178,7 @@ const StoresPage = () => {
                         options={filterOptions}
                         value={filterSelected}
                         onChange={setFilterSelected}
-                        placeholder="Filter stores"
+                        placeholder="Filter shops"
                         backgroundColor='var(--color-contrast)'
                     />
                 </div>
@@ -187,13 +187,13 @@ const StoresPage = () => {
                     className="flex items-center bg-highlight text-contrast rounded-full px-2 py-2 mr-2 hover:opacity-90"
                 >
                     <FaPlus className='mr-2'/>
-                    Add Store
+                    Add Shop
                 </button>
             </div>
 
-            {isLoading ? <LoadingOverlay /> : stores.length ? (
-                <StoresTable
-                    stores={filterStores}
+            {isLoading ? <LoadingOverlay /> : shops.length ? (
+                <ShopTable
+                    shops={filtershops}
                     type={filterType}
                     handleApprove={handleApprove}
                     openEdit={openEdit}
@@ -203,11 +203,11 @@ const StoresPage = () => {
                 />
             ) : (
                  <ErrorSection
-                    errorMsg="No store yet!"
+                    errorMsg="No shop yet!"
                  />
             )}
         </section>
     )
 }
 
-export default StoresPage
+export default ShopPage

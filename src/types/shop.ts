@@ -1,21 +1,21 @@
 import { Timestamp, FieldValue } from "firebase/firestore";
 import { DrinkReviewType } from "./drinkReview";
 
-export interface storeSubmittedType {
+export interface ShopSubmittedType {
     submittedName: string;
     submittedNote: string;
     submittedBy: string;
     submittedByRole: 'user' | 'admin'
 }
 
-export interface storeNameSlugType {
+export interface ShopNameSlugType {
     nameEn: string;
     nameZh: string;
     slug: string;
     alias: string[];
 }
 
-export interface StoreType extends storeSubmittedType, storeNameSlugType {
+export interface ShopType extends ShopSubmittedType, ShopNameSlugType {
     id: string;
     description: string;
     isApproved: boolean;
@@ -23,20 +23,20 @@ export interface StoreType extends storeSubmittedType, storeNameSlugType {
     updatedAt: string;
 }
 
-export interface StoreTypeFirestore extends storeSubmittedType, storeNameSlugType {
+export interface ShopTypeFirestore extends ShopSubmittedType, ShopNameSlugType {
     description: string;
     isApproved: boolean;
     createdAt: Timestamp
     updatedAt: Timestamp | FieldValue;
 }
 
-export interface StoreTypeWithReview extends StoreType {
+export interface ShopTypeWithReview extends ShopType {
     reviews: DrinkReviewType[];
     totalReviews: number,
     averageRating: number
 }
 
-export type StoreTypeFormType = Omit<StoreType, 'id' | 'createdAt' | 'updatedAt'>
+export type ShopFormType = Omit<ShopType, 'id' | 'createdAt' | 'updatedAt'>
 
 export interface AliasLabelType {
   value: string;

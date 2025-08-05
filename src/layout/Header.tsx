@@ -20,7 +20,7 @@ const Header = () => {
     }
 
     const pathArr = location.pathname.split('/');
-    const isStorePage = pathArr ? pathArr[1] === 'store' : false;
+    const isShopPage = pathArr ? pathArr[1] === 'shop' : false;
 
     return (
         <header className='relative flex items-center justify-between p-4 border-b-2 border-primary'>
@@ -30,7 +30,7 @@ const Header = () => {
                         <RiDrinks2Line size={35} />
                     </div>
                 </Link>
-                <Link to="/store">
+                <Link to="/shop">
                     <div className='text-primary hover:text-secondary'>
                         <MdStorefront size={35} />
                     </div>
@@ -38,7 +38,7 @@ const Header = () => {
             </div>
             
             <h1 className='text-primary text-xl absolute left-1/2 transform -translate-x-1/2'>
-                {isStorePage ? 'Store' : 'Drink'}
+                {isShopPage ? 'Shop' : 'Drink'}
             </h1>
             <div className='flex items-center'>
                 {location.pathname !== '/drink/add' && !location.pathname.includes('admin') && <Link to="/drink/add">

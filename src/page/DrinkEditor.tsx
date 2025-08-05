@@ -18,7 +18,7 @@ const DrinkEditor = () => {
 
   const initDrinkReview: DrinkReviewFormType = {
     drinkName: '',
-    storeName: '',
+    shopName: '',
     rating: 0,
     sugar: 100,
     ice: 100,
@@ -122,15 +122,15 @@ const DrinkEditor = () => {
               </div>
               <div className="mb-2">
                 <label
-                  htmlFor="storeName"
+                  htmlFor="shopName"
                   className="mb-1 after:content-['*'] after:ml-0.5 after:text-secondary block"
-                >Store Name:</label>
+                >Shop Name:</label>
                 <input
                   type="text"
-                  id="storeName"
+                  id="shopName"
                   className='w-full md:max-w-[500px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
-                  value={drinkData.storeName}
-                  onChange={(e) => setDrinkData({...drinkData, storeName: e.target.value})}
+                  value={drinkData.shopName}
+                  onChange={(e) => setDrinkData({...drinkData, shopName: e.target.value})}
                   required
                 />
               </div>

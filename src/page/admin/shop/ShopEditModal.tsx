@@ -1,18 +1,18 @@
 import Modal from "../../../component/Modal";
 import UnderlineInput from "../../../component/UnderlineInput";
 import ChipInput from "../../../component/ChipInput";
-import { StoreTypeFormType } from "../../../types/store";
+import { ShopFormType } from "../../../types/shop";
 
 interface propsType {
     isOpen: boolean;
     editMode: 'edit' | 'add' | '',
-    editData: StoreTypeFormType | null;
-    setEditData: (data: StoreTypeFormType) => void;
+    editData: ShopFormType | null;
+    setEditData: (data: ShopFormType) => void;
     onSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
     onCancel: () => void;
 }
 
-const StoresEditModal = ({
+const ShopEditModal = ({
     isOpen,
     editMode,
     editData,
@@ -22,7 +22,7 @@ const StoresEditModal = ({
 }: propsType) => {
   return (
     <Modal
-        title={editMode === 'edit' ? 'Edit Store' : 'Add Store'}
+        title={editMode === 'edit' ? 'Edit Shop' : 'Add Shop'}
         isOpen={isOpen}
         onClose={() => onCancel()}>
             {editData &&(<div>
@@ -102,4 +102,4 @@ const StoresEditModal = ({
   )
 }
 
-export default StoresEditModal
+export default ShopEditModal

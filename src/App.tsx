@@ -5,9 +5,9 @@ import Section from './layout/Section';
 import DrinkList from './page/DrinkList';
 import DrinkEditor from './page/DrinkEditor';
 import DrinkDetail from './page/DrinkDetail';
-import StoresPage from './page/admin/stores/StoresPage';
-import StoreList from './page/StoreList';
-import StoreDetail from './page/StoreDetail';
+import ShopPage from './page/admin/shop/ShopPage';
+import ShopList from './page/ShopList';
+import ShopDetail from './page/ShopDetail';
 import Footer from './layout/Footer';
 import ErrorSection from './component/ErrorSection';
 import { DrinkReviewProvider } from './context/DrinkReviewContext';
@@ -28,9 +28,9 @@ function App() {
               <Route path="/drink/add" element={<DrinkEditor />} />
               <Route path="/drink/:drinkId" element={<DrinkDetail />} />
               <Route path="/drink/:drinkId/edit" element={<DrinkEditor />} />
-              <Route path="/store/" element={<StoreList />} />
-              <Route path="/store/:storeSlug" element={<StoreDetail />} />
-              <Route path="/admin/stores" element={<StoresPage />} />
+              <Route path="/shop/" element={<ShopList />} />
+              <Route path="/shop/:shopSlug" element={<ShopDetail />} />
+              <Route path="/admin/shop" element={<ShopPage />} />
               <Route path="*" element={
                 <section>
                   <ErrorSection

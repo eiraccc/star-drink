@@ -24,7 +24,7 @@ const DrinkCard = ({ data, onClick }: DrinkCardProps) => {
             </div>
 
             <p className="text-text text-lg font-bold ">{data.drinkName}</p>
-            <p className="text-text-secondary italic">{data.storeName}</p>
+            <p className="text-text-secondary italic">{data.shopName}</p>
             <StarRating readonly={true} rating={data.rating} />
             <div className="mt-2">
                 <div className={`bg-primary-ice/${iceOpacity} text-text-ice inline-block p-1 text-xs mr-1`}>{iceLabelMap[data.ice]}</div>

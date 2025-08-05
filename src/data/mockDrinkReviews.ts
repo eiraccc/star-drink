@@ -4,7 +4,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-1',
     drinkName: "Classic Milk Tea",
-    storeName: "Tea Time",
+    shopName: "Tea Time",
+    shopId: "test",
     rating: 4,
     sugar: 50,
     ice: 70,
@@ -17,7 +18,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-2',
     drinkName: "Taro Milk Tea",
-    storeName: "Happy Cup",
+    shopName: "Happy Cup",
+    shopId: "test",
     rating: 5,
     sugar: 100,
     ice: 30,
@@ -30,7 +32,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-3',
     drinkName: "Wintermelon Green Tea",
-    storeName: "Cool Drink Bar",
+    shopName: "Cool Drink Bar",
+    shopId: "test",
     rating: 3,
     sugar: 25,
     ice: 0,
@@ -43,7 +46,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-4',
     drinkName: "Brown Sugar Latte",
-    storeName: "Sugar Rush",
+    shopName: "Sugar Rush",
+    shopId: "test",
     rating: 5,
     sugar: 100,
     ice: 30,
@@ -56,7 +60,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-5',
     drinkName: "Matcha Latte",
-    storeName: "Green Leaf",
+    shopName: "Green Leaf",
+    shopId: "test",
     rating: 4,
     sugar: 75,
     ice: 70,
@@ -69,7 +74,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-6',
     drinkName: "Fruit Tea",
-    storeName: "Fruity World",
+    shopName: "Fruity World",
+    shopId: "test",
     rating: 2,
     sugar: 0,
     ice: 100,
@@ -82,7 +88,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-7',
     drinkName: "Coffee Milk Tea",
-    storeName: "Café Boba",
+    shopName: "Café Boba",
+    shopId: "test",
     rating: 3,
     sugar: 50,
     ice: 70,
@@ -95,7 +102,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-8',
     drinkName: "Yakult Lemon Tea",
-    storeName: "Cool Cup",
+    shopName: "Cool Cup",
+    shopId: "test",
     rating: 4,
     sugar: 25,
     ice: 30,
@@ -108,7 +116,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-9',
     drinkName: "Thai Tea",
-    storeName: "Thai Cha",
+    shopName: "Thai Cha",
+    shopId: "test",
     rating: 5,
     sugar: 100,
     ice: 70,
@@ -121,7 +130,8 @@ export const mockDrinkReviews: DrinkReviewType[] = [
   {
     id: 'review-10',
     drinkName: "Oolong Milk Tea",
-    storeName: "Tea Craft",
+    shopName: "Tea Craft",
+    shopId: "test",
     rating: 3,
     sugar: 50,
     ice: -1,

@@ -1,20 +1,20 @@
 import Tooltip from "../../../component/Tooltip";
-import { StoreType } from "../../../types/store";
+import { ShopType } from "../../../types/shop";
 import { IoShieldCheckmark } from "react-icons/io5";
 import { FaRegClock } from "react-icons/fa";
 
 interface propsType {
-  stores: StoreType[];
+  shops: ShopType[];
   type: 'all' | 'approved' | 'pending';
-  handleApprove: (id: string, data: StoreType) => void;
-  openEdit: (store: StoreType) => void;
+  handleApprove: (id: string, data: ShopType) => void;
+  openEdit: (shop: ShopType) => void;
   handleDelete: (id: string) => void;
-  checkApproveValid: (store: StoreType) => boolean;
-  getApproveInvalidKey: (store: StoreType) => string[];
+  checkApproveValid: (shop: ShopType) => boolean;
+  getApproveInvalidKey: (shop: ShopType) => string[];
 }
 
-const StoresTable = ({
-    stores,
+const ShopTable = ({
+    shops,
     type,
     handleApprove,
     openEdit,
@@ -23,8 +23,8 @@ const StoresTable = ({
     getApproveInvalidKey
 }: propsType) => {
     const columns = [
-      { key: 'nameEn', label: 'Store Name (EN)' },
-      { key: 'nameZh', label: 'Store Name (ZH)' },
+      { key: 'nameEn', label: 'Shop Name (EN)' },
+      { key: 'nameZh', label: 'Shop Name (ZH)' },
       { key: 'slug', label: 'Slug' },
       { key: 'alias', label: 'Alias', render: (val: string[]) => (
         val.length ? (
@@ -79,36 +79,36 @@ const StoresTable = ({
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                    {stores.map((store) => (
-                        <tr key={store.id} className="hover:bg-background">
+                    {shops.map((shop) => (
+                        <tr key={shop.id} className="hover:bg-background">
                             {columns.filter(col => visableKeys.includes(col.key)).map(col => (
                                 <td key={col.key} className={`px-4 py-2 ${col.key==='slug' && 'whitespace-nowrap'}`}>
                                     {col.render
-                                        ? col.render((store as any)[col.key])
-                                        : (store as any)[col.key] || '-'}
+                                        ? col.render((shop as any)[col.key])
+                                        : (shop as any)[col.key] || '-'}
                                 </td>
                             ))}
                             <td className="px-4 py-2">
                                 <Tooltip
-                                    text={`Please complete: ${getApproveInvalidKey(store).join(',')}`}
-                                    show={!checkApproveValid(store)}
+                                    text={`Please complete: ${getApproveInvalidKey(shop).join(',')}`}
+                                    show={!checkApproveValid(shop)}
                                 >
                                     <button
-                                        disabled={!checkApproveValid(store) || store.isApproved}
-                                        onClick={() => handleApprove(store.id, store)}
+                                        disabled={!checkApproveValid(shop) || shop.isApproved}
+                                        onClick={() => handleApprove(shop.id, shop)}
                                         className="bg-highlight text-background px-5 py-2 rounded-md text-sm hover:opacity-90 disabled:opacity-50"
                                     >Approve</button>
                                 </Tooltip>
                             </td>
                             <td className="px-4 py-2">
                                 <button
-                                    onClick={() => openEdit(store)}
+                                    onClick={() => openEdit(shop)}
                                     className="bg-primary text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
                                 >Edit</button>
                             </td>
                             <td className="px-4 py-2">
                                 <button
-                                    onClick={() => handleDelete(store.id)}
+                                    onClick={() => handleDelete(shop.id)}
                                     className="bg-danger text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
                                 >Delete</button>
                             </td>
@@ -120,4 +120,4 @@ const StoresTable = ({
     )
 }
 
-export default StoresTable
+export default ShopTable

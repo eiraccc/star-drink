@@ -15,8 +15,8 @@ export type DrinkRatingType = 0 | 1 | 2 | 3 | 4 | 5;
 export interface DrinkReviewType {
     id: string,
     drinkName: string,
-    storeName: string,
-    storeId: string,
+    shopName: string,
+    shopId: string,
     rating: DrinkRatingType,
     sugar: SugarLevel,
     ice: IceLevel,
@@ -31,8 +31,8 @@ export type DrinkReviewFormType = Omit<DrinkReviewType, 'id' | 'userId' | 'creat
 
 export interface DrinkReviewFirestoreData {
   drinkName: string;
-  storeName: string;
-  storeId: string,
+  shopName: string;
+  shopId: string,
   rating: DrinkRatingType;
   sugar: SugarLevel;
   ice: IceLevel;

@@ -15,21 +15,21 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 import {
-  StoreType,
-  StoreTypeFirestore,
-  storeSubmittedType,
-  StoreTypeFormType,
-} from '../types/store';
+  ShopType,
+  ShopTypeFirestore,
+  ShopSubmittedType,
+  ShopFormType,
+} from '../types/shop';
 import { formatTimestampToUserLocalString } from './timeFormat';
 import { generateSlug } from './autoSlug';
 
-const storeRef = collection(db, 'stores');
+const shopRef = collection(db, 'shops');
 
-export async function getStores(): Promise<StoreType[]> {
+export async function getShops(): Promise<ShopType[]> {
   try {
-    const snapshot = await getDocs(storeRef);
+    const snapshot = await getDocs(shopRef);
     return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
-      const data = doc.data() as StoreTypeFirestore & {
+      const data = doc.data() as ShopTypeFirestore & {
         createdAt: Timestamp;
         updatedAt: Timestamp;
       };
@@ -46,33 +46,33 @@ export async function getStores(): Promise<StoreType[]> {
   }
 }
 
-export async function getStoresByQuery({
-  storeId,
-  storeSlug,
+export async function getShopsByQuery({
+  shopId,
+  shopSlug,
   isApproved
 }: {
-  storeId?: string,
-  storeSlug?: string,
+  shopId?: string,
+  shopSlug?: string,
   isApproved?: boolean
-}): Promise<StoreType[]> {
+}): Promise<ShopType[]> {
   try {
     const conditions: QueryConstraint[] = [];
-    if (storeId) {
-      conditions.push(where("id", "==", storeId));
+    if (shopId) {
+      conditions.push(where("id", "==", shopId));
     }
 
-    if (storeSlug) {
-      conditions.push(where("slug", "==", storeSlug));
+    if (shopSlug) {
+      conditions.push(where("slug", "==", shopSlug));
     }
   
     if (isApproved !== undefined) {
       conditions.push(where("isApproved", "==", isApproved));
     }
   
-    const q = query(storeRef, ...conditions);
+    const q = query(shopRef, ...conditions);
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
-      const data = doc.data() as StoreTypeFirestore & {
+      const data = doc.data() as ShopTypeFirestore & {
         createdAt: Timestamp;
         updatedAt: Timestamp;
       };
@@ -89,13 +89,13 @@ export async function getStoresByQuery({
   }
 }
 
-export async function addStoreByName({
+export async function addShopByName({
   submittedName,
   submittedNote,
   submittedBy,
-}: storeSubmittedType) {
+}: ShopSubmittedType) {
   try {
-    const storeData: StoreTypeFirestore = {
+    const shopData: ShopTypeFirestore = {
       ...generateSlug(submittedName),
       submittedName,
       submittedNote,
@@ -106,7 +106,7 @@ export async function addStoreByName({
       createdAt: serverTimestamp() as Timestamp,
       updatedAt: serverTimestamp() as Timestamp,
     };
-    const result = await addDoc(storeRef, storeData);
+    const result = await addDoc(shopRef, shopData);
     return result.id;
   } catch (error) {
     console.error('add error:', error);
@@ -114,15 +114,15 @@ export async function addStoreByName({
   }
 }
 
-export async function addStore(data: StoreTypeFormType) {
+export async function addShop(data: ShopFormType) {
     try {
-      const storeData: StoreTypeFirestore = {
+      const shopData: ShopTypeFirestore = {
         ...data,
         submittedByRole: 'admin',
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
       };
-      const result = await addDoc(storeRef, storeData);
+      const result = await addDoc(shopRef, shopData);
       return result.id;
     } catch (error) {
       console.error('add error:', error);
@@ -130,9 +130,9 @@ export async function addStore(data: StoreTypeFormType) {
     }
   }
 
-export async function approveStore(storeId: string) {
+export async function approveShop(shopId: string) {
   try {
-    const ref = doc(db, 'stores', storeId);
+    const ref = doc(db, 'shops', shopId);
     await updateDoc(ref, {
       isApproved: true,
       updatedAt: serverTimestamp(),
@@ -143,9 +143,9 @@ export async function approveStore(storeId: string) {
   }
 }
 
-export async function editStore(data: Omit<StoreType, 'createdAt'>) {
+export async function editShop(data: Omit<ShopType, 'createdAt'>) {
   try {
-    const ref = doc(db, 'stores', data.id);
+    const ref = doc(db, 'shops', data.id);
     await updateDoc(ref, {
       ...data,
       updatedAt: serverTimestamp(),
@@ -156,9 +156,9 @@ export async function editStore(data: Omit<StoreType, 'createdAt'>) {
   }
 }
 
-export async function deleteStore(storeId: string) {
+export async function deleteShop(shopId: string) {
   try {
-    const ref = doc(db, 'stores', storeId);
+    const ref = doc(db, 'shops', shopId);
     await deleteDoc(ref);
   } catch (error) {
     console.error('delete error:', error);

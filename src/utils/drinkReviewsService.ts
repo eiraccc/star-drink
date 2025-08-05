@@ -25,22 +25,22 @@ import { IoConstructOutline } from "react-icons/io5";
 const reviewsRef = collection(db, "drinkReviews");
 
 export async function getReviews({
-  storeId,
-  storeSlug,
+  shopId,
+  shopSlug,
   drinkName,
 }: {
-  storeId?: string,
-  storeSlug?: string,
+  shopId?: string,
+  shopSlug?: string,
   drinkName?: string
 }): Promise<DrinkReviewType[]> {
   try {
     const conditions: QueryConstraint[] = [];
-    if (storeId) {
-      conditions.push(where("storeId", "==", storeId));
+    if (shopId) {
+      conditions.push(where("shopId", "==", shopId));
     }
   
-    if (storeSlug) {
-      conditions.push(where("slug", "==", storeSlug));
+    if (shopSlug) {
+      conditions.push(where("slug", "==", shopSlug));
     }
 
     if (drinkName) {

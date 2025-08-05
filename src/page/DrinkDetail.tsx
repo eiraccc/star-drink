@@ -92,7 +92,7 @@ const DrinkDetail = () => {
             </div>
           ) : (
             <ErrorSection
-              errorMsg='Uh-oh, no drinks here yet!'
+              errorMsg='Uh-oh, no drink here!'
               btnActionHome={true}
             />
           )

@@ -182,7 +182,7 @@ const DrinkEditor = () => {
                   options={showToppingOptions}
                   selected={toppingSelected}
                   setSelected={updataToppings}
-                  placeholder='Select toppings'
+                  placeholder='Select toppings or add (type and press Enter)'
                   maxToShow={10}
                   borderColor='primary'
                   creatable={true}

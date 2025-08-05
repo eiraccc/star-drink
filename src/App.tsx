@@ -7,6 +7,7 @@ import DrinkEditor from './page/DrinkEditor';
 import DrinkDetail from './page/DrinkDetail';
 import StoresPage from './page/admin/stores/StoresPage';
 import StoreList from './page/StoreList';
+import StoreDetail from './page/StoreDetail';
 import Footer from './layout/Footer';
 import ErrorSection from './component/ErrorSection';
 import { DrinkReviewProvider } from './context/DrinkReviewContext';
@@ -28,6 +29,7 @@ function App() {
               <Route path="/drink/:drinkId" element={<DrinkDetail />} />
               <Route path="/drink/:drinkId/edit" element={<DrinkEditor />} />
               <Route path="/store/" element={<StoreList />} />
+              <Route path="/store/:storeSlug" element={<StoreDetail />} />
               <Route path="/admin/stores" element={<StoresPage />} />
               <Route path="*" element={
                 <section>

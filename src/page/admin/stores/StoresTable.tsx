@@ -61,7 +61,7 @@ const StoresTable = ({
     const visableKeysMap:any = {
         pending: ['nameEn', 'nameZh', 'slug', 'submittedName', 'submittedBy', 'submittedNote', 'createdAt', 'isApproved'],
         approved: ['nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'isApproved'],
-        all: columns.map(c => c.key),
+        all: ['nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'updatedAt',  'isApproved'],
     };
     const visableKeys = visableKeysMap[type] || [];
     

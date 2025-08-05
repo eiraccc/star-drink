@@ -48,15 +48,21 @@ export async function getStores(): Promise<StoreType[]> {
 
 export async function getStoresByQuery({
   storeId,
+  storeSlug,
   isApproved
 }: {
   storeId?: string,
+  storeSlug?: string,
   isApproved?: boolean
 }): Promise<StoreType[]> {
   try {
     const conditions: QueryConstraint[] = [];
     if (storeId) {
       conditions.push(where("id", "==", storeId));
+    }
+
+    if (storeSlug) {
+      conditions.push(where("slug", "==", storeSlug));
     }
   
     if (isApproved !== undefined) {

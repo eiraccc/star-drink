@@ -1,10 +1,10 @@
 type TooltipProps = {
   text: string,
-  show: boolean,
+  show?: boolean,
   children: React.ReactNode
 }
 
-export default function Tooltip({ text, show, children }: TooltipProps) {
+export default function Tooltip({ text, show = true, children }: TooltipProps) {
   return (
     <div className="relative group inline-block">
       { children }

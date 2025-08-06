@@ -12,6 +12,7 @@ import {
   Timestamp,
   QueryDocumentSnapshot,
   DocumentData,
+  documentId,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import {
@@ -58,7 +59,7 @@ export async function getShopsByQuery({
   try {
     const conditions: QueryConstraint[] = [];
     if (shopId) {
-      conditions.push(where("id", "==", shopId));
+      conditions.push(where(documentId(), "==", shopId));
     }
 
     if (shopSlug) {

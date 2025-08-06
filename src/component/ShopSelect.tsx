@@ -27,10 +27,10 @@ const ShopSelect = ({
           <components.Option {...props}>
             <div className="flex items-center justify-between">
               <span>{data.label}</span>
-              {data.pending ? (
-                <span className="text-xs text-primary ml-2">Under Review</span>
-              ): (
+              {data.isApproved ? (
                 <IoShieldCheckmark className='text-success'/>
+              ): (
+                <span className="text-xs text-primary ml-2">Under Review</span>
               )}
             </div>
           </components.Option>

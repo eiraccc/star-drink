@@ -9,14 +9,19 @@ import { MdArrowBackIos } from "react-icons/md";
 import { RiDrinks2Fill } from "react-icons/ri";
 import { ImCross } from "react-icons/im";
 import { useDrinkReview } from "../context/DrinkReviewContext";
+import { ShopType } from '../types/shop';
 import { toast } from 'react-toastify';
+import ShopStatusTag from '../component/ShopStatusTag';
+import { getShopsByQuery } from '../utils/shopService';
 
+type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 
 const DrinkDetail = () => {
-  const { drinkId } = useParams<{drinkId: string}>();
   const navigate = useNavigate();
-  
+  const { drinkId } = useParams<{drinkId: string}>();
   const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
+  const [shopStatus, setShopStatus] = useState<ShopStatusType>('');
+  const [shopData, setShopData] = useState<ShopType | null>(null);
   const { reviews, deleteReview, isLoading } = useDrinkReview();
 
   useEffect(() => {
@@ -24,6 +29,25 @@ const DrinkDetail = () => {
     const drinkData = reviews.find(n => n.id === drinkId) || null;
     setDrinkData(drinkData);
   }, [reviews]);
+
+  useEffect(() => {
+    // get shop status
+    if(drinkData?.shopId) {
+      getShopInfo(drinkData.shopId);
+    }
+  }, [drinkData]);
+
+  const getShopInfo = async(shopId: string) => {
+      const shopInfo = await getShopsByQuery({shopId: shopId});
+      if(shopInfo?.length) {
+          const shopData = shopInfo[0];
+          setShopStatus(shopData.isApproved ? 'approved' : 'pending');
+          setShopData(shopData);
+          // TODO: if shop change name, shoule change name field in drink data
+      } else {
+          setShopStatus('removed');
+      }
+  };
 
   const iceOpacity:number = drinkData ? (iceOptions.find(n => n.value === drinkData.ice)?.opacity || 0) : 0;
   const sugarOpacity:number = drinkData ? (sugarOptions.find(n => n.value === drinkData.sugar)?.opacity || 0) : 0;
@@ -59,7 +83,16 @@ const DrinkDetail = () => {
               <h2 className="text-text text-lg font-bold flex items-center">
                 {drinkData.drinkName}
               </h2>
-              <p className="text-text-secondary italic">{drinkData.shopName}</p>
+              <div className='flex items-center'>
+                {drinkData.shopId && shopStatus === 'approved' && shopData?.slug ? (
+                  <Link to={`/shop/${shopData.slug}`} className="text-text-secondary italic mr-2 hover:underline">
+                    {drinkData.shopName}
+                  </Link>
+                ) : (
+                  <p className="text-text-secondary italic mr-2">{drinkData.shopName}</p>
+                )}
+                <ShopStatusTag shopStatus={shopStatus} />
+              </div>
               <StarRating readonly={true} rating={drinkData.rating} />
               <div className='mt-1'>
                 <label htmlFor="ice" className='mr-2'>Ice:</label>

@@ -115,7 +115,7 @@ const DrinkEditor = () => {
       isApproved: false
     };
     setShopOptions([...shopOptions, newOption]);
-    setShopSelected(newOption);
+    putShopselected(newOption);
     setShowAddShoptModal(false);
   };
 

@@ -70,15 +70,22 @@ const ShopDetail = () => {
 
             <p className="text-text-secondary mt-2">{shopData.description}</p>
 
-            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-              {shopData.reviews.map(review => (
-                <DrinkCard
-                  key={review.id}
-                  data={review}
-                  onClick={() => navigate(`/drink/${review.id}`)}
-                />
-              ))}
-            </div>
+            {shopData.reviews.length ? (
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+                {shopData.reviews.map(review => (
+                  <DrinkCard
+                    key={review.id}
+                    data={review}
+                    onClick={() => navigate(`/drink/${review.id}`)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <ErrorSection
+                errorMsg='No drink review yet.'
+              />
+            )}
+            
             
           </div>
         ) : (

@@ -5,7 +5,6 @@ export interface ShopSubmittedType {
     submittedName: string;
     submittedNote: string;
     submittedBy: string;
-    submittedByRole: 'user' | 'admin'
 }
 
 export interface ShopNameSlugType {
@@ -21,6 +20,7 @@ export interface ShopType extends ShopSubmittedType, ShopNameSlugType {
     isApproved: boolean;
     createdAt: string;
     updatedAt: string;
+    submittedByRole: 'user' | 'admin'
 }
 
 export interface ShopTypeFirestore extends ShopSubmittedType, ShopNameSlugType {
@@ -28,6 +28,7 @@ export interface ShopTypeFirestore extends ShopSubmittedType, ShopNameSlugType {
     isApproved: boolean;
     createdAt: Timestamp
     updatedAt: Timestamp | FieldValue;
+    submittedByRole: 'user' | 'admin'
 }
 
 export interface ShopTypeWithReview extends ShopType {

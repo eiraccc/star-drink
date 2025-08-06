@@ -52,7 +52,7 @@ const StepSelector = ({
         return (
           <div
             key={option.value}
-            className="relative z-10 flex flex-col items-center cursor-pointer"
+            className="relative z-5 flex flex-col items-center cursor-pointer"
             onClick={() => onChange(option.value)}>
             {/* dot */}
             <div

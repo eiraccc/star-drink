@@ -1,6 +1,6 @@
 import Select from 'react-select'
 
-export type OptionType = {
+export interface OptionType {
   label: string;
   value: string;
 };
@@ -12,9 +12,11 @@ type SingleSelectProps = {
   placeholder?: string;
   backgroundColor?: string;
   borderColor?: string;
+  placeholderColor?: string,
   focusColor?: string;
+  width?: number;
+  components?: object
 };
-
 
 const SingleSelect = ({
     options,
@@ -23,14 +25,19 @@ const SingleSelect = ({
     placeholder = 'Select...',
     backgroundColor = 'var(--color-background)',
     borderColor = 'var(--color-surface)',
+    placeholderColor = 'var(--color-surface)',
     focusColor = 'var(--color-primary)',
+    width,
+    components,
 }: SingleSelectProps) => {
 
     const customStyles = {
         // inout wrap before focus
         control: (provided: any, state: any) => ({
             ...provided,
-            width: '150px',
+            ...width && {
+                width: width
+            },
             color: 'white',
             backgroundColor: backgroundColor,
             borderColor: state.isFocused ? focusColor : borderColor,
@@ -62,7 +69,7 @@ const SingleSelect = ({
         }),
         placeholder: (provided: any) => ({
             ...provided,
-            color: borderColor
+            color: placeholderColor
         }),
         // option
         option: (
@@ -78,21 +85,22 @@ const SingleSelect = ({
         ) => {
             return {
                 ...base,
-                backgroundColor: isFocused ? borderColor : 'transparent',
+                backgroundColor: isFocused ? 'var(--color-surface)' : 'transparent',
                 color: 'var(--color-text)',
                 cursor: 'pointer',
                 fontWeight: isSelected ? 'bold' : 'normal',
             }
         },
-    }
+    };
 
     return (
         <Select
-        options={options}
-        value={value}
-        onChange={(option) => {option && onChange(option)}}
-        placeholder={placeholder}
-        styles={customStyles}
+            options={options}
+            value={value}
+            onChange={(option) => {option && onChange(option)}}
+            placeholder={placeholder}
+            styles={customStyles}
+            components={{...components}}
         />
     )
 }

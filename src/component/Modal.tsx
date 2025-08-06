@@ -6,9 +6,10 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
+  maxWidth?: number 
 }
 
-const Modal = ({ isOpen, onClose, title, children }:ModalProps) => {
+const Modal = ({ isOpen, onClose, title, children, maxWidth }:ModalProps) => {
   if (!isOpen) return null;
 
   return createPortal(
@@ -17,7 +18,8 @@ const Modal = ({ isOpen, onClose, title, children }:ModalProps) => {
         onClick={onClose}
     >
       <div
-        className="bg-contrast rounded-xl shadow-lg w-full max-w-2xl mx-4"
+        className={'bg-contrast rounded-xl shadow-lg w-full max-w-2xl mx-4'}
+        style={{maxWidth: maxWidth || 'auto'}}
         onClick={(e) => e.stopPropagation()}
     >
         {/* Header */}
@@ -30,7 +32,7 @@ const Modal = ({ isOpen, onClose, title, children }:ModalProps) => {
 
         {/* Scrollable Content */}
         <div className="px-6 py-4 max-h-[70vh] overflow-y-auto">
-          {children}
+          { children }
         </div>
       </div>
     </div>,

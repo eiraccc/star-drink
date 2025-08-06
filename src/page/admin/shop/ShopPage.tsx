@@ -180,6 +180,7 @@ const ShopPage = () => {
                         onChange={setFilterSelected}
                         placeholder="Filter shops"
                         backgroundColor='var(--color-contrast)'
+                        width={150}
                     />
                 </div>
                 <button

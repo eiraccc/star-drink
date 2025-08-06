@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom';
 import StarRating from "../component/StarRating"
-import { DrinkReviewFormType, IceLevel, SugarLevel } from "../types/drinkReview"
+import { DrinkReviewFormType, IceLevel, SugarLevel, DrinkRatingType } from "../types/drinkReview"
 import { sugarOptions, iceOptions, toppingOptions, ToppingLabelType } from '../constants/drink'
 import { MdArrowBackIos } from "react-icons/md";
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,51 +14,55 @@ import { getShopsByQuery } from '../utils/shopService';
 import AddShopModal from '../component/AddShopModal';
 import ShopSelect, { OptionTypeWithApprovalStatus } from '../component/ShopSelect';
 import { toast } from 'react-toastify';
+import { useForm, Controller } from "react-hook-form";
 
 
 const DrinkEditor = () => {
   const { drinkId } = useParams<{ drinkId: string }>();
   const isEdit = Boolean(drinkId);
+  const navigate = useNavigate();
   const { reviews, addReview, editReview, isLoading } = useDrinkReview();
 
-  const initDrinkReview: DrinkReviewFormType = {
-    drinkName: '',
-    shopName: '',
-    shopId: '',
-    rating: 0,
-    sugar: 100,
-    ice: 100,
-    toppings: [],
-    comment: ''
-  }
-  const [drinkData, setDrinkData] = useState<DrinkReviewFormType | null>(initDrinkReview);
   const [showToppingOptions, setShowToppingOptions] = useState<ToppingLabelType[]>(toppingOptions);
   const [toppingSelected, setToppingSelected] = useState<ToppingLabelType[]>([]);
   const [shopOptions, setShopOptions] = useState<OptionTypeWithApprovalStatus[]>([]);
-  const [shopSelected, setShopSelected] = useState<OptionTypeWithApprovalStatus | null>(null);
   const [showAddShoptModal, setShowAddShoptModal] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [drinkIdError, setDrinkIdError] = useState<boolean>(false);
 
   useEffect(() => {
     if (isEdit && drinkId) {
       // edit
       const currentDrink = reviews.find(n => n.id === drinkId);
       if (currentDrink) {
+        setDrinkIdError(false);
+
         const { createdAt, updatedAt, userId,...editData } = currentDrink;
-        setDrinkData(editData);
+
+        // set old toppings
         editData.toppings.forEach(topping => {
           addNewTopping(topping);
         });
+
+        // set old shop
         getShopsAndSetOptions(editData);
+
+        // set old data
+        setValue('drinkName', editData.drinkName);
+        setValue('rating', editData.rating);
+        setValue('sugar', editData.sugar);
+        setValue('ice', editData.ice);
+        setValue('comment', editData.comment);
       } else {
-        setDrinkData(null);
+        setDrinkIdError(true);
         getShopsAndSetOptions(null);
+        reset(); // reset form
       }
     } else {
       // add
-      setDrinkData(initDrinkReview);
+      setDrinkIdError(false);
       setToppingSelected([]);
       getShopsAndSetOptions(null);
+      reset();  // reset form
     }
   }, [drinkId, reviews, isEdit]);
 
@@ -78,7 +82,7 @@ const DrinkEditor = () => {
       if(editData) {
         const matchedShop = shopList.find(n => n.value === editData.shopId);
         if(matchedShop) {
-          setShopSelected(matchedShop);
+          setValue('shopInfo', matchedShop);
         } else {
           const newOption = {
             label: editData.shopName,
@@ -86,10 +90,10 @@ const DrinkEditor = () => {
             isApproved: false
           };
           shopList.push(newOption);
-          setShopSelected(newOption);
+          setValue('shopInfo', newOption);
         }
       } else {
-        setShopSelected(null);
+        setValue('shopInfo', null);
       }
 
       setShopOptions(shopList);
@@ -98,16 +102,6 @@ const DrinkEditor = () => {
     }
  };
 
-  const putShopselected = (newOption: OptionTypeWithApprovalStatus) => {
-    setShopSelected(newOption);
-
-    drinkData && setDrinkData({
-      ...drinkData,
-      shopId: newOption?.value || '',
-      shopName: newOption?.label || ''
-    })
-  };
-
   const handleAddShop = (newId: string, newName: string) => {
     const newOption = {
       value: newId,
@@ -115,11 +109,10 @@ const DrinkEditor = () => {
       isApproved: false
     };
     setShopOptions([...shopOptions, newOption]);
-    putShopselected(newOption);
+    setValue('shopInfo', newOption);
     setShowAddShoptModal(false);
   };
 
-  
 
   const addNewTopping = useCallback((newTopping:string)  => {
     const newToppingValue = newTopping.trim().toLowerCase().replace(/\s+/g, '-');
@@ -147,27 +140,36 @@ const DrinkEditor = () => {
   // from selector update
   const updataToppings = (newToppings: ToppingLabelType[]) => {
     setToppingSelected(newToppings);
-    drinkData && setDrinkData({...drinkData, toppings: newToppings.map(n => n.value)});
   };
 
-  const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const concatSubmittedData = (data: DrinkForm): DrinkReviewFormType => {
+    let { shopInfo, ...newData } = data;
+    const submittedData: DrinkReviewFormType = {
+      ...newData,
+      toppings: toppingSelected.map(n => n.value),
+      shopId: shopInfo?.value ?? '',
+      shopName: shopInfo?.label ?? '',
+    };
+  
+    return submittedData;
+  };
+
+  const handleAdd = async (data: DrinkForm) => {
+    const submittedData = concatSubmittedData(data);
     try {
-      if(drinkData) {
-        await addReview(drinkData);
-        toast.success('Drink added successfully!');
-        navigate('/');
-      }
+      await addReview(submittedData);
+      toast.success('Drink added successfully!');
+      navigate('/');
     } catch (error) {
       toast.error("Failed to add drink. Please try again.");
     }
   };
 
-  const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleEdit = async (data: DrinkForm) => {
+    const submittedData = concatSubmittedData(data);
     try {
-      if (drinkId && drinkData) {
-        await editReview(drinkId, drinkData);
+      if (drinkId && submittedData) {
+        await editReview(drinkId, submittedData);
         toast.success('Drink updated successfully!');
         navigate(`/drink/${drinkId}`);
       }
@@ -179,6 +181,34 @@ const DrinkEditor = () => {
   const handleCancel = () => {
     navigate(isEdit ? `/drink/${drinkId}` : '/');
   };
+
+  type DrinkForm = {
+    drinkName: string,
+    shopInfo: OptionTypeWithApprovalStatus | null,
+    rating: DrinkRatingType,
+    sugar: SugarLevel,
+    ice: IceLevel,
+    comment: string
+  }
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors, isValid }
+  } = useForm<DrinkForm>({
+    mode: "onChange",
+    defaultValues: {
+      drinkName: '',
+      shopInfo: null,
+      rating: 0,
+      sugar: 100,
+      ice: 100,
+      comment: ''
+    }
+  });
 
   return (
     <section className='flex justify-center p-6 pb-10'>
@@ -195,125 +225,168 @@ const DrinkEditor = () => {
 
           {isLoading && <LoadingOverlay />}
 
-          { drinkData ? (
-            <div>
-              <div className="mb-2">
-                <label
-                  htmlFor="drinkName"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
-                >Drink Name:</label>
-                <input
-                  type="text"
-                  id="drinkName"
-                  className='w-full md:max-w-[500px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
-                  value={ drinkData.drinkName }
-                  onChange={(e) => setDrinkData({...drinkData, drinkName: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="shopName"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
-                >Shop Name:</label>
-                <ShopSelect
-                  options={shopOptions}
-                  value={shopSelected}
-                  onChange={putShopselected}
-                  onAddShop={() => setShowAddShoptModal(true)}
-                />
-              </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="rating"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
-                >Rating:</label>
-                  <StarRating
-                    rating={ drinkData.rating }
-                    iconSize={30}
-                    onChange={(newRating) => setDrinkData({...drinkData, rating: newRating})}
+          { !isLoading && (
+            drinkIdError ? (
+              <ErrorSection
+                errorMsg='Uh-oh, no drinks here yet!'
+                btnActionHome={true}
+              />
+            ) : (
+              <form onSubmit={handleSubmit(isEdit ? handleEdit : handleAdd)}>
+                <div className="mb-2">
+                  <label
+                    htmlFor="drinkName"
+                    className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
+                  >Drink Name:</label>
+                  <input
+                    type="text"
+                    id="drinkName"
+                    {...register("drinkName", { required: true })}
+                    className='w-full md:max-w-[500px] border-2 border-primary rounded-full py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
                   />
-              </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="ice"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
-                >Ice:</label>
-                <StepSelector
-                  options={iceOptions}
-                  selectedValue={drinkData.ice}
-                  onChange={(val) => setDrinkData({ ...drinkData, ice: val as IceLevel })}
-                  activeColorClass="bg-secondary-ice border-secondary-ice"
-                  baseColorClass="bg-background border-primary-ice"
-                  lineColorClass="bg-primary-ice"
-                  labelColorClass="text-text-ice"
-                />
-              </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="sugar"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
-                >Sugar:</label>
-                <StepSelector
-                  options={sugarOptions}
-                  selectedValue={drinkData.sugar}
-                  onChange={(val) => setDrinkData({ ...drinkData, sugar: val as SugarLevel })}
-                  activeColorClass="bg-secondary-sugar border-secondary-sugar"
-                  baseColorClass="bg-background border-primary-sugar"
-                  lineColorClass="bg-primary-sugar"
-                  labelColorClass="text-text-sugar"
-                />
-              </div>
+                  {errors.drinkName && (
+                    <p className="ml-1 text-danger text-xs">Required</p>
+                  )}
+                </div>
+                <div className="mb-2">
+                  <label
+                    htmlFor="shopInfo"
+                    className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
+                  >Shop Name:</label>
+                  <Controller
+                    name="shopInfo"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <ShopSelect
+                        options={shopOptions}
+                        value={field.value}
+                        onChange={field.onChange}
+                        onAddShop={() => setShowAddShoptModal(true)}
+                      />
+                    )}
+                  />
+                  {errors.shopInfo && (
+                    <p className="ml-1 text-danger text-xs">Required</p>
+                  )}
+                </div>
+                <div className="mb-2">
+                  <label
+                    htmlFor="rating"
+                    className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
+                  >Rating:</label>
+                    <Controller
+                      name="rating"
+                      control={control}
+                      rules={{
+                        validate: (value) => value > 0 || "Please provide a rating before submitting",
+                      }}
+                      render={({ field }) => (
+                        <StarRating
+                          iconSize={30}
+                          rating={field.value}
+                          onChange={field.onChange}
+                        />
+                      )}
+                    />
+                    {errors.rating && (
+                      <p className="text-xs text-danger mt-1">{errors.rating.message}</p>
+                    )}
+                </div>
+                <div className="mb-2">
+                  <label
+                    htmlFor="ice"
+                    className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
+                  >Ice:</label>
+                  <Controller
+                    name="ice"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <StepSelector
+                        options={iceOptions}
+                        selectedValue={field.value}
+                        onChange={field.onChange}
+                        activeColorClass="bg-secondary-ice border-secondary-ice"
+                        baseColorClass="bg-background border-primary-ice"
+                        lineColorClass="bg-primary-ice"
+                        labelColorClass="text-text-ice"
+                      />
+                    )}
+                  />
+                  {errors.ice && (
+                    <p className="text-xs text-danger mt-1">{errors.ice.message}</p>
+                  )}
+                </div>
+                <div className="mb-2">
+                  <label
+                    htmlFor="sugar"
+                    className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
+                  >Sugar:</label>
+                  <Controller
+                    name="sugar"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <StepSelector
+                        options={sugarOptions}
+                        selectedValue={field.value}
+                        onChange={field.onChange}
+                        activeColorClass="bg-secondary-sugar border-secondary-sugar"
+                        baseColorClass="bg-background border-primary-sugar"
+                        lineColorClass="bg-primary-sugar"
+                        labelColorClass="text-text-sugar"
+                      />
+                    )}
+                  />
+                  {errors.sugar && (
+                    <p className="text-xs text-danger mt-1">{errors.sugar.message}</p>
+                  )}
+                </div>
 
-              <div className="mb-2">
-                <label htmlFor="toppings" className='mb-1 block'>Toppings:</label>
-                <MultiSelect<ToppingLabelType>
-                  options={showToppingOptions}
-                  selected={toppingSelected}
-                  setSelected={updataToppings}
-                  placeholder='Select toppings or add (type and press Enter)'
-                  maxToShow={10}
-                  borderColor='primary'
-                  creatable={true}
-                  onCreateOption={(inputValue) => addNewTopping(inputValue)}
-                />
-              </div>
+                <div className="mb-2">
+                  <label htmlFor="toppings" className='mb-1 block'>Toppings:</label>
+                  <MultiSelect<ToppingLabelType>
+                    options={showToppingOptions}
+                    selected={toppingSelected}
+                    setSelected={updataToppings}
+                    placeholder='Select toppings or add (type and press Enter)'
+                    maxToShow={10}
+                    borderColor='primary'
+                    creatable={true}
+                    onCreateOption={(inputValue) => addNewTopping(inputValue)}
+                  />
+                </div>
 
-              <div className="mb-2">
-                <label
-                  htmlFor="comment"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
-                >Comment:</label>
-                <textarea
-                  id="comment"
-                  className='w-full md:max-w-[500px] border-2 border-primary rounded-xl py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
-                  value={drinkData.comment}
-                  onChange={(e) => setDrinkData({...drinkData, comment: e.target.value})}
-                  required
-                />
-              </div>
+                <div className="mb-2">
+                  <label
+                    htmlFor="comment"
+                    className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
+                  >Comment:</label>
+                  <textarea
+                    id="comment"
+                    {...register("comment", { required: true })}
+                    className='w-full md:max-w-[500px] border-2 border-primary rounded-xl py-1 bg-transparent text-secondary p-2 focus:outline-none focus:border-secondary'
+                  />
+                  {errors.comment && <p className="ml-1 text-danger text-xs">Required</p>}
+                </div>
 
-              <div className="flex gap-2 mt-4">
-                <button
-                  className="w-1/2 px-4 py-2 border rounded-lg text-sm text-text-secondary border-text-secondary hover:bg-surface"
-                  onClick={() => handleCancel()}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="w-1/2 px-4 py-2 rounded-lg text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
-                  onClick={(e) => isEdit ? handleEdit(e) : handleAdd(e)}
-                >
-                  {isEdit ? 'Edit' : 'Add'}
-                </button>
-              </div>
-            </div>
-          )
-          : (
-            <ErrorSection
-              errorMsg='Uh-oh, no drinks here yet!'
-              btnActionHome={true}
-            />
+                <div className="flex gap-2 mt-4">
+                  <button
+                    className="w-1/2 px-4 py-2 border rounded-lg text-sm text-text-secondary border-text-secondary hover:bg-surface"
+                    onClick={() => handleCancel()}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="w-1/2 px-4 py-2 rounded-lg text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
+                  >
+                    {isEdit ? 'Edit' : 'Add'}
+                  </button>
+                </div>
+              </form>
+            )
           )
           }
         </div>

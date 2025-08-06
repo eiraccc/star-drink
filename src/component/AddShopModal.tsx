@@ -26,7 +26,7 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
         try {
             const newId = await addShopByName(submittedData);
             onAdd(newId, submittedData.submittedName);
-            toast.success('Shop added successfully!');
+            toast.success('Shop added successfully! Please wait for admin approval.');
         } catch (error) {
             console.log('add shop error')
             toast.error("Failed to add shop. Please try again.");

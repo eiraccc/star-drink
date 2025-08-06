@@ -48,6 +48,7 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
       dispatch({ type: 'LOAD', payload: data });
     } catch (error) {
       console.error('get reviews error', error);
+      throw error;
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
@@ -60,6 +61,7 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
       await fetchReviews(); // fetch new data
     } catch (error) {
       console.error('add review error', error);
+      throw error;
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
@@ -72,6 +74,7 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
       await fetchReviews();
     } catch (error) {
       console.error('edit review error', error);
+      throw error;
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
@@ -84,6 +87,7 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
       await fetchReviews();
     } catch (error) {
       console.error('delete review error', error);
+      throw error;
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }

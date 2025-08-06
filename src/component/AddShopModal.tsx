@@ -3,6 +3,7 @@ import Modal from "./Modal";
 import { ShopSubmittedType } from "../types/shop";
 import { addShopByName } from "../utils/shopService";
 import LoadingOverlay from "./LoadingOverlay";
+import { toast } from 'react-toastify';
 
 interface propsType {
     isOpen: boolean;
@@ -25,8 +26,10 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
         try {
             const newId = await addShopByName(submittedData);
             onAdd(newId, submittedData.submittedName);
+            toast.success('Shop added successfully!');
         } catch (error) {
             console.log('add shop error')
+            toast.error("Failed to add shop. Please try again.");
         } finally {
             setIsLoading(false);
         }

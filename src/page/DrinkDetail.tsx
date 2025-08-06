@@ -9,6 +9,7 @@ import { MdArrowBackIos } from "react-icons/md";
 import { RiDrinks2Fill } from "react-icons/ri";
 import { ImCross } from "react-icons/im";
 import { useDrinkReview } from "../context/DrinkReviewContext";
+import { toast } from 'react-toastify';
 
 
 const DrinkDetail = () => {
@@ -32,8 +33,15 @@ const DrinkDetail = () => {
   };
 
   const handleDelete = async () => {
-    drinkId && await deleteReview(drinkId);
-    navigate('/');
+    try {
+      if (drinkId) {
+        await deleteReview(drinkId);
+        toast.success('Drink deleted successfully!');
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error("Failed to delete drink. Please try again.");
+    }
   };
 
   return (

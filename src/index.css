@@ -52,6 +52,8 @@
   --color-secondary-sugar: #B07585;   /* 次色：深粉灰 */
   --color-text-sugar: #B07585;        /* 文字色：適合粉色底 */
 
+  --toastify-color-success: var(--color-success);
+  --toastify-color-error: var(--color-danger);
 }
 
 
@@ -89,6 +91,10 @@ header {
 section {
   min-height: calc(100vh - 104px);
   padding: 10px;
+}
+section.Toastify {
+  min-height: auto;
+  padding: 0;
 }
 footer {
   height: 30px;

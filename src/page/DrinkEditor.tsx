@@ -13,6 +13,7 @@ import { useDrinkReview } from "../context/DrinkReviewContext";
 import { getShopsByQuery } from '../utils/shopService';
 import AddShopModal from '../component/AddShopModal';
 import ShopSelect, { OptionTypeWithApprovalStatus } from '../component/ShopSelect';
+import { toast } from 'react-toastify';
 
 
 const DrinkEditor = () => {
@@ -39,8 +40,7 @@ const DrinkEditor = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!drinkId) return;
-    if (isEdit) {
+    if (isEdit && drinkId) {
       // edit
       const currentDrink = reviews.find(n => n.id === drinkId);
       if (currentDrink) {
@@ -49,19 +49,20 @@ const DrinkEditor = () => {
         editData.toppings.forEach(topping => {
           addNewTopping(topping);
         });
-
         getShopsAndSetOptions(editData);
       } else {
         setDrinkData(null);
+        getShopsAndSetOptions(null);
       }
     } else {
       // add
       setDrinkData(initDrinkReview);
       setToppingSelected([]);
+      getShopsAndSetOptions(null);
     }
   }, [drinkId, reviews, isEdit]);
 
-  const getShopsAndSetOptions = async(editData: DrinkReviewFormType) => {
+  const getShopsAndSetOptions = async(editData: DrinkReviewFormType | null) => {
     try {
       const data = await getShopsByQuery({isApproved: true});
 
@@ -73,7 +74,6 @@ const DrinkEditor = () => {
           isApproved: true
         }
       ));
-
 
       if(editData) {
         const matchedShop = shopList.find(n => n.value === editData.shopId);
@@ -88,6 +88,8 @@ const DrinkEditor = () => {
           shopList.push(newOption);
           setShopSelected(newOption);
         }
+      } else {
+        setShopSelected(null);
       }
 
       setShopOptions(shopList);
@@ -99,11 +101,10 @@ const DrinkEditor = () => {
   const putShopselected = (newOption: OptionTypeWithApprovalStatus) => {
     setShopSelected(newOption);
 
-    if(!drinkData) return;
-    setDrinkData({
+    drinkData && setDrinkData({
       ...drinkData,
-      shopId: shopSelected?.value || '',
-      shopName: shopSelected?.label || ''
+      shopId: newOption?.value || '',
+      shopName: newOption?.label || ''
     })
   };
 
@@ -151,14 +152,28 @@ const DrinkEditor = () => {
 
   const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    drinkData && await addReview(drinkData);
-    navigate('/');
+    try {
+      if(drinkData) {
+        await addReview(drinkData);
+        toast.success('Drink added successfully!');
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error("Failed to add drink. Please try again.");
+    }
   };
 
   const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    (drinkId && drinkData) && await editReview(drinkId, drinkData);
-    navigate(`/drink/${drinkId}`);
+    try {
+      if (drinkId && drinkData) {
+        await editReview(drinkId, drinkData);
+        toast.success('Drink updated successfully!');
+        navigate(`/drink/${drinkId}`);
+      }
+    } catch (error) {
+      toast.error("Failed to update drink. Please try again.");
+    }
   };
 
   const handleCancel = () => {
@@ -178,7 +193,9 @@ const DrinkEditor = () => {
             <MdArrowBackIos />Back home
           </Link>
 
-          { isLoading ? <LoadingOverlay /> : drinkData ? (
+          {isLoading && <LoadingOverlay />}
+
+          { drinkData ? (
             <div>
               <div className="mb-2">
                 <label

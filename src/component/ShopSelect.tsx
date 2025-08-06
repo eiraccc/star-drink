@@ -61,7 +61,7 @@ const ShopSelect = ({
           options={options}
           value={value}
           onChange={onChange}
-          placeholder="Select shop"
+          placeholder="Search or add a shop"
           borderColor="var(--color-primary)"
           components={{
             Option: CustomOptionWithVerified,

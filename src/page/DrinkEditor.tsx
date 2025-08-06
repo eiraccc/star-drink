@@ -200,7 +200,7 @@ const DrinkEditor = () => {
               <div className="mb-2">
                 <label
                   htmlFor="drinkName"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-secondary block"
+                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
                 >Drink Name:</label>
                 <input
                   type="text"
@@ -214,7 +214,7 @@ const DrinkEditor = () => {
               <div className="mb-2">
                 <label
                   htmlFor="shopName"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-secondary block"
+                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
                 >Shop Name:</label>
                 <ShopSelect
                   options={shopOptions}
@@ -226,7 +226,7 @@ const DrinkEditor = () => {
               <div className="mb-2">
                 <label
                   htmlFor="rating"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-secondary block"
+                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
                 >Rating:</label>
                   <StarRating
                     rating={ drinkData.rating }
@@ -237,7 +237,7 @@ const DrinkEditor = () => {
               <div className="mb-2">
                 <label
                   htmlFor="ice"
-                  className="mb-1"
+                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
                 >Ice:</label>
                 <StepSelector
                   options={iceOptions}
@@ -252,7 +252,7 @@ const DrinkEditor = () => {
               <div className="mb-2">
                 <label
                   htmlFor="sugar"
-                  className="mb-1"
+                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
                 >Sugar:</label>
                 <StepSelector
                   options={sugarOptions}
@@ -282,7 +282,7 @@ const DrinkEditor = () => {
               <div className="mb-2">
                 <label
                   htmlFor="comment"
-                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-secondary block"
+                  className="mb-1 after:content-['*'] after:ml-0.5 after:text-primary block"
                 >Comment:</label>
                 <textarea
                   id="comment"

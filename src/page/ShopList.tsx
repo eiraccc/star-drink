@@ -1,52 +1,37 @@
-import { useEffect, useState } from "react"
+import { useMemo, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { getShopsByQuery } from "../utils/shopService"
-import { ShopTypeWithReview } from "../types/shop";
 import { useDrinkReview } from "../context/DrinkReviewContext";
 import ShopCard from "../component/ShopCard";
 import LoadingSection from "../component/LoadingSection";
 import ErrorSection from "../component/ErrorSection";
 import { RiSearchLine } from "react-icons/ri";
+import { useShop } from "../context/ShopContext";
 
 const ShopList = () => {
-    const [shops, setShops] = useState<ShopTypeWithReview[]>([]);
-    const [searchValue, setSearchValue] = useState<string>('');
-    const [isLoading, setIsLoading] =useState(false);
-    const { reviews } = useDrinkReview();
-
-    const fetchShopData = async() => {
-        setIsLoading(true);
-        try {
-            const data = await getShopsByQuery({ isApproved: true });
-            const shopsWithReviews = data.map(shop => {
-                const shopReviews = reviews.filter(n => n.shopId === shop.id);
-                const totalReviews = shopReviews.length;
-                const averageRating =
-                totalReviews > 0
-                    ? shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
-                    : 0;
-        
-                return {
-                    ...shop,
-                    reviews: shopReviews,
-                    totalReviews,
-                    averageRating,
-                };
-            });
-
-            setShops(shopsWithReviews);
-        } catch (error) {
-            console.log('get shop error');
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        fetchShopData();
-    }, [reviews]);
-
     const navigate = useNavigate();
+    const [searchValue, setSearchValue] = useState<string>('');
+    const { reviewsByShopId, isLoadingReview } = useDrinkReview();
+    const { approvedShops, isLoadingApprovedShop } = useShop();
+
+    const isLoading = isLoadingReview || isLoadingApprovedShop;
+
+    const shops = useMemo(() => {
+        return approvedShops.map(shop => {
+            const shopReviews = reviewsByShopId[shop.id] || [];
+            const totalReviews = shopReviews.length;
+            const averageRating =
+            totalReviews > 0
+                ? shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
+                : 0;
+    
+            return {
+                ...shop,
+                reviews: shopReviews,
+                totalReviews,
+                averageRating,
+            };
+        });
+    },  [approvedShops, reviewsByShopId]);
 
     const filterShops = shops.filter(shop => {
         return shop.nameEn.toLowerCase().includes(searchValue.toLowerCase());

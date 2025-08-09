@@ -18,7 +18,7 @@ const DrinkList = () => {
     order: 'desc'
   });
 
-  const { reviews, isLoading } = useDrinkReview();
+  const { reviews, isLoadingReview } = useDrinkReview();
 
   const toggleSort = (key:SortKey) => {
     setSort(preSort => {
@@ -69,9 +69,9 @@ const DrinkList = () => {
           toggleSort={toggleSort}
         />
 
-        {isLoading && <LoadingSection />}
+        {isLoadingReview && <LoadingSection />}
         
-        {sortReviews.length > 0 && !isLoading && (
+        {sortReviews.length > 0 && !isLoadingReview && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortReviews.map((review) => (
               <DrinkCard
@@ -83,7 +83,7 @@ const DrinkList = () => {
           </div>
         )}
 
-        {!sortReviews.length && !isLoading &&  (
+        {!sortReviews.length && !isLoadingReview &&  (
           reviews.length > 0 ? (
             <ErrorSection
               errorMsg='Hmm… no drinks found. Maybe try different filters.'

@@ -13,6 +13,7 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
   documentId,
+  onSnapshot,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import {
@@ -26,21 +27,58 @@ import { generateSlug } from './autoSlug';
 
 const shopRef = collection(db, 'shops');
 
+function formatDoc(doc: QueryDocumentSnapshot<DocumentData>): ShopType {
+  const data = doc.data() as ShopTypeFirestore & {
+    createdAt: Timestamp;
+    updatedAt: Timestamp
+  };
+  return {
+    id: doc.id,
+    ...data,
+    createdAt: formatTimestampToUserLocalString(data.createdAt),
+    updatedAt: formatTimestampToUserLocalString(data.updatedAt),
+  };
+};
+
+
+// 監聽已審核店家（onSnapshot）
+export function listenApprovedShops(
+  callback: (shops: ShopType[]) => void,
+  errorCallback?: (error: Error) => void
+) {
+  const q = query(shopRef, where('isApproved', '==', true));
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const shops = snapshot.docs.map(formatDoc);
+      callback(shops);
+    },
+    (error) => {
+      if (errorCallback) errorCallback(error);
+    }
+  );
+};
+
+export function listenAllShops(
+  callback: (shops: ShopType[]) => void,
+  errorCallback?: (error: Error) => void
+) {
+  return onSnapshot(
+    shopRef,
+    (snapshot) => {
+      const shops = snapshot.docs.map(formatDoc);
+      callback(shops);
+    },
+    (error) => {
+      if (errorCallback) errorCallback(error);
+    }
+  );
+};
+
 export async function getShops(): Promise<ShopType[]> {
   try {
     const snapshot = await getDocs(shopRef);
-    return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
-      const data = doc.data() as ShopTypeFirestore & {
-        createdAt: Timestamp;
-        updatedAt: Timestamp;
-      };
-      return {
-        id: doc.id,
-        ...data,
-        createdAt: formatTimestampToUserLocalString(data.createdAt),
-        updatedAt: formatTimestampToUserLocalString(data.updatedAt),
-      };
-    });
+    return snapshot.docs.map(formatDoc);
   } catch (error) {
     console.error('get reviews error:', error);
     throw error;
@@ -72,18 +110,7 @@ export async function getShopsByQuery({
   
     const q = query(shopRef, ...conditions);
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => {
-      const data = doc.data() as ShopTypeFirestore & {
-        createdAt: Timestamp;
-        updatedAt: Timestamp;
-      };
-      return {
-        id: doc.id,
-        ...data,
-        createdAt: formatTimestampToUserLocalString(data.createdAt),
-        updatedAt: formatTimestampToUserLocalString(data.updatedAt),
-      };
-    });
+    return snapshot.docs.map(formatDoc);
   } catch (error) {
     console.error('get reviews error:', error);
     throw error;

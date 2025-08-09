@@ -1,49 +1,37 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ShopType, ShopTypeWithReview } from "../types/shop";
-import { getShopsByQuery } from "../utils/shopService";
 import LoadingOverlay from "../component/LoadingOverlay";
 import ErrorSection from "../component/ErrorSection";
 import DrinkCard from "../component/DrinkCard";
 import { useDrinkReview } from "../context/DrinkReviewContext";
+import { useShop } from "../context/ShopContext";
 import { FaComment, FaStar } from "react-icons/fa";
 
 const ShopDetail = () => {
+  const navigate = useNavigate();
   const { shopSlug } = useParams<{shopSlug: string}>();
-  const [shopData, setShopData] = useState<ShopTypeWithReview | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { reviews } = useDrinkReview();
+  const { reviewsByShopId, isLoadingReview } = useDrinkReview();
+  const { approvedShops, isLoadingApprovedShop } = useShop();
 
-  const fetchShopData = async() => {
-    setIsLoading(true);
-    try {
-      const result = await getShopsByQuery({shopSlug: shopSlug});
-      const data = result?.length ? result[0] : null;
-      if(!data) return;
-      const shopReviews = reviews.filter(n => n.shopId === data.id);
-      const totalReviews = shopReviews.length;
+  const isLoading = isLoadingReview || isLoadingApprovedShop;
+
+  const shopData = useMemo(() => {
+    const data = approvedShops.find(n => n.slug === shopSlug);
+    if(!data) return null;
+
+    const shopReviews = reviewsByShopId[data.id] || [];
+    const totalReviews = shopReviews.length;
       const averageRating = totalReviews > 0
             ? shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
             : 0;
 
-      setShopData({
+    return {
         ...data,
         reviews: shopReviews,
         totalReviews,
         averageRating,
-    });
-    } catch (error) {
-      console.log('get shop error');
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchShopData();
-  }, []);
-
-  const navigate = useNavigate();
+    };
+  }, [approvedShops, reviewsByShopId]);
   
   return (
     <section className="flex justify-center p-6 pb-10">

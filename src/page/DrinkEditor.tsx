@@ -21,7 +21,7 @@ const DrinkEditor = () => {
   const { drinkId } = useParams<{ drinkId: string }>();
   const isEdit = Boolean(drinkId);
   const navigate = useNavigate();
-  const { reviews, addReview, editReview, isLoading } = useDrinkReview();
+  const { reviews, addReview, editReview, isLoadingReview } = useDrinkReview();
 
   const [showToppingOptions, setShowToppingOptions] = useState<ToppingLabelType[]>(toppingOptions);
   const [toppingSelected, setToppingSelected] = useState<ToppingLabelType[]>([]);
@@ -224,9 +224,9 @@ const DrinkEditor = () => {
             <MdArrowBackIos />Back home
           </Link>
 
-          {isLoading && <LoadingOverlay />}
+          {isLoadingReview && <LoadingOverlay />}
 
-          { !isLoading && (
+          { !isLoadingReview && (
             drinkIdError ? (
               <ErrorSection
                 errorMsg='Uh-oh, no drinks here yet!'

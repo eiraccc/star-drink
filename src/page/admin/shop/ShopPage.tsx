@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { ShopType, ShopFormType } from "../../../types/shop";
 import {
-    getShops as getShopsFromFB,
     addShop as addShopToFB,
     editShop as editShopToFB,
     deleteShop as deleteShopInFB,
@@ -13,11 +12,14 @@ import ShopEditModal from "./ShopEditModal";
 import LoadingOverlay from "../../../component/LoadingOverlay";
 import ErrorSection from "../../../component/ErrorSection";
 import { FaPlus } from 'react-icons/fa';
+import { useShop } from "../../../context/ShopContext";
 
 const ShopPage = () => {
-    const [shops, setShops] = useState<ShopType[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoadingAction, setIsLoadingAction] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<'edit' | 'add' | ''>('');
+    const { allShops, isLoadingAllShop } = useShop();
+
+    const isLoading = isLoadingAction || isLoadingAllShop;
 
     const filterOptions: OptionType[] = [
       { value: 'all', label: 'All' },
@@ -27,31 +29,10 @@ const ShopPage = () => {
     
     const [filterSelected, setFilterSelected] = useState<OptionType>(filterOptions[0]);
     const filterType = filterSelected.value as 'all' | 'approved' | 'pending';
-    const filtershops = shops.filter(n => {
+    const filtershops = allShops.filter(n => {
         if(filterType === 'all') return n;
         return n.isApproved === (filterType === 'approved')
     });
-
-    const fetchShop = async () => {
-      try {
-        const data = await getShopsFromFB();
-        data && setShops(data);
-        console.log('get data', data);
-      } catch (error) {
-        console.error('get shops error', error);
-      } finally {
-      }
-    };
-
-    const initGetShop = async () => {
-        setIsLoading(true);
-        await fetchShop();
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
-        initGetShop();
-    }, [])
 
     const checkKeys: (keyof ShopType)[] = ['nameEn', 'nameZh', 'slug', 'description'];
 
@@ -68,14 +49,14 @@ const ShopPage = () => {
     const handleApprove = async (shopId: string, data: ShopType) => {
         if(!checkApproveValid(data) || data.isApproved) return;
 
-        setIsLoading(true);
+        setIsLoadingAction(true);
         try {
             await approveShop(shopId);
-            await fetchShop();
+            // await fetchShop();
         } catch (error) {
             console.error('set isApproved error', error);
         } finally {
-            setIsLoading(false);
+            setIsLoadingAction(false);
         }
     };
 
@@ -110,35 +91,35 @@ const ShopPage = () => {
     const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if(!editData) return;
-        setIsLoading(true);
+        setIsLoadingAction(true);
         try {
             const {createdAt, ...editItem} = editData as ShopType;
             await editShopToFB(editItem);
             setEditMode('');
             setShowEditModal(false);
             setEditData(null);
-            await fetchShop();
+            // await fetchShop();
         } catch (error) {
             console.log('edit error');
         } finally {
-            setIsLoading(false);
+            setIsLoadingAction(false);
         }
     };
 
     const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if(!editData) return;
-        setIsLoading(true);
+        setIsLoadingAction(true);
         try {
             await addShopToFB(editData);
             setEditMode('');
             setShowEditModal(false);
             setEditData(null);
-            await fetchShop();
+            // await fetchShop();
         } catch (error) {
             console.log('edit error');
         } finally {
-            setIsLoading(false);
+            setIsLoadingAction(false);
         }
     };
 
@@ -149,14 +130,14 @@ const ShopPage = () => {
     };
 
     const handleDelete = async (shopId: string) => {
-        setIsLoading(true);
+        setIsLoadingAction(true);
         try {
             await deleteShopInFB(shopId);
-            await fetchShop();
+            // await fetchShop();
         } catch (error) {
             console.log('delete error')
         } finally {
-            setIsLoading(false);
+            setIsLoadingAction(false);
         }
     };
 
@@ -192,7 +173,7 @@ const ShopPage = () => {
                 </button>
             </div>
 
-            {isLoading ? <LoadingOverlay /> : shops.length ? (
+            {isLoading ? <LoadingOverlay /> : allShops.length ? (
                 <ShopTable
                     shops={filtershops}
                     type={filterType}

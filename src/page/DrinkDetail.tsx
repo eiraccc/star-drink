@@ -6,7 +6,6 @@ import LoadingOverlay from '../component/LoadingOverlay';
 import { DrinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { MdArrowBackIos } from "react-icons/md";
-import { RiDrinks2Fill } from "react-icons/ri";
 import { ImCross } from "react-icons/im";
 import { useDrinkReview } from "../context/DrinkReviewContext";
 import { ShopType } from '../types/shop';
@@ -22,7 +21,7 @@ const DrinkDetail = () => {
   const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
   const [shopStatus, setShopStatus] = useState<ShopStatusType>('');
   const [shopData, setShopData] = useState<ShopType | null>(null);
-  const { reviews, deleteReview, isLoading } = useDrinkReview();
+  const { reviews, deleteReview, isLoadingReview } = useDrinkReview();
 
   useEffect(() => {
     // get data
@@ -77,9 +76,8 @@ const DrinkDetail = () => {
 
 
         {
-          isLoading ? <LoadingOverlay /> : drinkData ? (
+          isLoadingReview ? <LoadingOverlay /> : drinkData ? (
             <div>
-              {/* <RiDrinks2Fill size={30} className="text-primary" /> */}
               <h2 className="text-text text-lg font-bold flex items-center">
                 {drinkData.drinkName}
               </h2>

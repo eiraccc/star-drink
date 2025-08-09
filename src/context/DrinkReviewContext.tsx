@@ -13,22 +13,34 @@ import {
   deleteReview as deleteReviewInFB,
 } from '../utils/drinkReviewsService';
 
+type ReviewsByShopIdType = {
+  [shopId: string]: DrinkReviewType[];
+}
+
 type State = {
   reviews: DrinkReviewType[];
-  isLoading: boolean;
+  reviewsByShopId: ReviewsByShopIdType;
+  isLoadingReview: boolean;
 };
 
 type Action =
-  | { type: 'LOAD'; payload: DrinkReviewType[] }
+  | { type: 'LOAD'; payload: {
+    reviews: DrinkReviewType[],
+    reviewsByShopId: ReviewsByShopIdType
+  } }
   | { type: 'SET_LOADING'; payload: boolean };
 
 // reducer: updates state based on the given action
 const drinkReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'LOAD':
-      return { ...state, reviews: action.payload };
+      return {
+        ...state,
+        reviews: action.payload.reviews, 
+        reviewsByShopId: action.payload.reviewsByShopId,
+      };
     case 'SET_LOADING':
-      return { ...state, isLoading: action.payload };
+      return { ...state, isLoadingReview: action.payload };
     default:
       return state;
   }
@@ -37,15 +49,24 @@ const drinkReducer = (state: State, action: Action): State => {
 export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(drinkReducer, {
     reviews: [],
-    isLoading: false,
+    reviewsByShopId: {},
+    isLoadingReview: false,
   });
+
+  const mapReviewsByShopId = (reviews: DrinkReviewType[]): ReviewsByShopIdType => {
+    return reviews.reduce((all, review) => {
+      if (!all[review.shopId]) all[review.shopId] = [];
+      all[review.shopId].push(review);
+      return all;
+    }, {} as ReviewsByShopIdType);
+  };
 
   const fetchReviews = async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const data = await getReviewsFromFB({});
-      console.log('get data', data);
-      dispatch({ type: 'LOAD', payload: data });
+      const reviewsByShopId = mapReviewsByShopId(data);
+      dispatch({ type: 'LOAD', payload: { reviews: data, reviewsByShopId } });
     } catch (error) {
       console.error('get reviews error', error);
       throw error;
@@ -101,7 +122,8 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
     <DrinkReviewContext.Provider
       value={{
         reviews: state.reviews,
-        isLoading: state.isLoading,
+        reviewsByShopId: state.reviewsByShopId,
+        isLoadingReview: state.isLoadingReview,
         fetchReviews,
         addReview,
         editReview,
@@ -115,7 +137,8 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
 // context
 type DrinkReviewContextType = {
   reviews: DrinkReviewType[];
-  isLoading: boolean;
+  reviewsByShopId: ReviewsByShopIdType;
+  isLoadingReview: boolean;
   fetchReviews: () => Promise<void>;
   addReview: (data: DrinkReviewFormType) => Promise<void>;
   editReview: (id: string, data: DrinkReviewFormType) => Promise<void>;

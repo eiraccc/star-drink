@@ -23,6 +23,7 @@ const ShopTable = ({
     getApproveInvalidKey
 }: propsType) => {
     const columns = [
+      { key: 'id', label: 'ID' },
       { key: 'nameEn', label: 'Shop Name (EN)' },
       { key: 'nameZh', label: 'Shop Name (ZH)' },
       { key: 'slug', label: 'Slug' },
@@ -61,7 +62,7 @@ const ShopTable = ({
     const visableKeysMap:any = {
         pending: ['nameEn', 'nameZh', 'slug', 'submittedName', 'submittedBy', 'submittedNote', 'createdAt', 'isApproved'],
         approved: ['nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'isApproved'],
-        all: ['nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'updatedAt',  'isApproved'],
+        all: ['id', 'nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'updatedAt',  'isApproved'],
     };
     const visableKeys = visableKeysMap[type] || [];
     

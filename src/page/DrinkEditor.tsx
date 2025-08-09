@@ -178,7 +178,8 @@ const DrinkEditor = () => {
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     navigate(isEdit ? `/drink/${drinkId}` : '/');
   };
 
@@ -374,7 +375,7 @@ const DrinkEditor = () => {
                 <div className="flex gap-2 mt-4">
                   <button
                     className="w-1/2 px-4 py-2 border rounded-lg text-sm text-text-secondary border-text-secondary hover:bg-surface"
-                    onClick={() => handleCancel()}
+                    onClick={(e) => handleCancel(e)}
                   >
                     Cancel
                   </button>

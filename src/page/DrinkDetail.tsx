@@ -83,7 +83,7 @@ const DrinkDetail = () => {
               </h2>
               <div className='flex items-center'>
                 {drinkData.shopId && shopStatus === 'approved' && shopData?.slug ? (
-                  <Link to={`/shop/${shopData.slug}`} className="text-text-secondary italic mr-2 hover:underline">
+                  <Link to={`/shop/${shopData.slug}`} className="text-text-secondary italic mr-2 underline">
                     {drinkData.shopName}
                   </Link>
                 ) : (

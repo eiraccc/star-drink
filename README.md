@@ -22,6 +22,11 @@ Built with React, Vite, Tailwind CSS, and TypeScript to deliver a modern, fast, 
 - 💬 Show error messages when invalid drink ID is accessed
 - 🌀 Loading overlay during create, read, update, and delete operations
 - ✨ Fully responsive UI
+- 🏪 Shop list showing selected drink reviews
+- 📋 Shop detail page with full reviews
+- ⚙️ Shop management page for adding, editing, deleting, and approving
+- ✔ Shop approval system to control listing visibility
+- ➕ Users can submit reviews and propose new shops
 
 ## 🛠️ Tech Stack
 

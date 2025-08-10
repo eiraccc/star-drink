@@ -13,6 +13,7 @@ import ShopTable from "./ShopTable";
 import ShopEditModal from "./ShopEditModal";
 import LoadingOverlay from "../../../component/LoadingOverlay";
 import ErrorSection from "../../../component/ErrorSection";
+import ConfirmModal from "../../../component/ConfirmModal";
 import { FaPlus } from 'react-icons/fa';
 import { useShop } from "../../../context/ShopContext";
 import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
@@ -144,14 +145,26 @@ const ShopPage = () => {
         setShowEditModal(false);
         setEditData(null);
     };
+    
 
-    const handleDelete = async (shopId: string) => {
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+    const [deleteShopId, setDeleteShopId] = useState<string>('');
+
+    const checkDelete = (shopId: string) => {
+        setDeleteShopId(shopId);
+        setShowDeleteConfirm(true);
+    }
+
+    const handleDelete = async () => {
+        setShowDeleteConfirm(false);
+        if(!deleteShopId) return;
+
         setIsLoadingAction(true);
         try {
-            await deleteShopInFB(shopId);
+            await deleteShopInFB(deleteShopId);
             // await fetchShop();
         } catch (error) {
-            console.log('delete error')
+            console.log('delete error');
         } finally {
             setIsLoadingAction(false);
         }
@@ -167,6 +180,16 @@ const ShopPage = () => {
                 onSave={editMode === 'edit' ? handleEdit : handleAdd}
                 onCancel={handleCancel}
            />
+           <ConfirmModal
+                isOpen={showDeleteConfirm}
+                title="Confirm Delete?"
+                message="Are you sure you want to delete this item?"
+                onCancel={() => {
+                    setShowDeleteConfirm(false);
+                    setDeleteShopId('');
+                }}
+                onConfirm={handleDelete}
+            />
            
             <div className="flex justify-between p-2">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
@@ -205,7 +228,7 @@ const ShopPage = () => {
                     visableLabelKeys={selectedVisableLabels.map(n => n.value)}
                     handleApprove={handleApprove}
                     openEdit={openEdit}
-                    handleDelete={handleDelete}
+                    handleDelete={checkDelete}
                     checkApproveValid={checkApproveValid}
                     getApproveInvalidKey={getApproveInvalidKey}
                 />

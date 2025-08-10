@@ -1,4 +1,4 @@
-import MultiSelect, { simpleLabelType } from '../component/MultiSelect';
+import MultiSelect from '../component/MultiSelect';
 import {
   sugarOptions,
   iceOptions,
@@ -17,6 +17,7 @@ import {
 } from 'react-icons/ri';
 import { FaRegStar } from 'react-icons/fa';
 import { useState } from 'react';
+import { BaseSelectOptionType } from '../types/selectOptionType';
 
 type propsType = {
   searchValue: string;
@@ -25,8 +26,8 @@ type propsType = {
   setSelectedIce: (val: SugarIceLabelType[]) => void;
   selectedSugar: SugarIceLabelType[];
   setSelectedSugar: (val: SugarIceLabelType[]) => void;
-  selectedTopping: simpleLabelType[];
-  setSelectedTopping: (val: simpleLabelType[]) => void;
+  selectedTopping: BaseSelectOptionType[];
+  setSelectedTopping: (val: BaseSelectOptionType[]) => void;
   sort: { key: SortKey; order: SortOrder };
   toggleSort: (key: SortKey) => void;
 };
@@ -97,7 +98,7 @@ const FilterBar = ({
           />
         </div>
         <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
-          <MultiSelect<simpleLabelType>
+          <MultiSelect<BaseSelectOptionType>
             options={toppingOptions}
             selected={selectedTopping}
             setSelected={setSelectedTopping}

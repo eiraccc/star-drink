@@ -1,5 +1,5 @@
 import { SugarLevel, IceLevel, ToppingType } from '../types/drinkReview';
-import { simpleLabelType } from '../component/MultiSelect';
+import { BaseSelectOptionType } from '../types/selectOptionType';
 
 export const sugarLevels: SugarLevel[] = [0, 25, 50, 75, 100];
 export const iceLevels: IceLevel[] = [-1, 0, 30, 70, 100];
@@ -85,7 +85,7 @@ function kebabToTitleCase(input: string): string {
     .join(' '); // Join the words with a space
 };
 
-export const toppingOptions:simpleLabelType[] = toppings.map(topping => ({
+export const toppingOptions:BaseSelectOptionType[] = toppings.map(topping => ({
     value: topping.trim().toLowerCase().replace(/\s+/g, '-'),
     label: kebabToTitleCase(topping)
 }));

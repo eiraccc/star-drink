@@ -6,14 +6,15 @@ import {
     deleteShop as deleteShopInFB,
     approveShop
 } from "../../../utils/shopService";
-import SingleSelect, { OptionType }  from "../../../component/SingleSelect";
+import { BaseSelectOptionType } from "../../../types/selectOptionType";
+import SingleSelect from "../../../component/SingleSelect";
+import MultiSelect from "../../../component/MultiSelect";
 import ShopTable from "./ShopTable";
 import ShopEditModal from "./ShopEditModal";
 import LoadingOverlay from "../../../component/LoadingOverlay";
 import ErrorSection from "../../../component/ErrorSection";
 import { FaPlus } from 'react-icons/fa';
 import { useShop } from "../../../context/ShopContext";
-import MultiSelect, { simpleLabelType } from "../../../component/MultiSelect";
 import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
 
 const ShopPage = () => {
@@ -23,13 +24,13 @@ const ShopPage = () => {
 
     const isLoading = isLoadingAction || isLoadingAllShop;
 
-    const filterOptions: OptionType[] = [
+    const filterOptions: BaseSelectOptionType[] = [
       { value: 'all', label: 'All' },
       { value: 'approved', label: 'Approved' },
       { value: 'pending', label: 'Pending' },
     ];
     
-    const [filterSelected, setFilterSelected] = useState<OptionType>(filterOptions[0]);
+    const [filterSelected, setFilterSelected] = useState<BaseSelectOptionType>(filterOptions[0]);
     const filterType = filterSelected.value as ApprovalStatusType;
     const filtershops = allShops.filter(n => {
         if(filterType === 'all') return n;
@@ -40,7 +41,7 @@ const ShopPage = () => {
         value: n.key,
         label: n.label
     }));
-    const [selectedVisableLabels, setSelectedVisableLabels] = useState<simpleLabelType[]>([]);
+    const [selectedVisableLabels, setSelectedVisableLabels] = useState<BaseSelectOptionType[]>([]);
     
     useEffect(() => {
         setSelectedVisableLabels(labelOptions.filter(n => {
@@ -179,7 +180,7 @@ const ShopPage = () => {
                         width={150}
                     />
                     <p className="flex-shrink-0 whitespace-nowrap">Show columns:</p>
-                    <MultiSelect<simpleLabelType>
+                    <MultiSelect<BaseSelectOptionType>
                         options={labelOptions}
                         selected={selectedVisableLabels}
                         setSelected={setSelectedVisableLabels}

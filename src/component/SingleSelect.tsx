@@ -1,14 +1,10 @@
 import Select from 'react-select'
-
-export interface OptionType {
-  label: string;
-  value: string;
-};
+import { BaseSelectOptionType } from '../types/selectOptionType';
 
 type SingleSelectProps = {
-  options: OptionType[];
-  value: OptionType | null;
-  onChange: (option: OptionType) => void;
+  options: BaseSelectOptionType[];
+  value: BaseSelectOptionType | null;
+  onChange: (option: BaseSelectOptionType) => void;
   placeholder?: string;
   backgroundColor?: string;
   borderColor?: string;
@@ -78,7 +74,7 @@ const SingleSelect = ({
                 isFocused,
                 isSelected,
             }: {
-                data: OptionType
+                data: BaseSelectOptionType
                 isFocused: boolean
                 isSelected: boolean
             }

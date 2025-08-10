@@ -7,13 +7,13 @@ import ErrorSection from "../component/ErrorSection";
 import FilterBar from "../component/FilterBar";
 import LoadingSection from "../component/LoadingSection";
 import { useDrinkReview } from "../context/DrinkReviewContext";
-import { simpleLabelType } from "../component/MultiSelect";
+import { BaseSelectOptionType } from "../types/selectOptionType";
 
 const DrinkList = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
   const [selectedSugar, setSelectedSugar] = useState<SugarIceLabelType[]>(sugarOptions);
-  const [selectedTopping, setSelectedTopping] = useState<simpleLabelType[]>([])
+  const [selectedTopping, setSelectedTopping] = useState<BaseSelectOptionType[]>([])
   const [sort, setSort] = useState<SortType>({
     key: 'rating',
     order: 'desc'

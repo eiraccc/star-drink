@@ -1,9 +1,10 @@
 import { components } from 'react-select';
-import SingleSelect, { OptionType } from './SingleSelect';
+import SingleSelect from './SingleSelect';
+import { BaseSelectOptionType } from '../types/selectOptionType';
 import { FaPlus } from 'react-icons/fa';
 import { IoShieldCheckmark } from "react-icons/io5";
 
-export interface OptionTypeWithApprovalStatus extends OptionType {
+export interface OptionTypeWithApprovalStatus extends BaseSelectOptionType {
     isApproved?: boolean;
 }
   

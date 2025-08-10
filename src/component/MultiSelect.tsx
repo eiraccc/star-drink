@@ -1,9 +1,14 @@
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { tagColorMap, SugarIceLabelType, ToppingLabelType } from '../constants/drink'
+import { tagColorMap, SugarIceLabelType } from '../constants/drink'
 import { Option, MultiValue } from './MultiSelectCustom'
 
-export type OptionType = SugarIceLabelType | ToppingLabelType;
+export type simpleLabelType = {
+  label: string,
+  value: string
+}
+
+export type OptionType = SugarIceLabelType | simpleLabelType;
 
 type MultiSelectProps<T extends OptionType> = {
   options: T[]
@@ -11,7 +16,10 @@ type MultiSelectProps<T extends OptionType> = {
   setSelected: (val: T[]) => void
   placeholder?: string
   maxToShow?: number
+  backgroundColor?: string
   borderColor?: string
+  minWidth?: number
+  showDeleteAllBtn?: boolean
   creatable?: boolean
   onCreateOption?: (input: string) => void
 }
@@ -23,6 +31,9 @@ const MultiSelect = <T extends OptionType>({
   placeholder = 'Select options',
   maxToShow = 2,
   borderColor = 'surface',
+  backgroundColor = 'var(--color-background)',
+  minWidth,
+  showDeleteAllBtn = true,
   creatable = false,
   onCreateOption,
 }: MultiSelectProps<T>) => {
@@ -33,14 +44,15 @@ const MultiSelect = <T extends OptionType>({
     control: (provided: any, state: any) => ({
       ...provided,
       color: 'var(--color-text)',
-      backgroundColor: 'var(--color-background)',
+      backgroundColor: backgroundColor,
       borderColor: state.isFocused ? 'var(--color-primary)' : `var(--color-${borderColor})`,
       borderWidth: '2px',
       borderRadius: '10px',
       boxShadow: 'none',
       '&:hover': {
         borderColor: 'var(--color-primary)'
-      }
+      },
+      minWidth: minWidth ? `${minWidth}px` : 'auto'
     }),
     singleValue: (provided: any) => ({
       ...provided,
@@ -85,12 +97,16 @@ const MultiSelect = <T extends OptionType>({
         isSelected: boolean
       }
     ) => {
-      const tagColor = tagColorMap[data.type]
-      const bgColor =
-        tagColor && data.opacity !== undefined
+      let bgColor = 'var(--color-surface)';
+      let textColor = 'var(--color-text)';
+
+      if('type' in data && tagColorMap.hasOwnProperty(data.type)) {
+        const tagColor = tagColorMap[data.type];
+        bgColor = tagColor && data.opacity !== undefined
           ? tagColor.bg(data.opacity / 100)
-          : 'var(--color-surface)'
-      const textColor = tagColor ? tagColor.text : 'var(--color-text)'
+          : bgColor;
+        textColor = tagColor ? tagColor.text : textColor;
+      };
 
       return {
         ...base,
@@ -102,12 +118,16 @@ const MultiSelect = <T extends OptionType>({
     },
     // selected item tag
     multiValue: (base: any, {data}: {data: OptionType}) => {
-      const tagColor = tagColorMap[data.type]
-      const bgColor =
-        tagColor && data.opacity !== undefined
+      let bgColor = 'var(--color-surface)';
+      let textColor = 'var(--color-text)';
+
+      if('type' in data && tagColorMap.hasOwnProperty(data.type)) {
+        const tagColor = tagColorMap[data.type];
+        bgColor = tagColor && data.opacity !== undefined
           ? tagColor.bg(data.opacity / 100)
-          : 'var(--color-surface)'
-      const textColor = tagColor ? tagColor.text : 'var(--color-text)'
+          : bgColor;
+        textColor = tagColor ? tagColor.text : textColor;
+      }
 
       return {
         ...base,
@@ -146,6 +166,7 @@ const MultiSelect = <T extends OptionType>({
       hideSelectedOptions={false}
       closeMenuOnSelect={false}
       className="w-full text-m"
+      isClearable={showDeleteAllBtn}
       onCreateOption={creatable ? onCreateOption : undefined}
     />
   )

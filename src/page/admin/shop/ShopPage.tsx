@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ShopType, ShopFormType } from "../../../types/shop";
 import {
     addShop as addShopToFB,
@@ -13,6 +13,8 @@ import LoadingOverlay from "../../../component/LoadingOverlay";
 import ErrorSection from "../../../component/ErrorSection";
 import { FaPlus } from 'react-icons/fa';
 import { useShop } from "../../../context/ShopContext";
+import MultiSelect, { simpleLabelType } from "../../../component/MultiSelect";
+import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
 
 const ShopPage = () => {
     const [isLoadingAction, setIsLoadingAction] = useState<boolean>(false);
@@ -28,11 +30,24 @@ const ShopPage = () => {
     ];
     
     const [filterSelected, setFilterSelected] = useState<OptionType>(filterOptions[0]);
-    const filterType = filterSelected.value as 'all' | 'approved' | 'pending';
+    const filterType = filterSelected.value as ApprovalStatusType;
     const filtershops = allShops.filter(n => {
         if(filterType === 'all') return n;
         return n.isApproved === (filterType === 'approved')
     });
+  
+    const labelOptions = shopColumns.map(n => ({
+        value: n.key,
+        label: n.label
+    }));
+    const [selectedVisableLabels, setSelectedVisableLabels] = useState<simpleLabelType[]>([]);
+    
+    useEffect(() => {
+        setSelectedVisableLabels(labelOptions.filter(n => {
+            return typeToInitColumnsMap[filterType].includes(n.value);
+        }));
+    }, [filterType]);
+
 
     const checkKeys: (keyof ShopType)[] = ['nameEn', 'nameZh', 'slug', 'description'];
 
@@ -153,8 +168,8 @@ const ShopPage = () => {
            />
            
             <div className="flex justify-between p-2">
-                <div className="flex items-center">
-                    <p className="mr-2">Approval Status:</p>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                    <p className="flex-shrink-0 whitespace-nowrap">Approval Status:</p>
                     <SingleSelect
                         options={filterOptions}
                         value={filterSelected}
@@ -163,20 +178,30 @@ const ShopPage = () => {
                         backgroundColor='var(--color-contrast)'
                         width={150}
                     />
+                    <p className="flex-shrink-0 whitespace-nowrap">Show columns:</p>
+                    <MultiSelect<simpleLabelType>
+                        options={labelOptions}
+                        selected={selectedVisableLabels}
+                        setSelected={setSelectedVisableLabels}
+                        backgroundColor='var(--color-contrast)'
+                        showDeleteAllBtn={false}
+                        maxToShow={1}
+                        minWidth={300}
+                    />
                 </div>
                 <button
                     onClick={() => openAdd()}
-                    className="flex items-center bg-highlight text-contrast rounded-full px-2 py-2 mr-2 hover:opacity-90"
+                    className="flex items-center justify-center bg-highlight text-contrast rounded-full px-2 py-2 sm:mr-2 hover:opacity-90 w-10 h-10 sm:w-auto sm:h-auto"
                 >
-                    <FaPlus className='mr-2'/>
-                    Add Shop
+                    <FaPlus size={16} />
+                    <span className="hidden sm:inline-block ml-2">Add Shop</span>
                 </button>
             </div>
 
             {isLoading ? <LoadingOverlay /> : allShops.length ? (
                 <ShopTable
                     shops={filtershops}
-                    type={filterType}
+                    visableLabelKeys={selectedVisableLabels.map(n => n.value)}
                     handleApprove={handleApprove}
                     openEdit={openEdit}
                     handleDelete={handleDelete}

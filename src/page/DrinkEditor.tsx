@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom';
 import StarRating from "../component/StarRating"
 import { DrinkReviewFormType, IceLevel, SugarLevel, DrinkRatingType } from "../types/drinkReview"
-import { sugarOptions, iceOptions, toppingOptions, ToppingLabelType } from '../constants/drink'
+import { sugarOptions, iceOptions, toppingOptions } from '../constants/drink'
 import { MdArrowBackIos } from "react-icons/md";
 import { useNavigate, useParams } from 'react-router-dom';
-import MultiSelect from '../component/MultiSelect';
+import MultiSelect, { simpleLabelType } from '../component/MultiSelect';
 import StepSelector from '../component/StepSelector';
 import ErrorSection from '../component/ErrorSection';
 import LoadingOverlay from '../component/LoadingOverlay';
@@ -23,8 +23,8 @@ const DrinkEditor = () => {
   const navigate = useNavigate();
   const { reviews, addReview, editReview, isLoadingReview } = useDrinkReview();
 
-  const [showToppingOptions, setShowToppingOptions] = useState<ToppingLabelType[]>(toppingOptions);
-  const [toppingSelected, setToppingSelected] = useState<ToppingLabelType[]>([]);
+  const [showToppingOptions, setShowToppingOptions] = useState<simpleLabelType[]>(toppingOptions);
+  const [toppingSelected, setToppingSelected] = useState<simpleLabelType[]>([]);
   const [shopOptions, setShopOptions] = useState<OptionTypeWithApprovalStatus[]>([]);
   const [showAddShoptModal, setShowAddShoptModal] = useState<boolean>(false);
   const [drinkIdError, setDrinkIdError] = useState<boolean>(false);
@@ -116,10 +116,9 @@ const DrinkEditor = () => {
 
   const addNewTopping = useCallback((newTopping:string)  => {
     const newToppingValue = newTopping.trim().toLowerCase().replace(/\s+/g, '-');
-    const newOption:ToppingLabelType = {
+    const newOption:simpleLabelType = {
       value: newToppingValue,
-      label: newTopping.replace(' ', '\n'),
-      type: 'topping'
+      label: newTopping.replace(' ', '\n')
     };
 
     setShowToppingOptions(prev => {
@@ -138,7 +137,7 @@ const DrinkEditor = () => {
   }, [setToppingSelected, setShowToppingOptions])
 
   // from selector update
-  const updataToppings = (newToppings: ToppingLabelType[]) => {
+  const updataToppings = (newToppings: simpleLabelType[]) => {
     setToppingSelected(newToppings);
   };
 
@@ -347,7 +346,7 @@ const DrinkEditor = () => {
 
                 <div className="mb-2">
                   <label htmlFor="toppings" className='mb-1 block'>Toppings:</label>
-                  <MultiSelect<ToppingLabelType>
+                  <MultiSelect<simpleLabelType>
                     options={showToppingOptions}
                     selected={toppingSelected}
                     setSelected={updataToppings}

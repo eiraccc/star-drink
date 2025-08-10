@@ -1,4 +1,5 @@
 import { SugarLevel, IceLevel, ToppingType } from '../types/drinkReview';
+import { simpleLabelType } from '../component/MultiSelect';
 
 export const sugarLevels: SugarLevel[] = [0, 25, 50, 75, 100];
 export const iceLevels: IceLevel[] = [-1, 0, 30, 70, 100];
@@ -31,16 +32,7 @@ export type SugarIceLabelType =
         value: SugarLevel;
         label: string;
         opacity?: number;
-      };
-
-export type ToppingLabelType = {
-    value: string,
-    label: string,
-    opacity?: number,
-    type: 'topping'
-}
-
-export type OptionType = SugarIceLabelType | ToppingLabelType;
+      };;
 
 export const sugarOptions:SugarIceLabelType[] = sugarLevels.map((level, index) => ({
     value: level as SugarLevel,
@@ -61,7 +53,7 @@ type TagColorConfig = {
   bg: (opacity?: number) => string;
 };
 
-type TagType = 'sugar' | 'ice' | 'topping';
+type TagType = 'sugar' | 'ice';
 
 export const tagColorMap: Record<TagType, TagColorConfig> = {
     sugar: {
@@ -71,10 +63,6 @@ export const tagColorMap: Record<TagType, TagColorConfig> = {
     ice: {
         text: 'var(--color-text-ice)',
         bg: (opacity = 1) => `rgb(var(--color-primary-ice-rgb) / ${opacity})`,
-    },
-    topping: {
-        text: 'var(--color-text)',
-        bg: () => 'var(--color-surface)'
     }
 };
 
@@ -97,9 +85,8 @@ function kebabToTitleCase(input: string): string {
     .join(' '); // Join the words with a space
 };
 
-export const toppingOptions:ToppingLabelType[] = toppings.map(topping => ({
+export const toppingOptions:simpleLabelType[] = toppings.map(topping => ({
     value: topping.trim().toLowerCase().replace(/\s+/g, '-'),
-    label: kebabToTitleCase(topping),
-    type: 'topping'
+    label: kebabToTitleCase(topping)
 }));
 

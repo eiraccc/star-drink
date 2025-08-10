@@ -1,18 +1,19 @@
 import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from 'react-router-dom';
 import { SortKey, SortType } from "../types/sorting";
-import { sugarOptions, iceOptions, SugarIceLabelType, toppingOptions, ToppingLabelType } from '../constants/drink'
+import { sugarOptions, iceOptions, SugarIceLabelType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
 import ErrorSection from "../component/ErrorSection";
 import FilterBar from "../component/FilterBar";
 import LoadingSection from "../component/LoadingSection";
 import { useDrinkReview } from "../context/DrinkReviewContext";
+import { simpleLabelType } from "../component/MultiSelect";
 
 const DrinkList = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
   const [selectedSugar, setSelectedSugar] = useState<SugarIceLabelType[]>(sugarOptions);
-  const [selectedTopping, setSelectedTopping] = useState<ToppingLabelType[]>([])
+  const [selectedTopping, setSelectedTopping] = useState<simpleLabelType[]>([])
   const [sort, setSort] = useState<SortType>({
     key: 'rating',
     order: 'desc'

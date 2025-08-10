@@ -2,10 +2,11 @@ import Tooltip from "../../../component/Tooltip";
 import { ShopType } from "../../../types/shop";
 import { IoShieldCheckmark } from "react-icons/io5";
 import { FaRegClock } from "react-icons/fa";
+import { shopColumns } from "../../../constants/shopColumnConfig";
 
 interface propsType {
   shops: ShopType[];
-  type: 'all' | 'approved' | 'pending';
+  visableLabelKeys: string[]
   handleApprove: (id: string, data: ShopType) => void;
   openEdit: (shop: ShopType) => void;
   handleDelete: (id: string) => void;
@@ -15,63 +16,19 @@ interface propsType {
 
 const ShopTable = ({
     shops,
-    type,
+    visableLabelKeys,
     handleApprove,
     openEdit,
     handleDelete,
     checkApproveValid,
     getApproveInvalidKey
 }: propsType) => {
-    const columns = [
-      { key: 'id', label: 'ID' },
-      { key: 'nameEn', label: 'Shop Name (EN)' },
-      { key: 'nameZh', label: 'Shop Name (ZH)' },
-      { key: 'slug', label: 'Slug' },
-      { key: 'alias', label: 'Alias', render: (val: string[]) => (
-        val.length ? (
-            <div className="flex flex-wrap gap-1 justify-center">
-              {val.map((item, index) => (
-                <span
-                  key={index}
-                  className="inline-block px-2 py-1 bg-background text-text-secondary text-xs rounded-full whitespace-nowrap"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          ) : ('-')
-      ) },
-      { key: 'submittedName', label: 'Submitted Name' },
-      { key: 'submittedNote', label: 'Submitted Note' },
-      { key: 'submittedBy', label: 'Submitted By' },
-      { key: 'description', label: 'Description' },
-      { key: 'createdAt', label: 'Created At' },
-      { key: 'updatedAt', label: 'Updated At' },
-      { key: 'isApproved', label: 'Approval Status', render: (val: boolean) => (
-        val ? (
-            <div className="flex items-center text-success font-bold">
-                <IoShieldCheckmark className="mr-1" />Approved
-            </div>
-        ) : (
-            <div className="flex items-center text-danger font-bold">
-                <FaRegClock className="mr-1" />Pending
-            </div>
-        )
-      ) },
-    ];
-    const visableKeysMap:any = {
-        pending: ['nameEn', 'nameZh', 'slug', 'submittedName', 'submittedBy', 'submittedNote', 'createdAt', 'isApproved'],
-        approved: ['nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'isApproved'],
-        all: ['id', 'nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'updatedAt',  'isApproved'],
-    };
-    const visableKeys = visableKeysMap[type] || [];
-    
     return (
         <div className="overflow-x-auto rounded-xl shadow border border-gray-200">
             <table className="min-w-full divide-y divide-gray-200 bg-contrast text-sm text-center">
                 <thead className="bg-surface text-text-secondary font-semibold">
                 <tr>
-                    {columns.filter(col => visableKeys.includes(col.key)).map(col => (
+                    {shopColumns.filter(col => visableLabelKeys.includes(col.key)).map(col => (
                         <th key={col.key} className="px-4 py-2">{ col.label }</th>
                     ))}
                     <th className="px-4 py-2">Approve</th>
@@ -82,13 +39,49 @@ const ShopTable = ({
                 <tbody className="divide-y divide-gray-100">
                     {shops.map((shop) => (
                         <tr key={shop.id} className="hover:bg-background">
-                            {columns.filter(col => visableKeys.includes(col.key)).map(col => (
-                                <td key={col.key} className={`px-4 py-2 ${col.key==='slug' && 'whitespace-nowrap'}`}>
-                                    {col.render
-                                        ? col.render((shop as any)[col.key])
-                                        : (shop as any)[col.key] || '-'}
-                                </td>
-                            ))}
+                            {shopColumns.filter(col => visableLabelKeys.includes(col.key)).map(col => {
+                                const val = shop[col.key as keyof ShopType];
+                                let content;
+                                switch (col.key) {
+                                    case 'alias':
+                                      content = Array.isArray(val) && val.length > 0 ? (
+                                        <div className="flex flex-wrap gap-1 justify-center">
+                                          {val.map((item: string, i: number) => (
+                                            <span
+                                              key={i}
+                                              className="inline-block px-2 py-1 bg-background text-text-secondary text-xs rounded-full whitespace-nowrap"
+                                            >
+                                              {item}
+                                            </span>
+                                          ))}
+                                        </div>
+                                      ) : (
+                                        '-'
+                                      );
+                                      break;
+                          
+                                    case 'isApproved':
+                                      content = val ? (
+                                        <div className="flex items-center text-success font-bold">
+                                          <IoShieldCheckmark className="mr-1" /> Approved
+                                        </div>
+                                      ) : (
+                                        <div className="flex items-center text-danger font-bold">
+                                          <FaRegClock className="mr-1" /> Pending
+                                        </div>
+                                      );
+                                      break;
+                          
+                                    default:
+                                      content = val;
+                                  }
+
+                                  return (
+                                    <td key={col.key} className={`px-4 py-2 ${col.key==='slug' && 'whitespace-nowrap'}`}>
+                                        { content || '-' }
+                                    </td>
+                                )
+                            })}
                             <td className="px-4 py-2">
                                 <Tooltip
                                     text={`Please complete: ${getApproveInvalidKey(shop).join(',')}`}

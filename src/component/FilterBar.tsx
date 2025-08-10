@@ -1,10 +1,9 @@
-import MultiSelect from '../component/MultiSelect';
+import MultiSelect, { simpleLabelType } from '../component/MultiSelect';
 import {
   sugarOptions,
   iceOptions,
   SugarIceLabelType,
   toppingOptions,
-  ToppingLabelType,
 } from '../constants/drink';
 import { SortKey, SortOrder } from '../types/sorting';
 import { RxCaretSort } from 'react-icons/rx';
@@ -26,8 +25,8 @@ type propsType = {
   setSelectedIce: (val: SugarIceLabelType[]) => void;
   selectedSugar: SugarIceLabelType[];
   setSelectedSugar: (val: SugarIceLabelType[]) => void;
-  selectedTopping: ToppingLabelType[];
-  setSelectedTopping: (val: ToppingLabelType[]) => void;
+  selectedTopping: simpleLabelType[];
+  setSelectedTopping: (val: simpleLabelType[]) => void;
   sort: { key: SortKey; order: SortOrder };
   toggleSort: (key: SortKey) => void;
 };
@@ -98,7 +97,7 @@ const FilterBar = ({
           />
         </div>
         <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
-          <MultiSelect<ToppingLabelType>
+          <MultiSelect<simpleLabelType>
             options={toppingOptions}
             selected={selectedTopping}
             setSelected={setSelectedTopping}

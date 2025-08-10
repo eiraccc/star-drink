@@ -17,6 +17,7 @@ import ConfirmModal from "../../../component/ConfirmModal";
 import { FaPlus } from 'react-icons/fa';
 import { useShop } from "../../../context/ShopContext";
 import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
+import { toast } from 'react-toastify';
 
 const ShopPage = () => {
     const [isLoadingAction, setIsLoadingAction] = useState<boolean>(false);
@@ -115,9 +116,11 @@ const ShopPage = () => {
             setEditMode('');
             setShowEditModal(false);
             setEditData(null);
+            toast.success('Shop edited successfully!');
             // await fetchShop();
         } catch (error) {
             console.log('edit error');
+            toast.error("Failed to edit shop. Please try again.");
         } finally {
             setIsLoadingAction(false);
         }
@@ -132,9 +135,11 @@ const ShopPage = () => {
             setEditMode('');
             setShowEditModal(false);
             setEditData(null);
+            toast.success('Shop added successfully!');
             // await fetchShop();
         } catch (error) {
             console.log('edit error');
+            toast.error("Failed to add shop. Please try again.");
         } finally {
             setIsLoadingAction(false);
         }
@@ -162,9 +167,11 @@ const ShopPage = () => {
         setIsLoadingAction(true);
         try {
             await deleteShopInFB(deleteShopId);
+            toast.success('Shop deleted successfully!');
             // await fetchShop();
         } catch (error) {
             console.log('delete error');
+            toast.error("Failed to delete shop. Please try again.");
         } finally {
             setIsLoadingAction(false);
         }

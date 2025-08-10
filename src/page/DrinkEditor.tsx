@@ -374,14 +374,14 @@ const DrinkEditor = () => {
 
                 <div className="flex gap-2 mt-4">
                   <button
-                    className="w-1/2 px-4 py-2 border rounded-lg text-sm text-text-secondary border-text-secondary hover:bg-surface"
+                    className="w-1/2 px-4 py-2 border rounded-md text-sm text-text-secondary border-text-secondary hover:bg-surface"
                     onClick={(e) => handleCancel(e)}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="w-1/2 px-4 py-2 rounded-lg text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
+                    className="w-1/2 px-4 py-2 rounded-md text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
                   >
                     {isEdit ? 'Edit' : 'Add'}
                   </button>

@@ -91,7 +91,7 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
                 </div>
                 <div className="flex gap-2 mt-4">
                     <button
-                        className="w-1/2 px-4 py-2 border rounded-lg text-sm text-text-secondary border-text-secondary hover:bg-surface"
+                        className="w-1/2 px-4 py-2 border rounded-md text-sm text-text-secondary border-text-secondary hover:bg-background"
                         onClick={onClose}
                     >
                         Cancel
@@ -99,7 +99,7 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
                     <button
                         type="submit"
                         disabled={!isValid}
-                        className="w-1/2 px-4 py-2 rounded-lg text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
+                        className="w-1/2 px-4 py-2 rounded-md text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50"
                     >
                         Add
                     </button>

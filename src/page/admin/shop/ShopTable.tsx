@@ -2,6 +2,7 @@ import Tooltip from "../../../component/Tooltip";
 import { ShopType } from "../../../types/shop";
 import { IoShieldCheckmark } from "react-icons/io5";
 import { FaRegClock } from "react-icons/fa";
+import { MdEdit, MdDelete } from "react-icons/md";
 import { shopColumns } from "../../../constants/shopColumnConfig";
 
 interface propsType {
@@ -62,11 +63,11 @@ const ShopTable = ({
                           
                                     case 'isApproved':
                                       content = val ? (
-                                        <div className="flex items-center text-success font-bold">
+                                        <div className="flex items-center justify-center text-success font-bold">
                                           <IoShieldCheckmark className="mr-1" /> Approved
                                         </div>
                                       ) : (
-                                        <div className="flex items-center text-danger font-bold">
+                                        <div className="flex items-center justify-center text-danger font-bold">
                                           <FaRegClock className="mr-1" /> Pending
                                         </div>
                                       );
@@ -95,16 +96,23 @@ const ShopTable = ({
                                 </Tooltip>
                             </td>
                             <td className="px-4 py-2">
-                                <button
-                                    onClick={() => openEdit(shop)}
-                                    className="bg-primary text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
-                                >Edit</button>
+                                <div className="flex items-center justify-center">
+                                    <MdEdit
+                                        onClick={() => openEdit(shop)}
+                                        className="text-primary hover:opacity-80 cursor-pointer align-middle"
+                                        size={25}
+                                    />
+                                </div>
+                                
                             </td>
                             <td className="px-4 py-2">
-                                <button
-                                    onClick={() => handleDelete(shop.id)}
-                                    className="bg-danger text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
-                                >Delete</button>
+                                <div className="flex items-center justify-center">
+                                    <MdDelete
+                                        onClick={() => handleDelete(shop.id)}
+                                        className="text-primary hover:opacity-80 cursor-pointer"
+                                        size={25}
+                                    />
+                                </div>
                             </td>
                         </tr>
                     ))}

@@ -47,10 +47,12 @@ const drinkReducer = (state: State, action: Action): State => {
   }
 };
 
-export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
+export const DrinkReviewProvider = ({ children, initData }: {
+  children: ReactNode,
+  initData: Omit<State, 'isLoadingReview'>
+}) => {
   const [state, dispatch] = useReducer(drinkReducer, {
-    reviews: [],
-    reviewsByShopId: {},
+    ...initData,
     isLoadingReview: false,
   });
 
@@ -115,9 +117,9 @@ export const DrinkReviewProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    fetchReviews();
-  }, []);
+  // useEffect(() => {
+  //   fetchReviews();
+  // }, []);
 
   return (
     <DrinkReviewContext.Provider

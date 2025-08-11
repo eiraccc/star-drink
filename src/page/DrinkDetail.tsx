@@ -1,5 +1,7 @@
+'use client';
 import { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import StarRating from '../component/StarRating';
 import ErrorSection from '../component/ErrorSection';
 import LoadingOverlay from '../component/LoadingOverlay';
@@ -15,9 +17,8 @@ import { getShopsByQuery } from '../utils/shopService';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 
-const DrinkDetail = () => {
-  const navigate = useNavigate();
-  const { drinkId } = useParams<{drinkId: string}>();
+const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
+  const router = useRouter();
   const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
   const [shopStatus, setShopStatus] = useState<ShopStatusType>('');
   const [shopData, setShopData] = useState<ShopType | null>(null);
@@ -52,7 +53,7 @@ const DrinkDetail = () => {
   const sugarOpacity:number = drinkData ? (sugarOptions.find(n => n.value === drinkData.sugar)?.opacity || 0) : 0;
 
   const handleEdit = () => {
-    navigate(`/drink/${drinkId}/edit`);
+    router.push(`/drink/${drinkId}/edit`);
   };
 
   const handleDelete = async () => {
@@ -60,7 +61,7 @@ const DrinkDetail = () => {
       if (drinkId) {
         await deleteReview(drinkId);
         toast.success('Drink deleted successfully!');
-        navigate('/');
+        router.push('/');
       }
     } catch (error) {
       toast.error("Failed to delete drink. Please try again.");
@@ -70,7 +71,7 @@ const DrinkDetail = () => {
   return (
     <section className='flex justify-center p-6 pb-10'>
       <div className='w-full md:max-w-[500px]'>
-        <Link to="/" className='text-secondary flex items-center mb-4'>
+        <Link href="/" className='text-secondary flex items-center mb-4'>
           <MdArrowBackIos />Back home
         </Link>
 
@@ -83,7 +84,7 @@ const DrinkDetail = () => {
               </h2>
               <div className='flex items-center'>
                 {drinkData.shopId && shopStatus === 'approved' && shopData?.slug ? (
-                  <Link to={`/shop/${shopData.slug}`} className="text-text-secondary italic mr-2 underline">
+                  <Link href={`/shop/${shopData.slug}`} className="text-text-secondary italic mr-2 underline">
                     {drinkData.shopName}
                   </Link>
                 ) : (

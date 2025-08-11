@@ -1,11 +1,11 @@
+'use client';
 import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import StarRating from "../component/StarRating"
 import { DrinkReviewFormType, IceLevel, SugarLevel, DrinkRatingType } from "../types/drinkReview"
 import { sugarOptions, iceOptions, toppingOptions } from '../constants/drink'
 import { MdArrowBackIos } from "react-icons/md";
-import { useNavigate, useParams } from 'react-router-dom';
-import MultiSelect from '../component/MultiSelect';
 import { BaseSelectOptionType } from '../types/selectOptionType';
 import StepSelector from '../component/StepSelector';
 import ErrorSection from '../component/ErrorSection';
@@ -14,16 +14,19 @@ import { useDrinkReview } from "../context/DrinkReviewContext";
 import { getShopsByQuery } from '../utils/shopService';
 import AddShopModal from '../component/AddShopModal';
 import ShopSelect, { OptionTypeWithApprovalStatus } from '../component/ShopSelect';
+import MultiSelect from '../component/MultiSelect';
 import { toast } from 'react-toastify';
 import { useForm, Controller } from "react-hook-form";
 
-
-const DrinkEditor = () => {
-  const { drinkId } = useParams<{ drinkId: string }>();
+const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
+  const router = useRouter();
   const isEdit = Boolean(drinkId);
-  const navigate = useNavigate();
-  const { reviews, addReview, editReview, isLoadingReview } = useDrinkReview();
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
+  const { reviews, addReview, editReview, isLoadingReview } = useDrinkReview();
   const [showToppingOptions, setShowToppingOptions] = useState<BaseSelectOptionType[]>(toppingOptions);
   const [toppingSelected, setToppingSelected] = useState<BaseSelectOptionType[]>([]);
   const [shopOptions, setShopOptions] = useState<OptionTypeWithApprovalStatus[]>([]);
@@ -159,7 +162,7 @@ const DrinkEditor = () => {
     try {
       await addReview(submittedData);
       toast.success('Drink added successfully!');
-      navigate('/');
+      router.push('/');
     } catch (error) {
       toast.error("Failed to add drink. Please try again.");
     }
@@ -171,7 +174,7 @@ const DrinkEditor = () => {
       if (drinkId && submittedData) {
         await editReview(drinkId, submittedData);
         toast.success('Drink updated successfully!');
-        navigate(`/drink/${drinkId}`);
+        router.push(`/drink/${drinkId}`);
       }
     } catch (error) {
       toast.error("Failed to update drink. Please try again.");
@@ -180,7 +183,7 @@ const DrinkEditor = () => {
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    navigate(isEdit ? `/drink/${drinkId}` : '/');
+    router.push(isEdit ? `/drink/${drinkId}` : '/');
   };
 
   type DrinkForm = {
@@ -213,14 +216,14 @@ const DrinkEditor = () => {
 
   return (
     <section className='flex justify-center p-6 pb-10'>
-        <div className='w-full md:max-w-[500px]'>
+        {isClient ? <div className='w-full md:max-w-[500px]'>
           <AddShopModal
             isOpen={showAddShoptModal}
             onClose={() => setShowAddShoptModal(false)}
             onAdd={handleAddShop}
           />
 
-          <Link to="/" className='text-secondary flex items-center mb-4'>
+          <Link href="/" className='text-secondary flex items-center mb-4'>
             <MdArrowBackIos />Back home
           </Link>
 
@@ -390,7 +393,7 @@ const DrinkEditor = () => {
             )
           )
           }
-        </div>
+        </div>: <LoadingOverlay />}
     </section>
   )
 }

@@ -11,6 +11,12 @@ import { useDrinkReview } from "../context/DrinkReviewContext";
 import { BaseSelectOptionType } from "../types/selectOptionType";
 
 const DrinkList = () => {
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedIce, setSelectedIce] = useState<SugarIceLabelType[]>(iceOptions);
   const [selectedSugar, setSelectedSugar] = useState<SugarIceLabelType[]>(sugarOptions);
@@ -31,8 +37,7 @@ const DrinkList = () => {
     }
     })
   };
-
-  const router = useRouter();
+  
   const goToDrinkDetail = (id: string) => {
     router.push(`/drink/${id}`);
   };
@@ -57,7 +62,7 @@ const DrinkList = () => {
 
   return (
     <section className="p-6 pb-10">
-      <div className="sm:p-6 lg:p-8">
+      {isClient && <div className="sm:p-6 lg:p-8">
         <FilterBar
           searchValue={searchValue}
           setSearchValue={setSearchValue}
@@ -96,7 +101,7 @@ const DrinkList = () => {
             />
           )
         )}
-      </div>
+      </div>}
     </section>
   )
 }

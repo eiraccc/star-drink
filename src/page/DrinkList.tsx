@@ -37,10 +37,6 @@ const DrinkList = () => {
     }
     })
   };
-  
-  const goToDrinkDetail = (id: string) => {
-    router.push(`/drink/${id}`);
-  };
 
   const sortReviews = useMemo(() => {
     return [...reviews].filter(review => {
@@ -84,7 +80,7 @@ const DrinkList = () => {
               <DrinkCard
                 key={review.id}
                 data={review}
-                onClick={() => goToDrinkDetail(review.id)}
+                onClick={() => router.push(`/drink/${review.id}`)}
               />
             ))}
           </div>

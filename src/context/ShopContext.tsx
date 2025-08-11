@@ -1,3 +1,4 @@
+'use client';
 import {
     createContext,
     useContext,
@@ -10,7 +11,6 @@ import {
     listenApprovedShops,
     listenAllShops,
 } from '../utils/shopService';
-import { useLocation } from 'react-router-dom';
 
 interface ShopContextType {
   approvedShops: ShopType[];
@@ -28,27 +28,26 @@ export const ShopProvider = ({ children }: { children: ReactNode }) => {
     const [isLoadingAllShop, setIsLoadingAllShop] = useState(true);
     const [errorApproved, setErrorApproved] = useState<Error | null>(null);
     const [errorAll, setErrorAll] = useState<Error | null>(null);
-    const location = useLocation();
 
     useEffect(() => {
         let unsubAll: (() => void) | null = null;
         let unsubApproved: (() => void) | null = null;
 
-        if (location.pathname.startsWith('/admin')) {
+        // if (pathname.startsWith('/admin')) {
             // admin page
-            setIsLoadingAllShop(true);
-            unsubAll = listenAllShops(
-                (shops) => {
-                    setAllShops(shops);
-                    setIsLoadingAllShop(false);
-                    setErrorAll(null);
-                },
-                (error) => {
-                    setErrorAll(error);
-                    setIsLoadingAllShop(false);
-                }
-            );
-        } else {
+            // setIsLoadingAllShop(true);
+            // unsubAll = listenAllShops(
+            //     (shops) => {
+            //         setAllShops(shops);
+            //         setIsLoadingAllShop(false);
+            //         setErrorAll(null);
+            //     },
+            //     (error) => {
+            //         setErrorAll(error);
+            //         setIsLoadingAllShop(false);
+            //     }
+            // );
+        // } else {
             // not admin page
             setIsLoadingApprovedShop(true);
             unsubApproved = listenApprovedShops(
@@ -62,7 +61,7 @@ export const ShopProvider = ({ children }: { children: ReactNode }) => {
                     setIsLoadingApprovedShop(false);
                 }
             );
-        }
+        // }
         
         return () => {
             unsubApproved && unsubApproved();

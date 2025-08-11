@@ -8,6 +8,6 @@ type PropsType = {
 }
 
 export default async function DrinkDetailPage({ params }: PropsType) {
-    const { drinkId } = await params;  
+    const { drinkId } = await params;
     return <DrinkDetail drinkId={drinkId} />
 }

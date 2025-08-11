@@ -1,5 +1,6 @@
+'use client';
 import { useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import LoadingOverlay from "../component/LoadingOverlay";
 import ErrorSection from "../component/ErrorSection";
 import DrinkCard from "../component/DrinkCard";
@@ -7,9 +8,8 @@ import { useDrinkReview } from "../context/DrinkReviewContext";
 import { useShop } from "../context/ShopContext";
 import { FaComment, FaStar } from "react-icons/fa";
 
-const ShopDetail = () => {
-  const navigate = useNavigate();
-  const { shopSlug } = useParams<{shopSlug: string}>();
+const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
+  const router = useRouter();
   const { reviewsByShopId, isLoadingReview } = useDrinkReview();
   const { approvedShops, isLoadingApprovedShop } = useShop();
 
@@ -64,7 +64,7 @@ const ShopDetail = () => {
                   <DrinkCard
                     key={review.id}
                     data={review}
-                    onClick={() => navigate(`/drink/${review.id}`)}
+                    onClick={() => router.push(`/drink/${review.id}`)}
                   />
                 ))}
               </div>
@@ -80,7 +80,7 @@ const ShopDetail = () => {
           <ErrorSection
             errorMsg='Hmm... no drink shop here. Maybe try a different flavor?'
             btnText="Explore other shops"
-            btnAction={() => navigate('/shop/')}
+            btnAction={() => router.push('/shop/')}
           />
         )}
       </div>

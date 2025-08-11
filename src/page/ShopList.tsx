@@ -1,5 +1,6 @@
+'use client';
 import { useMemo, useState } from "react"
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useDrinkReview } from "../context/DrinkReviewContext";
 import ShopCard from "../component/ShopCard";
 import LoadingSection from "../component/LoadingSection";
@@ -8,7 +9,7 @@ import { RiSearchLine } from "react-icons/ri";
 import { useShop } from "../context/ShopContext";
 
 const ShopList = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [searchValue, setSearchValue] = useState<string>('');
     const { reviewsByShopId, isLoadingReview } = useDrinkReview();
     const { approvedShops, isLoadingApprovedShop } = useShop();
@@ -59,7 +60,7 @@ const ShopList = () => {
                             <ShopCard
                                 key={shop.id}
                                 data={shop}
-                                onClick={() => navigate(`/shop/${shop.slug}`)}
+                                onClick={() => router.push(`/shop/${shop.slug}`)}
                             />
                         ))}
                     </div>

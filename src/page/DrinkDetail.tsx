@@ -52,10 +52,6 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   const iceOpacity:number = drinkData ? (iceOptions.find(n => n.value === drinkData.ice)?.opacity || 0) : 0;
   const sugarOpacity:number = drinkData ? (sugarOptions.find(n => n.value === drinkData.sugar)?.opacity || 0) : 0;
 
-  const handleEdit = () => {
-    router.push(`/drink/${drinkId}/edit`);
-  };
-
   const handleDelete = async () => {
     try {
       if (drinkId) {
@@ -116,7 +112,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
 
               <div className="flex justify-end mt-4 space-x-2">
                 <button
-                  onClick={handleEdit}
+                  onClick={() => router.push(`/drink/${drinkId}/edit`)}
                   className="bg-primary text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
                 >
                   Edit

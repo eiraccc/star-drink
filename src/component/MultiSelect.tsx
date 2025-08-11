@@ -1,3 +1,4 @@
+'use client';
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { tagColorMap, SugarIceLabelType } from '../constants/drink'
@@ -155,7 +156,7 @@ const MultiSelect = <T extends OptionType>({
       isMulti
       options={options}
       value={selected}
-      onChange={newVal => setSelected([...newVal])}
+      onChange={newVal => setSelected(newVal ? [...newVal] : [])}
       placeholder={placeholder}
       styles={customStyles}
       components={{MultiValue: WrappedMultiValue, Option}}

@@ -1,4 +1,4 @@
-import MultiSelect from '../component/MultiSelect';
+'use client';
 import {
   sugarOptions,
   iceOptions,
@@ -18,6 +18,9 @@ import {
 import { FaRegStar } from 'react-icons/fa';
 import { useState } from 'react';
 import { BaseSelectOptionType } from '../types/selectOptionType';
+
+import dynamic from 'next/dynamic'
+const MultiSelect = dynamic(() => import('./MultiSelect'), { ssr: false })
 
 type propsType = {
   searchValue: string;

@@ -14,7 +14,7 @@ export const Option = (props: any) => {
 
 export const MultiValue = (props: any) => {
   const {index, getValue, data, maxToShow} = props
-  const selectedValues = getValue()
+  const selectedValues = getValue ? getValue() : [];
 
   if (index < maxToShow) {
     // 顯示前幾個選項的標籤

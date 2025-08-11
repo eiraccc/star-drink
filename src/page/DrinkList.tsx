@@ -1,7 +1,6 @@
-'use client'
-
+'use client';
 import { useState, useEffect, useMemo } from "react"
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { SortKey, SortType } from "../types/sorting";
 import { sugarOptions, iceOptions, SugarIceLabelType } from '../constants/drink'
 import DrinkCard from "../component/DrinkCard";
@@ -33,9 +32,9 @@ const DrinkList = () => {
     })
   };
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const goToDrinkDetail = (id: string) => {
-    navigate(`/drink/${id}`);
+    router.push(`/drink/${id}`);
   };
 
   const sortReviews = useMemo(() => {

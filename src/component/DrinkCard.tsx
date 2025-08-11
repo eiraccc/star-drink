@@ -1,3 +1,4 @@
+'use client';
 import StarRating from "./StarRating"
 import { DrinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";

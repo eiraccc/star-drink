@@ -1,3 +1,4 @@
+'use client';
 const Footer = () => {
     const today = new Date();
     return (

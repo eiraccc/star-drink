@@ -1,5 +1,7 @@
+'use client';
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { RiDrinks2Line } from "react-icons/ri";
 import { FaPlus } from 'react-icons/fa';
 import { FiSun, FiMoon } from "react-icons/fi";
@@ -8,7 +10,7 @@ import { IoConstructOutline } from 'react-icons/io5';
 
 const Header = () => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-    const location = useLocation();
+    const pathname = usePathname();
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -20,7 +22,7 @@ const Header = () => {
     }
 
     const getPageTitle = () => {
-        const pathArr = location.pathname.split('/');
+        const pathArr = pathname.split('/');
         const mainPath = pathArr ? pathArr[1] : '';
         if(!mainPath) return 'Drink';
         return mainPath.charAt(0).toUpperCase() + mainPath.slice(1);
@@ -29,12 +31,12 @@ const Header = () => {
     return (
         <header className='relative flex items-center justify-between p-4 border-b-2 border-primary'>
             <div className='flex'>
-                <Link to="/">
+                <Link href="/">
                     <div className='text-primary hover:text-secondary mr-2'>
                         <RiDrinks2Line size={35} />
                     </div>
                 </Link>
-                <Link to="/shop">
+                <Link href="/shop">
                     <div className='text-primary hover:text-secondary'>
                         <MdStorefront size={35} />
                     </div>
@@ -45,14 +47,16 @@ const Header = () => {
                 {getPageTitle()}
             </h1>
             <div className='flex items-center'>
-                {location.pathname !== '/drink/add' && !location.pathname.includes('admin') && <Link to="/drink/add">
-                    <button
-                        className='hidden sm:flex bg-highlight text-contrast rounded-full px-2 py-2 mr-2 items-center hover:opacity-80'
-                    >
-                        <FaPlus className='mr-2'/>
-                        Add Drink
-                    </button>
-                </Link>}
+                {location.pathname !== '/drink/add' && !location.pathname.includes('admin') && (
+                    <Link href="/drink/add">
+                        <button
+                            className='hidden sm:flex bg-highlight text-contrast rounded-full px-2 py-2 mr-2 items-center hover:opacity-80'
+                        >
+                            <FaPlus className='mr-2'/>
+                            Add Drink
+                        </button>
+                    </Link>
+                )}
                 <button
                     onClick={ collapseMode }
                     aria-label="切換模式"
@@ -61,12 +65,14 @@ const Header = () => {
                     { isDarkMode ? <FiMoon size={23} /> : <FiSun size={23} /> }
                 </button>
             </div>
-            {location.pathname !== '/drink/add' && <Link
-                to="/drink/add"
-                className="sm:hidden fixed bottom-9 right-4 w-10 h-10 rounded-full bg-highlight text-contrast flex items-center justify-center shadow-lg hover:bg-primary/90 z-[9999]"
-            >
-                <FaPlus />
-            </Link>}
+            {location.pathname !== '/drink/add' && (
+                <Link
+                    href="/drink/add"
+                    className="sm:hidden fixed bottom-9 right-4 w-10 h-10 rounded-full bg-highlight text-contrast flex items-center justify-center shadow-lg hover:bg-primary/90 z-[9999]"
+                >
+                    <FaPlus />
+                </Link>
+            )}
         </header>
     )
 }

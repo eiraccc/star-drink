@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from 'react-router-dom';
 import { SortKey, SortType } from "../types/sorting";

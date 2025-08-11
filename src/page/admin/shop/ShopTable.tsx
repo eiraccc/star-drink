@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 import Tooltip from "../../../component/Tooltip";
 import { ShopType } from "../../../types/shop";

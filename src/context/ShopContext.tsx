@@ -9,75 +9,43 @@ import {
 import { ShopType} from '../types/shop';
 import {
     listenApprovedShops,
-    listenAllShops,
 } from '../utils/shopService';
 
 interface ShopContextType {
   approvedShops: ShopType[];
-  allShops: ShopType[];
   isLoadingApprovedShop: boolean;
-  isLoadingAllShop: boolean;
   errorApproved: Error | null;
-  errorAll: Error | null;
 }
 
 export const ShopProvider = ({ children }: { children: ReactNode }) => {
     const [approvedShops, setApprovedShops] = useState<ShopType[]>([]);
-    const [allShops, setAllShops] = useState<ShopType[]>([]);
-    const [isLoadingApprovedShop, setIsLoadingApprovedShop] = useState(true);
-    const [isLoadingAllShop, setIsLoadingAllShop] = useState(true);
+    const [isLoadingApprovedShop, setIsLoadingApprovedShop] = useState(false);
     const [errorApproved, setErrorApproved] = useState<Error | null>(null);
-    const [errorAll, setErrorAll] = useState<Error | null>(null);
 
     useEffect(() => {
-        let unsubAll: (() => void) | null = null;
-        let unsubApproved: (() => void) | null = null;
-
-        // if (pathname.startsWith('/admin')) {
-            // admin page
-            // setIsLoadingAllShop(true);
-            // unsubAll = listenAllShops(
-            //     (shops) => {
-            //         setAllShops(shops);
-            //         setIsLoadingAllShop(false);
-            //         setErrorAll(null);
-            //     },
-            //     (error) => {
-            //         setErrorAll(error);
-            //         setIsLoadingAllShop(false);
-            //     }
-            // );
-        // } else {
-            // not admin page
-            setIsLoadingApprovedShop(true);
-            unsubApproved = listenApprovedShops(
-                (shops) => {
-                    setApprovedShops(shops);
-                    setIsLoadingApprovedShop(false);
-                    setErrorApproved(null);
-                },
-                (err) => {
-                    setErrorApproved(err);
-                    setIsLoadingApprovedShop(false);
-                }
-            );
-        // }
+        setIsLoadingApprovedShop(true);
+        const unsubApproved = listenApprovedShops(
+            (shops) => {
+                setApprovedShops(shops);
+                setIsLoadingApprovedShop(false);
+                setErrorApproved(null);
+            },
+            (err) => {
+                setErrorApproved(err);
+                setIsLoadingApprovedShop(false);
+            }
+        );
         
-        return () => {
-            unsubApproved && unsubApproved();
-            unsubAll && unsubAll();
-        };
+    
+        return () => unsubApproved();
     }, []);
 
     return (
         <ShopContext.Provider
           value={{
             approvedShops,
-            allShops,
             isLoadingApprovedShop,
-            isLoadingAllShop,
             errorApproved,
-            errorAll,
           }}
         >
           {children}

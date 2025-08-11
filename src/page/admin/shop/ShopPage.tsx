@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from "react"
 import { ShopType, ShopFormType } from "../../../types/shop";
 import {
@@ -12,19 +13,42 @@ import MultiSelect from "../../../component/MultiSelect";
 import ShopTable from "./ShopTable";
 import ShopEditModal from "./ShopEditModal";
 import LoadingOverlay from "../../../component/LoadingOverlay";
+import LoadingSection from "../../../component/LoadingSection";
 import ErrorSection from "../../../component/ErrorSection";
 import ConfirmModal from "../../../component/ConfirmModal";
 import { FaPlus } from 'react-icons/fa';
-import { useShop } from "../../../context/ShopContext";
 import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
 import { toast } from 'react-toastify';
+import { listenAllShops } from "../../../utils/shopService";
 
 const ShopPage = () => {
+    const [isClient, setIsClient] = useState(false);
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+    
     const [isLoadingAction, setIsLoadingAction] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<'edit' | 'add' | ''>('');
-    const { allShops, isLoadingAllShop } = useShop();
+    const [allShops, setAllShops] = useState<ShopType[]>([]);
+    const [isLoadingAllShop, setIsLoadingAllShop] = useState(false);
+    const [errorAll, setErrorAll] = useState<Error | null>(null);
 
-    const isLoading = isLoadingAction || isLoadingAllShop;
+    useEffect(() => {
+        setIsLoadingAllShop(true);
+        const unsubAll = listenAllShops(
+            (shops) => {
+                setAllShops(shops);
+                setIsLoadingAllShop(false);
+                setErrorAll(null);
+            },
+            (error) => {
+                setErrorAll(error);
+                setIsLoadingAllShop(false);
+            }
+        );
+        
+        return () => unsubAll();
+    }, []);
 
     const filterOptions: BaseSelectOptionType[] = [
       { value: 'all', label: 'All' },
@@ -198,7 +222,7 @@ const ShopPage = () => {
                 onConfirm={handleDelete}
             />
            
-            <div className="flex justify-between p-2">
+            {isClient && <div className="flex justify-between p-2">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                     <p className="flex-shrink-0 whitespace-nowrap">Approval Status:</p>
                     <SingleSelect
@@ -227,9 +251,11 @@ const ShopPage = () => {
                     <FaPlus size={16} />
                     <span className="hidden sm:inline-block ml-2">Add Shop</span>
                 </button>
-            </div>
+            </div>}
 
-            {isLoading ? <LoadingOverlay /> : allShops.length ? (
+            {isLoadingAction && <LoadingOverlay />}
+
+            {isLoadingAllShop ? <LoadingSection /> : allShops.length ? (
                 <ShopTable
                     shops={filtershops}
                     visableLabelKeys={selectedVisableLabels.map(n => n.value)}
@@ -240,7 +266,7 @@ const ShopPage = () => {
                     getApproveInvalidKey={getApproveInvalidKey}
                 />
             ) : (
-                 <ErrorSection
+                isClient && <ErrorSection
                     errorMsg="No shop yet!"
                  />
             )}

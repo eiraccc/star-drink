@@ -1,3 +1,4 @@
+'use client';
 import Modal from "../../../component/Modal";
 import UnderlineInput from "../../../component/UnderlineInput";
 import ChipInput from "../../../component/ChipInput";

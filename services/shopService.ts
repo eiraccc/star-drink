@@ -40,82 +40,62 @@ function formatDoc(doc: QueryDocumentSnapshot<DocumentData>): ShopType {
   };
 };
 
+type FetchMode = 'once' | 'subscribe';
 
-// 監聽已審核店家（onSnapshot）
-export function listenApprovedShops(
-  callback: (shops: ShopType[]) => void,
-  errorCallback?: (error: Error) => void
-) {
-  const q = query(shopRef, where('isApproved', '==', true));
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const shops = snapshot.docs.map(formatDoc);
-      callback(shops);
-    },
-    (error) => {
-      if (errorCallback) errorCallback(error);
-    }
-  );
-};
-
-export function listenAllShops(
-  callback: (shops: ShopType[]) => void,
-  errorCallback?: (error: Error) => void
-) {
-  return onSnapshot(
-    shopRef,
-    (snapshot) => {
-      const shops = snapshot.docs.map(formatDoc);
-      callback(shops);
-    },
-    (error) => {
-      if (errorCallback) errorCallback(error);
-    }
-  );
-};
-
-export async function getShops(): Promise<ShopType[]> {
-  try {
-    const snapshot = await getDocs(shopRef);
-    return snapshot.docs.map(formatDoc);
-  } catch (error) {
-    console.error('get reviews error:', error);
-    throw error;
-  }
+interface FetchShopsParams {
+  mode?: FetchMode;
+  shopId?: string;
+  shopSlug?: string;
+  isApproved?: boolean;
+  callback?: (shops: ShopType[]) => void; // for subscribe
+  errorCallback?: (error: Error) => void; // for subscribe
 }
 
-export async function getShopsByQuery({
+export async function fetchShops({
+  mode = 'once',
   shopId,
   shopSlug,
-  isApproved
-}: {
-  shopId?: string,
-  shopSlug?: string,
-  isApproved?: boolean
-}): Promise<ShopType[]> {
-  try {
-    const conditions: QueryConstraint[] = [];
-    if (shopId) {
-      conditions.push(where(documentId(), "==", shopId));
-    }
+  isApproved,
+  callback,
+  errorCallback,
+}: FetchShopsParams): Promise<ShopType[] | (() => void)> {
+  const conditions: QueryConstraint[] = [];
 
-    if (shopSlug) {
-      conditions.push(where("slug", "==", shopSlug));
-    }
-  
-    if (isApproved !== undefined) {
-      conditions.push(where("isApproved", "==", isApproved));
-    }
-  
-    const q = query(shopRef, ...conditions);
+  if (shopId) {
+    conditions.push(where(documentId(), '==', shopId));
+  }
+  if (shopSlug) {
+    conditions.push(where('slug', '==', shopSlug));
+  }
+  if (isApproved !== undefined) {
+    conditions.push(where('isApproved', '==', isApproved));
+  }
+
+  const q = conditions.length > 0 ? query(shopRef, ...conditions) : shopRef;
+
+  if (mode === 'once') {
+    // 一次性抓資料
     const snapshot = await getDocs(q);
     return snapshot.docs.map(formatDoc);
-  } catch (error) {
-    console.error('get reviews error:', error);
-    throw error;
   }
-}
+
+  if (mode === 'subscribe') {
+    if (!callback) throw new Error('subscribe mode requires a callback');
+    // 即時監聽
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const shops = snapshot.docs.map(formatDoc);
+        callback(shops);
+      },
+      (error) => {
+        if (errorCallback) errorCallback(error);
+      }
+    );
+  }
+
+  throw new Error(`Invalid mode: ${mode}`);
+};
 
 export async function addShopByName({
   submittedName,

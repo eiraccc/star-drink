@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { ShopType} from '../types/shop';
 import {
-    listenApprovedShops,
+    fetchShops,
 } from '../services/shopService';
 
 interface ShopContextType {
@@ -17,28 +17,46 @@ interface ShopContextType {
   errorApproved: Error | null;
 }
 
-export const ShopProvider = ({ children }: { children: ReactNode }) => {
-    const [approvedShops, setApprovedShops] = useState<ShopType[]>([]);
-    const [isLoadingApprovedShop, setIsLoadingApprovedShop] = useState(false);
+export const ShopProvider = ({
+  children,
+  initApprovedShops = [],
+}: {
+  children: ReactNode,
+  initApprovedShops: ShopType[]
+}) => {
+    const [approvedShops, setApprovedShops] = useState<ShopType[]>(initApprovedShops);
+    const [isLoadingApprovedShop, setIsLoadingApprovedShop] = useState(!initApprovedShops.length);
     const [errorApproved, setErrorApproved] = useState<Error | null>(null);
 
     useEffect(() => {
-        setIsLoadingApprovedShop(true);
-        const unsubApproved = listenApprovedShops(
-            (shops) => {
-                setApprovedShops(shops);
-                setIsLoadingApprovedShop(false);
-                setErrorApproved(null);
-            },
-            (err) => {
-                setErrorApproved(err);
-                setIsLoadingApprovedShop(false);
-            }
-        );
-        
-    
-        return () => unsubApproved();
+      // 啟動即時監聽
+      let unsubscribe: (() => void) | undefined;
+  
+      (async () => {
+        const sub = await fetchShops({
+          mode: 'subscribe',
+          isApproved: true,
+          callback: (shops) => {
+            setApprovedShops(shops);
+            setIsLoadingApprovedShop(false);
+            setErrorApproved(null);
+          },
+          errorCallback: (err) => {
+            setErrorApproved(err);
+            setIsLoadingApprovedShop(false);
+          },
+        });
+  
+        if (typeof sub === 'function') {
+          unsubscribe = sub;
+        }
+      })();
+  
+      return () => {
+        if (unsubscribe) unsubscribe();
+      };
     }, []);
+  
 
     return (
         <ShopContext.Provider

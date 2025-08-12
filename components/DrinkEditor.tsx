@@ -11,12 +11,13 @@ import StepSelector from './StepSelector';
 import ErrorSection from './ErrorSection';
 import LoadingOverlay from './LoadingOverlay';
 import { useDrinkReview } from "../context/DrinkReviewContext";
-import { getShopsByQuery } from '../services/shopService';
+import { fetchShops } from '../services/shopService';
 import AddShopModal from './AddShopModal';
 import ShopSelect, { OptionTypeWithApprovalStatus } from './ShopSelect';
 import MultiSelect from './MultiSelect';
 import { toast } from 'react-toastify';
 import { useForm, Controller } from "react-hook-form";
+import { ShopType } from '../types/shop';
 
 const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   const router = useRouter();
@@ -72,7 +73,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
 
   const getShopsAndSetOptions = async(editData: DrinkReviewFormType | null) => {
     try {
-      const data = await getShopsByQuery({isApproved: true});
+      const data = await fetchShops({isApproved: true}) as ShopType[];
 
       if (!data?.length) return;
       let shopList = data.map(shop => (

@@ -19,9 +19,9 @@ import ConfirmModal from "../../../components/ConfirmModal";
 import { FaPlus } from 'react-icons/fa';
 import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
 import { toast } from 'react-toastify';
-import { listenAllShops } from "../../../services/shopService";
+import { fetchShops } from "../../../services/shopService";
 
-const ShopPage = () => {
+const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const [isClient, setIsClient] = useState(false);
     useEffect(() => {
         setIsClient(true);
@@ -29,25 +29,30 @@ const ShopPage = () => {
     
     const [isLoadingAction, setIsLoadingAction] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<'edit' | 'add' | ''>('');
-    const [allShops, setAllShops] = useState<ShopType[]>([]);
-    const [isLoadingAllShop, setIsLoadingAllShop] = useState(false);
+    const [allShops, setAllShops] = useState<ShopType[]>(initAllShops);
     const [errorAll, setErrorAll] = useState<Error | null>(null);
 
     useEffect(() => {
-        setIsLoadingAllShop(true);
-        const unsubAll = listenAllShops(
-            (shops) => {
-                setAllShops(shops);
-                setIsLoadingAllShop(false);
-                setErrorAll(null);
-            },
-            (error) => {
-                setErrorAll(error);
-                setIsLoadingAllShop(false);
+        let unsubscribe: (() => void) | undefined;
+
+        (async () => {
+            try {
+              unsubscribe = (await fetchShops({
+                mode: 'subscribe',
+                callback: (shops) => {
+                  setAllShops(shops as ShopType[]);
+                  setErrorAll(null);
+                },
+                errorCallback: (error) => setErrorAll(error),
+              })) as () => void;
+            } catch (error) {
+              setErrorAll(error as Error);
             }
-        );
+        })();
         
-        return () => unsubAll();
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
     }, []);
 
     const filterOptions: BaseSelectOptionType[] = [
@@ -255,7 +260,7 @@ const ShopPage = () => {
 
             {isLoadingAction && <LoadingOverlay />}
 
-            {isLoadingAllShop ? <LoadingSection /> : allShops.length ? (
+            {!isClient ? <LoadingSection /> : allShops.length ? (
                 <ShopTable
                     shops={filtershops}
                     visableLabelKeys={selectedVisableLabels.map(n => n.value)}
@@ -266,7 +271,7 @@ const ShopPage = () => {
                     getApproveInvalidKey={getApproveInvalidKey}
                 />
             ) : (
-                isClient && <ErrorSection
+                <ErrorSection
                     errorMsg="No shop yet!"
                  />
             )}

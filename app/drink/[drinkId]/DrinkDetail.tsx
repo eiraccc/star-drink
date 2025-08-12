@@ -13,7 +13,7 @@ import { useDrinkReview } from "../../../context/DrinkReviewContext";
 import { ShopType } from '../../../types/shop';
 import { toast } from 'react-toastify';
 import ShopStatusTag from '../../../components/ShopStatusTag';
-import { getShopsByQuery } from '../../../services/shopService';
+import { fetchShops } from '../../../services/shopService';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 
@@ -38,7 +38,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   }, [drinkData]);
 
   const getShopInfo = async(shopId: string) => {
-      const shopInfo = await getShopsByQuery({shopId: shopId});
+      const shopInfo = await fetchShops({shopId: shopId}) as ShopType[];
       if(shopInfo?.length) {
           const shopData = shopInfo[0];
           setShopStatus(shopData.isApproved ? 'approved' : 'pending');

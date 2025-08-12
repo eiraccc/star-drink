@@ -13,13 +13,13 @@ import {
   QueryDocumentSnapshot,
   DocumentData
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../lib/firebase";
 import {
   DrinkReviewType,
   DrinkReviewFormType,
   DrinkReviewFirestoreData
-} from "../types/drinkReview";
-import { formatTimestampToUserLocalString } from "./timeFormat";
+} from "../src/types/drinkReview";
+import { formatTimestampToUserLocalString } from "../utils/timeFormat";
 import { IoConstructOutline } from "react-icons/io5";
 
 const reviewsRef = collection(db, "drinkReviews");

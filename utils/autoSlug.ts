@@ -1,6 +1,6 @@
 import pinyin from 'pinyin';
 import slugify from 'slugify';
-import { ShopNameSlugType } from '../types/shop';
+import { ShopNameSlugType } from '../src/types/shop';
 
 function toPinyin(text: string): string {
   // 將中文轉拼音（空格合併，轉小寫）

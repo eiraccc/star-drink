@@ -10,7 +10,7 @@ import {
   RiArrowDownSLine,
   RiArrowUpSLine,
 } from 'react-icons/ri';
-import { shopColumns } from "../../../constants/shopColumnConfig";
+import { shopColumns } from "../../../../constants/shopColumnConfig";
 
 interface propsType {
   shops: ShopType[];

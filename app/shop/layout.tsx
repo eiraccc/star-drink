@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShopProvider } from '../../src/context/ShopContext';
+import { ShopProvider } from '../../context/ShopContext';
 
 export default async function ShopLayout({children}: {children: React.ReactNode}) {
     return (

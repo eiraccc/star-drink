@@ -2,12 +2,12 @@
 import { useState, useEffect, useMemo } from "react"
 import { useRouter } from 'next/navigation';
 import { SortKey, SortType } from "../types/sorting";
-import { sugarOptions, iceOptions, SugarIceLabelType } from '../constants/drink'
+import { sugarOptions, iceOptions, SugarIceLabelType } from '../../constants/drink'
 import DrinkCard from "../component/DrinkCard";
 import ErrorSection from "../component/ErrorSection";
 import FilterBar from "../component/FilterBar";
 import LoadingSection from "../component/LoadingSection";
-import { useDrinkReview } from "../context/DrinkReviewContext";
+import { useDrinkReview } from "../../context/DrinkReviewContext";
 import { BaseSelectOptionType } from "../types/selectOptionType";
 
 const DrinkList = () => {

@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation';
 import LoadingOverlay from "../component/LoadingOverlay";
 import ErrorSection from "../component/ErrorSection";
 import DrinkCard from "../component/DrinkCard";
-import { useDrinkReview } from "../context/DrinkReviewContext";
-import { useShop } from "../context/ShopContext";
+import { useDrinkReview } from "../../context/DrinkReviewContext";
+import { useShop } from "../../context/ShopContext";
 import { FaComment, FaStar } from "react-icons/fa";
 
 const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {

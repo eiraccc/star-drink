@@ -6,10 +6,10 @@ import {
     useState,
     ReactNode
 } from 'react';
-import { ShopType} from '../types/shop';
+import { ShopType} from '../src/types/shop';
 import {
     listenApprovedShops,
-} from '../utils/shopService';
+} from '../services/shopService';
 
 interface ShopContextType {
   approvedShops: ShopType[];

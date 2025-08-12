@@ -6,13 +6,13 @@ import {
   ReactNode,
   useEffect,
 } from 'react';
-import { DrinkReviewType, DrinkReviewFormType } from '../types/drinkReview';
+import { DrinkReviewType, DrinkReviewFormType } from '../src/types/drinkReview';
 import {
   getReviews as getReviewsFromFB,
   addReview as addReviewToFB,
   updateReview as updateReviewInFB,
   deleteReview as deleteReviewInFB,
-} from '../utils/drinkReviewsService';
+} from '../services/drinkReviewsService';
 
 type ReviewsByShopIdType = {
   [shopId: string]: DrinkReviewType[];

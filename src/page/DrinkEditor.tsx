@@ -4,14 +4,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import StarRating from "../component/StarRating"
 import { DrinkReviewFormType, IceLevel, SugarLevel, DrinkRatingType } from "../types/drinkReview"
-import { sugarOptions, iceOptions, toppingOptions } from '../constants/drink'
+import { sugarOptions, iceOptions, toppingOptions } from '../../constants/drink'
 import { MdArrowBackIos } from "react-icons/md";
 import { BaseSelectOptionType } from '../types/selectOptionType';
 import StepSelector from '../component/StepSelector';
 import ErrorSection from '../component/ErrorSection';
 import LoadingOverlay from '../component/LoadingOverlay';
-import { useDrinkReview } from "../context/DrinkReviewContext";
-import { getShopsByQuery } from '../utils/shopService';
+import { useDrinkReview } from "../../context/DrinkReviewContext";
+import { getShopsByQuery } from '../../services/shopService';
 import AddShopModal from '../component/AddShopModal';
 import ShopSelect, { OptionTypeWithApprovalStatus } from '../component/ShopSelect';
 import MultiSelect from '../component/MultiSelect';

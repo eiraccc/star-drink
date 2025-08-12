@@ -1,5 +1,5 @@
-import { SugarLevel, IceLevel, ToppingType } from '../types/drinkReview';
-import { BaseSelectOptionType } from '../types/selectOptionType';
+import { SugarLevel, IceLevel, ToppingType } from '../src/types/drinkReview';
+import { BaseSelectOptionType } from '../src/types/selectOptionType';
 
 export const sugarLevels: SugarLevel[] = [0, 25, 50, 75, 100];
 export const iceLevels: IceLevel[] = [-1, 0, 30, 70, 100];

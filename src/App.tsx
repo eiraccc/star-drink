@@ -12,15 +12,15 @@ import ShopList from './page/ShopList';
 import ShopDetail from './page/ShopDetail';
 import Footer from './layout/Footer';
 import ErrorSection from './component/ErrorSection';
-import { DrinkReviewProvider } from './context/DrinkReviewContext';
-import { ShopProvider } from './context/ShopContext';
+import { DrinkReviewProvider } from '../context/DrinkReviewContext';
+import { ShopProvider } from '../context/ShopContext';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
 
   return (
     <div className='flex flex-col'>
-      <ToastContainer position="top-center" autoClose={3000}/>
+      {/* <ToastContainer position="top-center" autoClose={3000}/>
       <BrowserRouter>
         <Header />
         
@@ -51,7 +51,7 @@ function App() {
         </DrinkReviewProvider>
         
         <Footer />
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   )
 }

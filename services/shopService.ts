@@ -15,15 +15,15 @@ import {
   documentId,
   onSnapshot,
 } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from '../lib/firebase';
 import {
   ShopType,
   ShopTypeFirestore,
   ShopSubmittedType,
   ShopFormType,
-} from '../types/shop';
-import { formatTimestampToUserLocalString } from './timeFormat';
-import { generateSlug } from './autoSlug';
+} from '../src/types/shop';
+import { formatTimestampToUserLocalString } from '../utils/timeFormat';
+import { generateSlug } from '../utils/autoSlug';
 
 const shopRef = collection(db, 'shops');
 

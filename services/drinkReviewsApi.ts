@@ -1,4 +1,4 @@
-import { getReviews } from '../src/utils/drinkReviewsService';
+import { getReviews } from './drinkReviewsService';
 import { DrinkReviewType } from '../src/types/drinkReview';
 
 type ReviewsByShopIdType = {

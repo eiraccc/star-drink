@@ -6,7 +6,7 @@ import {
     editShop as editShopToFB,
     deleteShop as deleteShopInFB,
     approveShop
-} from "../../../utils/shopService";
+} from "../../../../services/shopService";
 import { BaseSelectOptionType } from "../../../types/selectOptionType";
 import SingleSelect from "../../../component/SingleSelect";
 import MultiSelect from "../../../component/MultiSelect";
@@ -17,9 +17,9 @@ import LoadingSection from "../../../component/LoadingSection";
 import ErrorSection from "../../../component/ErrorSection";
 import ConfirmModal from "../../../component/ConfirmModal";
 import { FaPlus } from 'react-icons/fa';
-import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
+import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../../constants/shopColumnConfig";
 import { toast } from 'react-toastify';
-import { listenAllShops } from "../../../utils/shopService";
+import { listenAllShops } from "../../../../services/shopService";
 
 const ShopPage = () => {
     const [isClient, setIsClient] = useState(false);

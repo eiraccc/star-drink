@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import '../src/index.css';
 import Header from '../src/layout/Header';
 import Footer from '../src/layout/Footer';
-import { DrinkReviewProvider } from '../src/context/DrinkReviewContext';
-import { fetchReviews } from '../services/reviews';
+import { DrinkReviewProvider } from '../context/DrinkReviewContext';
+import { fetchReviews } from '../services/drinkReviewsApi';
  
 export const metadata: Metadata = {
   title: 'Star Drink',

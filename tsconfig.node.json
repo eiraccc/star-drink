@@ -13,5 +13,5 @@
     "declaration": true,
     "composite": true
   },
-  "include": ["src"]
+  "include": ["src", "utils", "context", "lib/firebase.ts", "services/drinkReviewsService.ts", "services/shopService.ts", "constants"]
 }

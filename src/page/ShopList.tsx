@@ -1,12 +1,12 @@
 'use client';
 import { useMemo, useState } from "react"
 import { useRouter } from 'next/navigation';
-import { useDrinkReview } from "../context/DrinkReviewContext";
+import { useDrinkReview } from "../../context/DrinkReviewContext";
 import ShopCard from "../component/ShopCard";
 import LoadingSection from "../component/LoadingSection";
 import ErrorSection from "../component/ErrorSection";
 import { RiSearchLine } from "react-icons/ri";
-import { useShop } from "../context/ShopContext";
+import { useShop } from "../../context/ShopContext";
 
 const ShopList = () => {
     const router = useRouter();

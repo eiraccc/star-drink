@@ -7,8 +7,7 @@ import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { DrinkReviewProvider } from '../context/DrinkReviewContext';
 import { fetchReviewsServer } from '../services/drinkReviewServer';
-import dynamic from 'next/dynamic';
-const ToastProvider = dynamic(() => import('../components/ToastProvider'), { ssr: false });
+import ToastProvider from '../components/ToastProvider';
  
 export const metadata: Metadata = {
   title: 'Star Drink',

@@ -1,3 +1,4 @@
+'use client';
 import { components } from 'react-select';
 import SingleSelect from './SingleSelect';
 import { BaseSelectOptionType } from '../types/selectOptionType';

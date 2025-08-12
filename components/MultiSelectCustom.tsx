@@ -1,3 +1,4 @@
+'use client';
 import { components } from 'react-select'
 import { FaCheck } from 'react-icons/fa'
 

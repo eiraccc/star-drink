@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { DrinkRatingType } from "../types/drinkReview";

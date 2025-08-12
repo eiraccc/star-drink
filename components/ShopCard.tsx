@@ -1,3 +1,4 @@
+'use client';
 import { ShopTypeWithReview } from "../types/shop";
 import StarRating from "./StarRating";
 import { MdStorefront } from "react-icons/md";

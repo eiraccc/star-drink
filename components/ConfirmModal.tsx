@@ -1,3 +1,4 @@
+'use client';
 import Modal from "./Modal"
 
 type propsType = {

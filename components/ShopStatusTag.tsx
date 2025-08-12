@@ -1,3 +1,4 @@
+'use client';
 import Tooltip from "./Tooltip";
 import { IoShieldCheckmark } from "react-icons/io5";
 import { FaRegClock } from "react-icons/fa";

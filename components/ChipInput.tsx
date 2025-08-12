@@ -1,3 +1,4 @@
+'use client';
 import { useState, KeyboardEvent } from 'react';
 import { RxCross2 } from "react-icons/rx";
 

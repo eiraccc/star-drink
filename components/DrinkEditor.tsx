@@ -11,7 +11,7 @@ import StepSelector from './StepSelector';
 import ErrorSection from './ErrorSection';
 import LoadingOverlay from './LoadingOverlay';
 import { useDrinkReview } from "../context/DrinkReviewContext";
-import { fetchShops } from '../services/shopService';
+import { fetchShops } from '../services/shopClient';
 import AddShopModal from './AddShopModal';
 import ShopSelect, { OptionTypeWithApprovalStatus } from './ShopSelect';
 import MultiSelect from './MultiSelect';

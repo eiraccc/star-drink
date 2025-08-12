@@ -13,7 +13,7 @@ import { useDrinkReview } from "../../../context/DrinkReviewContext";
 import { ShopType } from '../../../types/shop';
 import { toast } from 'react-toastify';
 import ShopStatusTag from '../../../components/ShopStatusTag';
-import { fetchShops } from '../../../services/shopService';
+import { fetchShops } from '../../../services/shopClient';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 

@@ -9,7 +9,7 @@ import {
 import { ShopType} from '../types/shop';
 import {
     fetchShops,
-} from '../services/shopService';
+} from '../services/shopClient';
 
 interface ShopContextType {
   approvedShops: ShopType[];

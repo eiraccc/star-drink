@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { DrinkReviewProvider } from '../context/DrinkReviewContext';
-import { fetchReviews } from '../services/drinkReviewsApi';
+import { fetchReviewsServer } from '../services/drinkReviewServer';
  
 export const metadata: Metadata = {
   title: 'Star Drink',
@@ -17,14 +17,15 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({children}: {children: ReactNode}) {
-    const reviewData = await fetchReviews();
+    const reviewData = await fetchReviewsServer({});
+    // console.log('reviewData', reviewData)
     return (
         <html lang="zh-Hant">
         <body className='bg-background text-text'>
             <ToastContainer position="top-center" autoClose={3000}/>
             <div className='flex flex-col'>
                 <Header />
-                <DrinkReviewProvider initData={reviewData}>
+                <DrinkReviewProvider initReviewData={reviewData}>
                     <main>{children}</main>
                 </DrinkReviewProvider>
                 <Footer/>

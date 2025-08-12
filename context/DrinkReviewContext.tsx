@@ -11,7 +11,7 @@ import {
   addReview as addReviewToFB,
   updateReview as updateReviewInFB,
   deleteReview as deleteReviewInFB,
-} from '../services/drinkReviewsService';
+} from '../services/drinkReviewsClient';
 
 type ReviewsByShopIdType = {
   [shopId: string]: DrinkReviewType[];
@@ -46,22 +46,23 @@ const drinkReducer = (state: State, action: Action): State => {
   }
 };
 
-export const DrinkReviewProvider = ({ children, initData }: {
+const mapReviewsByShopId = (reviews: DrinkReviewType[]): ReviewsByShopIdType => {
+    return reviews.reduce((all, review) => {
+        if (!all[review.shopId]) all[review.shopId] = [];
+        all[review.shopId].push(review);
+        return all;
+    }, {} as ReviewsByShopIdType);
+};
+
+export const DrinkReviewProvider = ({ children, initReviewData }: {
   children: ReactNode,
-  initData: Omit<State, 'isLoadingReview'>
+  initReviewData: DrinkReviewType[]
 }) => {
   const [state, dispatch] = useReducer(drinkReducer, {
-    ...initData,
+    reviews: initReviewData,
+    reviewsByShopId: mapReviewsByShopId(initReviewData),
     isLoadingReview: false,
   });
-
-  const mapReviewsByShopId = (reviews: DrinkReviewType[]): ReviewsByShopIdType => {
-    return reviews.reduce((all, review) => {
-      if (!all[review.shopId]) all[review.shopId] = [];
-      all[review.shopId].push(review);
-      return all;
-    }, {} as ReviewsByShopIdType);
-  };
 
   const fetchReviews = async () => {
     dispatch({ type: 'SET_LOADING', payload: true });

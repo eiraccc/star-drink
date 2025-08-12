@@ -1,8 +1,9 @@
 import ShopPage from './ShopPage'
-import { fetchShops } from '../../../services/shopService'
+import { fetchShopsServer } from '../../../services/shopServer';
 import { ShopType } from '../../../types/shop';
 
 export default async function AdminShopPage() {
-  const allShops = await fetchShops({ mode: 'once', isApproved: true }) as ShopType[];
+  const allShops = await fetchShopsServer({}) as ShopType[];
+  // console.log('allShops', allShops)
   return <ShopPage initAllShops={allShops} />
 }

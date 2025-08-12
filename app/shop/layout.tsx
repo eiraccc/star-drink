@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 import { ShopProvider } from '../../context/ShopContext';
-import { fetchShops } from '../../services/shopService';
-import { ShopType } from '../../types/shop';
+import { fetchShopsServer } from '../../services/shopServer';
 
 export default async function ShopLayout({children}: {children: ReactNode}) {
-    const approvedShops = await fetchShops({ mode: 'once', isApproved: true }) as ShopType[];
+    const approvedShops = await fetchShopsServer({ isApproved: true });
     return (
         <ShopProvider initApprovedShops={approvedShops}>
             {children}

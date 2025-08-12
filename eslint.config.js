@@ -10,6 +10,13 @@ export default [
   globalIgnores(['dist']),
   js.configs.recommended,
   {
+    files: ['lib/firebaseAdmin.ts'],
+    env: {
+      node: true,
+      browser: false,
+    },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,

@@ -6,7 +6,7 @@ import {
   ReactNode,
   useEffect,
 } from 'react';
-import { DrinkReviewType, DrinkReviewFormType } from '../src/types/drinkReview';
+import { DrinkReviewType, DrinkReviewFormType } from '../types/drinkReview';
 import {
   getReviews as getReviewsFromFB,
   addReview as addReviewToFB,

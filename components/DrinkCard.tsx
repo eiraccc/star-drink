@@ -1,7 +1,7 @@
 'use client';
 import StarRating from "./StarRating"
 import { DrinkReviewType } from "../types/drinkReview"
-import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../../constants/drink";
+import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { RiDrinks2Fill } from "react-icons/ri";
 
 type DrinkCardProps = {

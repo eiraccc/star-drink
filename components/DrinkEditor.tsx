@@ -2,19 +2,19 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import StarRating from "../component/StarRating"
+import StarRating from "./StarRating"
 import { DrinkReviewFormType, IceLevel, SugarLevel, DrinkRatingType } from "../types/drinkReview"
-import { sugarOptions, iceOptions, toppingOptions } from '../../constants/drink'
+import { sugarOptions, iceOptions, toppingOptions } from '../constants/drink'
 import { MdArrowBackIos } from "react-icons/md";
 import { BaseSelectOptionType } from '../types/selectOptionType';
-import StepSelector from '../component/StepSelector';
-import ErrorSection from '../component/ErrorSection';
-import LoadingOverlay from '../component/LoadingOverlay';
-import { useDrinkReview } from "../../context/DrinkReviewContext";
-import { getShopsByQuery } from '../../services/shopService';
-import AddShopModal from '../component/AddShopModal';
-import ShopSelect, { OptionTypeWithApprovalStatus } from '../component/ShopSelect';
-import MultiSelect from '../component/MultiSelect';
+import StepSelector from './StepSelector';
+import ErrorSection from './ErrorSection';
+import LoadingOverlay from './LoadingOverlay';
+import { useDrinkReview } from "../context/DrinkReviewContext";
+import { getShopsByQuery } from '../services/shopService';
+import AddShopModal from './AddShopModal';
+import ShopSelect, { OptionTypeWithApprovalStatus } from './ShopSelect';
+import MultiSelect from './MultiSelect';
 import { toast } from 'react-toastify';
 import { useForm, Controller } from "react-hook-form";
 

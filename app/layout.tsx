@@ -1,8 +1,7 @@
-import React from 'react';
 import type { Metadata } from 'next'
-import '../src/index.css';
-import Header from '../src/layout/Header';
-import Footer from '../src/layout/Footer';
+import '../styles/index.css'
+import Header from '../layout/Header';
+import Footer from '../layout/Footer';
 import { DrinkReviewProvider } from '../context/DrinkReviewContext';
 import { fetchReviews } from '../services/drinkReviewsApi';
  

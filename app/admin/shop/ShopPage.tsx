@@ -6,20 +6,20 @@ import {
     editShop as editShopToFB,
     deleteShop as deleteShopInFB,
     approveShop
-} from "../../../../services/shopService";
+} from "../../../services/shopService";
 import { BaseSelectOptionType } from "../../../types/selectOptionType";
-import SingleSelect from "../../../component/SingleSelect";
-import MultiSelect from "../../../component/MultiSelect";
+import SingleSelect from "../../../components/SingleSelect";
+import MultiSelect from "../../../components/MultiSelect";
 import ShopTable from "./ShopTable";
 import ShopEditModal from "./ShopEditModal";
-import LoadingOverlay from "../../../component/LoadingOverlay";
-import LoadingSection from "../../../component/LoadingSection";
-import ErrorSection from "../../../component/ErrorSection";
-import ConfirmModal from "../../../component/ConfirmModal";
+import LoadingOverlay from "../../../components/LoadingOverlay";
+import LoadingSection from "../../../components/LoadingSection";
+import ErrorSection from "../../../components/ErrorSection";
+import ConfirmModal from "../../../components/ConfirmModal";
 import { FaPlus } from 'react-icons/fa';
-import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../../constants/shopColumnConfig";
+import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
 import { toast } from 'react-toastify';
-import { listenAllShops } from "../../../../services/shopService";
+import { listenAllShops } from "../../../services/shopService";
 
 const ShopPage = () => {
     const [isClient, setIsClient] = useState(false);

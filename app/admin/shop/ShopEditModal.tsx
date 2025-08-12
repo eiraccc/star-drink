@@ -1,7 +1,7 @@
 'use client';
-import Modal from "../../../component/Modal";
-import UnderlineInput from "../../../component/UnderlineInput";
-import ChipInput from "../../../component/ChipInput";
+import Modal from "../../../components/Modal";
+import UnderlineInput from "../../../components/UnderlineInput";
+import ChipInput from "../../../components/ChipInput";
 import { ShopFormType } from "../../../types/shop";
 
 interface propsType {

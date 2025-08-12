@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import { ShopSubmittedType } from "../types/shop";
-import { addShopByName } from "../../services/shopService";
+import { addShopByName } from "../services/shopService";
 import LoadingOverlay from "./LoadingOverlay";
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';

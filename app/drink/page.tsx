@@ -1,5 +1,4 @@
-import React from 'react'
-import DrinkList from '../../src/page/DrinkList'
+import DrinkList from '../../components/DrinkList'
 
 export default function DrinkListPage() {
   return <DrinkList />

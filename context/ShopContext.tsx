@@ -6,7 +6,7 @@ import {
     useState,
     ReactNode
 } from 'react';
-import { ShopType} from '../src/types/shop';
+import { ShopType} from '../types/shop';
 import {
     listenApprovedShops,
 } from '../services/shopService';

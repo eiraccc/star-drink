@@ -1,5 +1,4 @@
-import React from 'react'
-import DrinkEditor from '../../../../src/page/DrinkEditor'
+import DrinkEditor from '../../../../components/DrinkEditor'
 
 type PropsType = {
   params: {

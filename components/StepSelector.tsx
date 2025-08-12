@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { SugarIceLabelType } from '../../constants/drink';
+import { SugarIceLabelType } from '../constants/drink';
 
 type propsType = {
   options: SugarIceLabelType[];

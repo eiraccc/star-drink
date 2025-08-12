@@ -1,6 +1,6 @@
 'use client';
 import { useState } from "react";
-import Tooltip from "../../../component/Tooltip";
+import Tooltip from "../../../components/Tooltip";
 import { ShopType } from "../../../types/shop";
 import { IoShieldCheckmark } from "react-icons/io5";
 import { FaRegClock } from "react-icons/fa";
@@ -10,7 +10,7 @@ import {
   RiArrowDownSLine,
   RiArrowUpSLine,
 } from 'react-icons/ri';
-import { shopColumns } from "../../../../constants/shopColumnConfig";
+import { shopColumns } from "../../../constants/shopColumnConfig";
 
 interface propsType {
   shops: ShopType[];

@@ -1,5 +1,5 @@
 import { getReviews } from './drinkReviewsService';
-import { DrinkReviewType } from '../src/types/drinkReview';
+import { DrinkReviewType } from '../types/drinkReview';
 
 type ReviewsByShopIdType = {
     [shopId: string]: DrinkReviewType[];

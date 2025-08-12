@@ -21,7 +21,7 @@ import {
   ShopTypeFirestore,
   ShopSubmittedType,
   ShopFormType,
-} from '../src/types/shop';
+} from '../types/shop';
 import { formatTimestampToUserLocalString } from '../utils/timeFormat';
 import { generateSlug } from '../utils/autoSlug';
 

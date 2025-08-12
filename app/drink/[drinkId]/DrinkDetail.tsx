@@ -2,18 +2,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import StarRating from '../component/StarRating';
-import ErrorSection from '../component/ErrorSection';
-import LoadingOverlay from '../component/LoadingOverlay';
-import { DrinkReviewType } from "../types/drinkReview"
-import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../../constants/drink";
+import StarRating from '../../../components/StarRating';
+import ErrorSection from '../../../components/ErrorSection';
+import LoadingOverlay from '../../../components/LoadingOverlay';
+import { DrinkReviewType } from "../../../types/drinkReview"
+import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../../../constants/drink";
 import { MdArrowBackIos } from "react-icons/md";
 import { ImCross } from "react-icons/im";
-import { useDrinkReview } from "../../context/DrinkReviewContext";
-import { ShopType } from '../types/shop';
+import { useDrinkReview } from "../../../context/DrinkReviewContext";
+import { ShopType } from '../../../types/shop';
 import { toast } from 'react-toastify';
-import ShopStatusTag from '../component/ShopStatusTag';
-import { getShopsByQuery } from '../../services/shopService';
+import ShopStatusTag from '../../../components/ShopStatusTag';
+import { getShopsByQuery } from '../../../services/shopService';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 

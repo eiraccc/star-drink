@@ -1,11 +1,11 @@
 'use client';
 import { useMemo } from "react";
 import { useRouter } from 'next/navigation';
-import LoadingOverlay from "../component/LoadingOverlay";
-import ErrorSection from "../component/ErrorSection";
-import DrinkCard from "../component/DrinkCard";
-import { useDrinkReview } from "../../context/DrinkReviewContext";
-import { useShop } from "../../context/ShopContext";
+import LoadingOverlay from "../../../components/LoadingOverlay";
+import ErrorSection from "../../../components/ErrorSection";
+import DrinkCard from "../../../components/DrinkCard";
+import { useDrinkReview } from "../../../context/DrinkReviewContext";
+import { useShop } from "../../../context/ShopContext";
 import { FaComment, FaStar } from "react-icons/fa";
 
 const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {

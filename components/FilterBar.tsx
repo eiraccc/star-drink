@@ -5,7 +5,7 @@ import {
   iceOptions,
   SugarIceLabelType,
   toppingOptions,
-} from '../../constants/drink';
+} from '../constants/drink';
 import { SortKey, SortOrder } from '../types/sorting';
 import { RxCaretSort } from 'react-icons/rx';
 import {

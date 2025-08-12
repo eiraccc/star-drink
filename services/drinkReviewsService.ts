@@ -18,7 +18,7 @@ import {
   DrinkReviewType,
   DrinkReviewFormType,
   DrinkReviewFirestoreData
-} from "../src/types/drinkReview";
+} from "../types/drinkReview";
 import { formatTimestampToUserLocalString } from "../utils/timeFormat";
 import { IoConstructOutline } from "react-icons/io5";
 

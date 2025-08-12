@@ -1,5 +1,4 @@
-import React from 'react'
-import DrinkDetail from '../../../src/page/DrinkDetail'
+import DrinkDetail from './DrinkDetail'
 
 type PropsType = {
   params: {

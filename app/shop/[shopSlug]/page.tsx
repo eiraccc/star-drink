@@ -1,5 +1,4 @@
-import React from 'react'
-import ShopDetail from '../../../src/page/ShopDetail'
+import ShopDetail from './ShopDetail'
 
 type PropsType = {
   params: {

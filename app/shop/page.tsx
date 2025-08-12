@@ -1,5 +1,4 @@
-import React from 'react'
-import ShopList from '../../src/page/ShopList'
+import ShopList from './ShopList'
 
 export default function ShopListPage() {
   return <ShopList />

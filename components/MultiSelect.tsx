@@ -1,7 +1,7 @@
 'use client';
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { tagColorMap, SugarIceLabelType } from '../../constants/drink'
+import { tagColorMap, SugarIceLabelType } from '../constants/drink'
 import { Option, MultiValue } from './MultiSelectCustom'
 import { BaseSelectOptionType } from '../types/selectOptionType'
 

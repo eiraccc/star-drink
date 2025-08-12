@@ -2,9 +2,9 @@
 import { useMemo, useState } from "react"
 import { useRouter } from 'next/navigation';
 import { useDrinkReview } from "../../context/DrinkReviewContext";
-import ShopCard from "../component/ShopCard";
-import LoadingSection from "../component/LoadingSection";
-import ErrorSection from "../component/ErrorSection";
+import ShopCard from "../../components/ShopCard";
+import LoadingSection from "../../components/LoadingSection";
+import ErrorSection from "../../components/ErrorSection";
 import { RiSearchLine } from "react-icons/ri";
 import { useShop } from "../../context/ShopContext";
 

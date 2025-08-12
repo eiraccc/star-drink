@@ -7,6 +7,8 @@ import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { DrinkReviewProvider } from '../context/DrinkReviewContext';
 import { fetchReviewsServer } from '../services/drinkReviewServer';
+import dynamic from 'next/dynamic';
+const ToastProvider = dynamic(() => import('../components/ToastProvider'), { ssr: false });
  
 export const metadata: Metadata = {
   title: 'Star Drink',
@@ -22,7 +24,7 @@ export default async function RootLayout({children}: {children: ReactNode}) {
     return (
         <html lang="zh-Hant">
         <body className='bg-background text-text'>
-            <ToastContainer position="top-center" autoClose={3000}/>
+            <ToastProvider />
             <div className='flex flex-col'>
                 <Header />
                 <DrinkReviewProvider initReviewData={reviewData}>

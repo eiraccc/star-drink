@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { DrinkRatingType } from "../types/drinkReview";
 
@@ -6,7 +6,7 @@ type propsType = {
   readonly?: boolean,
   rating?: DrinkRatingType,
   iconSize?: number,
-  onChange?: (newRating: DrinkRatingType) => void;
+  onChange?: (_newRating: DrinkRatingType) => void;
 }
 
 const StarRating = ({

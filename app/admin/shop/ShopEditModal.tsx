@@ -1,4 +1,5 @@
 'use client';
+import React from "react";
 import Modal from "../../../components/Modal";
 import UnderlineInput from "../../../components/UnderlineInput";
 import ChipInput from "../../../components/ChipInput";
@@ -8,8 +9,8 @@ interface propsType {
     isOpen: boolean;
     editMode: 'edit' | 'add' | '',
     editData: ShopFormType | null;
-    setEditData: (data: ShopFormType) => void;
-    onSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    setEditData: (_data: ShopFormType) => void;
+    onSave: (_e: React.MouseEvent<HTMLButtonElement>) => void;
     onCancel: () => void;
 }
 

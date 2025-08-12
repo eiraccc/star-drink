@@ -31,7 +31,7 @@ const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
         totalReviews,
         averageRating,
     };
-  }, [approvedShops, reviewsByShopId]);
+  }, [approvedShops, reviewsByShopId, shopSlug]);
   
   return (
     <section className="flex justify-center p-6 pb-10">

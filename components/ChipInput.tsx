@@ -3,7 +3,7 @@ import { RxCross2 } from "react-icons/rx";
 
 type ChipInputProps = {
   defaultValue: string[];
-  onChange: (newValue: string[]) => void;
+  onChange: (_newValue: string[]) => void;
   placeholder?: string;
 };
 

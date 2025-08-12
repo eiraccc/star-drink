@@ -4,7 +4,7 @@ import { BaseSelectOptionType } from '../types/selectOptionType';
 type SingleSelectProps = {
   options: BaseSelectOptionType[];
   value: BaseSelectOptionType | null;
-  onChange: (option: BaseSelectOptionType) => void;
+  onChange: (_option: BaseSelectOptionType) => void;
   placeholder?: string;
   backgroundColor?: string;
   borderColor?: string;
@@ -50,7 +50,7 @@ const SingleSelect = ({
             color: 'var(--color-text)',
           }),
         // down icon
-        dropdownIndicator: (provided: any, state: any) => ({
+        dropdownIndicator: (provided: any) => ({
             ...provided,
             color: focusColor,
             '&:hover': {

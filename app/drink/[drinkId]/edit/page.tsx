@@ -1,12 +1,10 @@
 import DrinkEditor from '../../../../components/DrinkEditor'
 
-type PropsType = {
-  params: {
-    drinkId: string
-  }
+type pageProps = {
+  params: Promise<{ drinkId: string }>;
 }
 
-export default async function DrinkEditPage({ params }: PropsType) {
+export default async function DrinkEditPage({ params }: pageProps) {
     const { drinkId } = await params;  
     return <DrinkEditor drinkId={drinkId} />
 }

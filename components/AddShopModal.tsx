@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 interface propsType {
     isOpen: boolean;
     onClose: () => void;
-    onAdd: (newId: string, newName: string) => void;
+    onAdd: (_newId: string, _newName: string) => void;
 }
 
 type FormType = Omit<ShopSubmittedType, 'submittedBy'>;
@@ -26,7 +26,7 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
             onAdd(newId, submittedData.submittedName);
             toast.success('Shop added successfully! Please wait for admin approval.');
         } catch (error) {
-            console.log('add shop error')
+            console.log('add shop error', error);
             toast.error("Failed to add shop. Please try again.");
         } finally {
             setIsLoading(false);
@@ -42,7 +42,7 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
 
 
     // reset form valid when open th modal
-    useEffect(() => reset(), [isOpen]);
+    useEffect(() => reset(), [isOpen, reset]);
 
     return (<>
         {isLoading && <LoadingOverlay />}

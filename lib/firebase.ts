@@ -4,6 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 // Firebase configuration
+/* global process */
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -19,5 +20,5 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 if(process.env.NEXT_PUBLIC_ENV !== "development") {
-  const analytics = getAnalytics(app);
+  getAnalytics(app);
 }

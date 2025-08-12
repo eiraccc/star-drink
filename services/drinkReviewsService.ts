@@ -20,7 +20,6 @@ import {
   DrinkReviewFirestoreData
 } from "../types/drinkReview";
 import { formatTimestampToUserLocalString } from "../utils/timeFormat";
-import { IoConstructOutline } from "react-icons/io5";
 
 const reviewsRef = collection(db, "drinkReviews");
 

@@ -1,10 +1,11 @@
+import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   maxWidth?: number 
 }
 

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import type { Metadata } from 'next'
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/index.css'
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   }
 }
 
-export default async function RootLayout({children}: {children: React.ReactNode}) {
+export default async function RootLayout({children}: {children: ReactNode}) {
     const reviewData = await fetchReviews();
     return (
         <html lang="zh-Hant">

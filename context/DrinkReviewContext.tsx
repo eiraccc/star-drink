@@ -4,7 +4,6 @@ import {
   useContext,
   useReducer,
   ReactNode,
-  useEffect,
 } from 'react';
 import { DrinkReviewType, DrinkReviewFormType } from '../types/drinkReview';
 import {
@@ -143,9 +142,9 @@ type DrinkReviewContextType = {
   reviewsByShopId: ReviewsByShopIdType;
   isLoadingReview: boolean;
   fetchReviews: () => Promise<void>;
-  addReview: (data: DrinkReviewFormType) => Promise<void>;
-  editReview: (id: string, data: DrinkReviewFormType) => Promise<void>;
-  deleteReview: (id: string) => Promise<void>;
+  addReview: (_data: DrinkReviewFormType) => Promise<void>;
+  editReview: (_id: string, _data: DrinkReviewFormType) => Promise<void>;
+  deleteReview: (_id: string) => Promise<void>;
 };
 
 const DrinkReviewContext = createContext<DrinkReviewContextType | undefined>(

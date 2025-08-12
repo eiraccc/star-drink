@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   sugarOptions,
   iceOptions,
@@ -22,15 +22,15 @@ import MultiSelect from './MultiSelect';
 
 type propsType = {
   searchValue: string;
-  setSearchValue: (val: string) => void;
+  setSearchValue: (_val: string) => void;
   selectedIce: SugarIceLabelType[];
-  setSelectedIce: (val: SugarIceLabelType[]) => void;
+  setSelectedIce: (_val: SugarIceLabelType[]) => void;
   selectedSugar: SugarIceLabelType[];
-  setSelectedSugar: (val: SugarIceLabelType[]) => void;
+  setSelectedSugar: (_val: SugarIceLabelType[]) => void;
   selectedTopping: BaseSelectOptionType[];
-  setSelectedTopping: (val: BaseSelectOptionType[]) => void;
+  setSelectedTopping: (_val: BaseSelectOptionType[]) => void;
   sort: { key: SortKey; order: SortOrder };
-  toggleSort: (key: SortKey) => void;
+  toggleSort: (_key: SortKey) => void;
 };
 
 const FilterBar = ({

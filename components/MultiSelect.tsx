@@ -1,5 +1,5 @@
 'use client';
-import Select from 'react-select'
+import Select, { OnChangeValue } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { tagColorMap, SugarIceLabelType } from '../constants/drink'
 import { Option, MultiValue } from './MultiSelectCustom'
@@ -10,7 +10,7 @@ export type OptionType = SugarIceLabelType | BaseSelectOptionType;
 type MultiSelectProps<T extends OptionType> = {
   options: T[]
   selected: T[]
-  setSelected: (val: T[]) => void
+  setSelected: (_val: T[]) => void
   placeholder?: string
   maxToShow?: number
   backgroundColor?: string
@@ -18,7 +18,7 @@ type MultiSelectProps<T extends OptionType> = {
   minWidth?: number
   showDeleteAllBtn?: boolean
   creatable?: boolean
-  onCreateOption?: (input: string) => void
+  onCreateOption?: (_input: string) => void
 }
 
 const MultiSelect = <T extends OptionType>({
@@ -56,7 +56,7 @@ const MultiSelect = <T extends OptionType>({
       color: 'var(--color-text)',  // 選中後顯示的字色
     }),
     // down icon
-    dropdownIndicator: (provided: any, state: any) => ({
+    dropdownIndicator: (provided: any) => ({
       ...provided,
       color: 'var(--color-primary)',
       '&:hover': {
@@ -64,13 +64,13 @@ const MultiSelect = <T extends OptionType>({
       }
     }),
     // divider
-    indicatorSeparator: (provided:any) => ({
+    indicatorSeparator: (provided: any) => ({
       ...provided,
       backgroundColor: 'var(--color-surface)',
       width: 2,
     }),
     // clear icon
-    clearIndicator: (provided: any, state: any) => ({
+    clearIndicator: (provided: any) => ({
       ...provided,
       color: 'var(--color-primary)',
       '&:hover': {
@@ -97,7 +97,7 @@ const MultiSelect = <T extends OptionType>({
       let bgColor = 'var(--color-surface)';
       let textColor = 'var(--color-text)';
 
-      if('type' in data && tagColorMap.hasOwnProperty(data.type)) {
+      if('type' in data && Object.hasOwn(tagColorMap, data.type)) {
         const tagColor = tagColorMap[data.type];
         bgColor = tagColor && data.opacity !== undefined
           ? tagColor.bg(data.opacity / 100)
@@ -118,7 +118,7 @@ const MultiSelect = <T extends OptionType>({
       let bgColor = 'var(--color-surface)';
       let textColor = 'var(--color-text)';
 
-      if('type' in data && tagColorMap.hasOwnProperty(data.type)) {
+      if('type' in data && Object.hasOwn(tagColorMap, data.type)) {
         const tagColor = tagColorMap[data.type];
         bgColor = tagColor && data.opacity !== undefined
           ? tagColor.bg(data.opacity / 100)
@@ -152,11 +152,11 @@ const MultiSelect = <T extends OptionType>({
   const SelectComponent = creatable ? CreatableSelect : Select;
 
   return (
-    <SelectComponent
+    <SelectComponent<T, true>
       isMulti
       options={options}
       value={selected}
-      onChange={newVal => setSelected(newVal ? [...newVal] : [])}
+      onChange={(newVal: OnChangeValue<T, true>) => setSelected(newVal ? [...newVal] : [])}
       placeholder={placeholder}
       styles={customStyles}
       components={{MultiValue: WrappedMultiValue, Option}}

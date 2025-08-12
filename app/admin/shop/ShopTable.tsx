@@ -15,11 +15,11 @@ import { shopColumns } from "../../../constants/shopColumnConfig";
 interface propsType {
   shops: ShopType[];
   visableLabelKeys: string[]
-  handleApprove: (id: string, data: ShopType) => void;
-  openEdit: (shop: ShopType) => void;
-  handleDelete: (id: string) => void;
-  checkApproveValid: (shop: ShopType) => boolean;
-  getApproveInvalidKey: (shop: ShopType) => string[];
+  handleApprove: (_id: string, _data: ShopType) => void;
+  openEdit: (_shop: ShopType) => void;
+  handleDelete: (_id: string) => void;
+  checkApproveValid: (_shop: ShopType) => boolean;
+  getApproveInvalidKey: (_shop: ShopType) => string[];
 }
 
 type SortKey = 'createdAt' | 'updatedAt' | '';

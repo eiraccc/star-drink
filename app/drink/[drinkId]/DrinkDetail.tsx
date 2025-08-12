@@ -28,7 +28,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
     // get data
     const drinkData = reviews.find(n => n.id === drinkId) || null;
     setDrinkData(drinkData);
-  }, [reviews]);
+  }, [reviews, drinkId]);
 
   useEffect(() => {
     // get shop status
@@ -60,6 +60,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
         router.push('/');
       }
     } catch (error) {
+      console.log('error', error);
       toast.error("Failed to delete drink. Please try again.");
     }
   };

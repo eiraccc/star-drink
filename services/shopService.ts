@@ -47,8 +47,8 @@ interface FetchShopsParams {
   shopId?: string;
   shopSlug?: string;
   isApproved?: boolean;
-  callback?: (shops: ShopType[]) => void; // for subscribe
-  errorCallback?: (error: Error) => void; // for subscribe
+  callback?: (_shops: ShopType[]) => void; // for subscribe
+  errorCallback?: (_error: Error) => void; // for subscribe
 }
 
 export async function fetchShops({

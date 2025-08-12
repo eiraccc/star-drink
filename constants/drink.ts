@@ -50,7 +50,7 @@ export const iceOptions:SugarIceLabelType[] = iceLevels.map((level, index) => ({
 
 type TagColorConfig = {
   text: string;
-  bg: (opacity?: number) => string;
+  bg: (_opacity?: number) => string;
 };
 
 type TagType = 'sugar' | 'ice';

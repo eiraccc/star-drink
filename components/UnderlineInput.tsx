@@ -1,8 +1,10 @@
+import type { ChangeEvent } from 'react';
+
 interface UnderlineInputProps {
   id: string;
   label: string;
   defaultValue: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (_e: ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   type?: string;
 }

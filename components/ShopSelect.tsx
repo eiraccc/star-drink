@@ -11,7 +11,7 @@ export interface OptionTypeWithApprovalStatus extends BaseSelectOptionType {
 type ShopSelectProps = {
   options: OptionTypeWithApprovalStatus[];
   value: OptionTypeWithApprovalStatus | null;
-  onChange: (option: OptionTypeWithApprovalStatus) => void;
+  onChange: (_option: OptionTypeWithApprovalStatus) => void;
   onAddShop?: () => void;
 };
 

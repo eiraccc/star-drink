@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import { ShopType, ShopFormType } from "../../../types/shop";
 import {
     addShop as addShopToFB,
@@ -55,6 +55,10 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
         };
     }, []);
 
+    useEffect(() => {
+        console.log('error', errorAll);
+    }, [errorAll]);
+
     const filterOptions: BaseSelectOptionType[] = [
       { value: 'all', label: 'All' },
       { value: 'approved', label: 'Approved' },
@@ -68,17 +72,19 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
         return n.isApproved === (filterType === 'approved')
     });
   
-    const labelOptions = shopColumns.map(n => ({
-        value: n.key,
-        label: n.label
-    }));
+    const labelOptions = useMemo(() => 
+        shopColumns.map(n => ({
+            value: n.key,
+            label: n.label
+        })), []
+    );
     const [selectedVisableLabels, setSelectedVisableLabels] = useState<BaseSelectOptionType[]>([]);
     
     useEffect(() => {
         setSelectedVisableLabels(labelOptions.filter(n => {
             return typeToInitColumnsMap[filterType].includes(n.value);
         }));
-    }, [filterType]);
+    }, [filterType, labelOptions]);
 
 
     const checkKeys: (keyof ShopType)[] = ['nameEn', 'nameZh', 'slug', 'description'];
@@ -88,7 +94,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     }
 
     const getApproveInvalidKey = (data: ShopType) => {
-        let invalidKeys = checkKeys.filter(key => data[key] === '');
+        const invalidKeys = checkKeys.filter(key => data[key] === '');
         if(!data.alias.length) invalidKeys.push('alias');
         return invalidKeys;
     }
@@ -140,7 +146,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
         if(!editData) return;
         setIsLoadingAction(true);
         try {
-            const {createdAt, ...editItem} = editData as ShopType;
+            const {createdAt: _createdAt, ...editItem} = editData as ShopType;
             await editShopToFB(editItem);
             setEditMode('');
             setShowEditModal(false);
@@ -148,7 +154,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
             toast.success('Shop edited successfully!');
             // await fetchShop();
         } catch (error) {
-            console.log('edit error');
+            console.log('edit error', error);
             toast.error("Failed to edit shop. Please try again.");
         } finally {
             setIsLoadingAction(false);
@@ -167,7 +173,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
             toast.success('Shop added successfully!');
             // await fetchShop();
         } catch (error) {
-            console.log('edit error');
+            console.log('edit error', error);
             toast.error("Failed to add shop. Please try again.");
         } finally {
             setIsLoadingAction(false);
@@ -199,7 +205,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
             toast.success('Shop deleted successfully!');
             // await fetchShop();
         } catch (error) {
-            console.log('delete error');
+            console.log('delete error', error);
             toast.error("Failed to delete shop. Please try again.");
         } finally {
             setIsLoadingAction(false);

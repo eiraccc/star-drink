@@ -1,9 +1,7 @@
 import ShopDetail from './ShopDetail'
 
 type PropsType = {
-  params: {
-    shopSlug: string
-  }
+  params: Promise<{ shopSlug: string }>;
 }
 
 export default async function ShopDetailPage({ params }: PropsType) {

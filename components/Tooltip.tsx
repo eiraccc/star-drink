@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
+
 type TooltipProps = {
   text: string,
   show?: boolean,
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export default function Tooltip({ text, show = true, children }: TooltipProps) {

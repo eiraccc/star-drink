@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import StarRating from "./StarRating"
@@ -34,44 +34,26 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   const [showAddShoptModal, setShowAddShoptModal] = useState<boolean>(false);
   const [drinkIdError, setDrinkIdError] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isEdit && drinkId) {
-      // edit
-      const currentDrink = reviews.find(n => n.id === drinkId);
-      if (currentDrink) {
-        setDrinkIdError(false);
-
-        const { createdAt, updatedAt, userId,...editData } = currentDrink;
-
-        // set old toppings
-        editData.toppings.forEach(topping => {
-          addNewTopping(topping);
-        });
-
-        // set old shop
-        getShopsAndSetOptions(editData);
-
-        // set old data
-        setValue('drinkName', editData.drinkName);
-        setValue('rating', editData.rating);
-        setValue('sugar', editData.sugar);
-        setValue('ice', editData.ice);
-        setValue('comment', editData.comment);
-      } else {
-        setDrinkIdError(true);
-        getShopsAndSetOptions(null);
-        reset(); // reset form
-      }
-    } else {
-      // add
-      setDrinkIdError(false);
-      setToppingSelected([]);
-      getShopsAndSetOptions(null);
-      reset();  // reset form
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors }
+  } = useForm<DrinkForm>({
+    mode: "onChange",
+    defaultValues: {
+      drinkName: '',
+      shopInfo: null,
+      rating: 0,
+      sugar: 100,
+      ice: 100,
+      comment: ''
     }
-  }, [drinkId, reviews, isEdit]);
+  });
 
-  const getShopsAndSetOptions = async(editData: DrinkReviewFormType | null) => {
+  const getShopsAndSetOptions = useCallback(async(editData: DrinkReviewFormType | null) => {
     try {
       const data = await fetchShops({isApproved: true}) as ShopType[];
 
@@ -103,21 +85,9 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
 
       setShopOptions(shopList);
     } catch (error) {
-      console.log('get shop error')
+      console.log('get shop error', error);
     }
- };
-
-  const handleAddShop = (newId: string, newName: string) => {
-    const newOption = {
-      value: newId,
-      label: newName,
-      isApproved: false
-    };
-    setShopOptions([...shopOptions, newOption]);
-    setValue('shopInfo', newOption);
-    setShowAddShoptModal(false);
-  };
-
+ }, [setValue]);
 
   const addNewTopping = useCallback((newTopping:string)  => {
     const newToppingValue = newTopping.trim().toLowerCase().replace(/\s+/g, '-');
@@ -146,6 +116,63 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
     setToppingSelected(newToppings);
   };
 
+  useEffect(() => {
+    if (isEdit && drinkId) {
+      // edit
+      const currentDrink = reviews.find(n => n.id === drinkId);
+      if (currentDrink) {
+        setDrinkIdError(false);
+
+        const { createdAt: _createdAt, updatedAt: _updatedAt, userId: _userId, ...editData } = currentDrink;
+
+        // set old toppings
+        editData.toppings.forEach(topping => {
+          addNewTopping(topping);
+        });
+
+        // set old shop
+        getShopsAndSetOptions(editData);
+
+        // set old data
+        setValue('drinkName', editData.drinkName);
+        setValue('rating', editData.rating);
+        setValue('sugar', editData.sugar);
+        setValue('ice', editData.ice);
+        setValue('comment', editData.comment);
+      } else {
+        setDrinkIdError(true);
+        getShopsAndSetOptions(null);
+        reset(); // reset form
+      }
+    } else {
+      // add
+      setDrinkIdError(false);
+      setToppingSelected([]);
+      getShopsAndSetOptions(null);
+      reset();  // reset form
+    }
+  }, [
+    drinkId,
+    reviews,
+    isEdit,
+    addNewTopping,
+    getShopsAndSetOptions,
+    reset,
+    setValue,
+  ]);
+
+  const handleAddShop = (newId: string, newName: string) => {
+    const newOption = {
+      value: newId,
+      label: newName,
+      isApproved: false
+    };
+    setShopOptions([...shopOptions, newOption]);
+    setValue('shopInfo', newOption);
+    setShowAddShoptModal(false);
+  };
+
+
   const concatSubmittedData = (data: DrinkForm): DrinkReviewFormType => {
     let { shopInfo, ...newData } = data;
     const submittedData: DrinkReviewFormType = {
@@ -165,6 +192,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
       toast.success('Drink added successfully!');
       router.push('/');
     } catch (error) {
+      console.log('error', error);
       toast.error("Failed to add drink. Please try again.");
     }
   };
@@ -178,6 +206,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
         router.push(`/drink/${drinkId}`);
       }
     } catch (error) {
+      console.log('error', error);
       toast.error("Failed to update drink. Please try again.");
     }
   };
@@ -196,24 +225,6 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
     comment: string
   }
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors, isValid }
-  } = useForm<DrinkForm>({
-    mode: "onChange",
-    defaultValues: {
-      drinkName: '',
-      shopInfo: null,
-      rating: 0,
-      sugar: 100,
-      ice: 100,
-      comment: ''
-    }
-  });
 
   return (
     <section className='flex justify-center p-6 pb-10'>

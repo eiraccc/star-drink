@@ -1,9 +1,7 @@
 import DrinkDetail from './DrinkDetail'
 
 type PropsType = {
-  params: {
-    drinkId: string
-  }
+  params: Promise<{ drinkId: string }>;
 }
 
 export default async function DrinkDetailPage({ params }: PropsType) {

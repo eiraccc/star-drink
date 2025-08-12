@@ -13,7 +13,7 @@ export const Option = (props: any) => {
 };
 
 export const MultiValue = (props: any) => {
-  const {index, getValue, data, maxToShow} = props
+  const {index, getValue, maxToShow} = props
   const selectedValues = getValue ? getValue() : [];
 
   if (index < maxToShow) {

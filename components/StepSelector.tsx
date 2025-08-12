@@ -4,7 +4,7 @@ import { SugarIceLabelType } from '../constants/drink';
 type propsType = {
   options: SugarIceLabelType[];
   selectedValue: number;
-  onChange: (value: number) => void;
+  onChange: (_value: number) => void;
   activeColorClass: string;
   baseColorClass: string;
   lineColorClass: string;

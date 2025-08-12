@@ -8,6 +8,7 @@ import Footer from '../layout/Footer';
 import { DrinkReviewProvider } from '../context/DrinkReviewContext';
 import { fetchReviewsServer } from '../services/drinkReviewServer';
 import ToastProvider from '../components/ToastProvider';
+import AnalyticsInit from '../components/AnalyticsInit';
  
 export const metadata: Metadata = {
   title: 'Star Drink',
@@ -24,6 +25,7 @@ export default async function RootLayout({children}: {children: ReactNode}) {
         <html lang="zh-Hant">
         <body className='bg-background text-text'>
             <ToastProvider />
+            <AnalyticsInit />
             <div className='flex flex-col'>
                 <Header />
                 <DrinkReviewProvider initReviewData={reviewData}>

@@ -16,9 +16,5 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-
-if(process.env.NEXT_PUBLIC_ENV !== "development") {
-  getAnalytics(app);
-}
+export const firebaseApp = initializeApp(firebaseConfig);
+export const db = getFirestore(firebaseApp);

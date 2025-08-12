@@ -3,8 +3,9 @@ import lineClamp from '@tailwindcss/line-clamp'
 
 export default {
   content: [
-    "./src/**/*.{html,js,ts,jsx,tsx}",
-    "./index.html",
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './layout/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {

@@ -3,7 +3,8 @@
 Welcome to **Star Drink**, your personal and social drink journal.
 
 Forget what you drank or how it tasted? Star Drink helps you record and rate every drink, from sugar and ice levels to toppings. Discover favorites through community reviews, search, and filters.
-Built with React, Vite, Tailwind CSS, and TypeScript to deliver a modern, fast, and reliable experience.
+
+Built with Next.js, React, Tailwind CSS, and TypeScript for a modern, fast, and SEO-friendly experience, with server-side Firebase support for secure data management.
 
 ## 📷 Screenshot
 ![Star Drink Screenshot](public/screenshot.png)
@@ -13,7 +14,7 @@ Built with React, Vite, Tailwind CSS, and TypeScript to deliver a modern, fast, 
 
 
 ## 🚀 Features
-
+### Core Features
 - 🔍 Filter drinks by ice level, sugar level, and toppings
 - 🌟 Rate drinks using a 5-star system
 - 📜 Sort reviews by rating or creation time
@@ -27,19 +28,27 @@ Built with React, Vite, Tailwind CSS, and TypeScript to deliver a modern, fast, 
 - ⚙️ Shop management page for adding, editing, deleting, and approving
 - ✔ Shop approval system to control listing visibility
 - ➕ Users can submit reviews and propose new shops
+### Next.js Enhancements
+- ⚡ Server-side rendering (SSR)
+- 📄 Static site generation (SSG)
+- 🌍 SEO-friendly metadata
+- 🔒 Firebase Admin SDK for server-side logic
 
 ## 🛠️ Tech Stack
 
-- **React** (v18)
-- **TypeScript**
-- **Vite**
-- **Tailwind CSS**
-- **React Router DOM** (v7)
-- **React Icons**
-- **React Select**
-- **Firebase (Firestore)** – for managing drink reviews and store data
-- **Firebase serverTimestamp & Timestamp** – for consistent time handling
-- **date-fns / date-fns-tz** – for date formatting and timezone conversion
+- **React** (v18)  
+- **Next.js** (App Router) – SSR/SSG and API routes  
+- **TypeScript**  
+- **Vite** – used in the legacy SPA build  
+- **Tailwind CSS** – utility-first styling  
+- **React Router DOM** (v7) – used in SPA routing (legacy)  
+- **React Icons** – icon set  
+- **React Select** – customizable select inputs  
+- **Firebase (Firestore)** – managing drink reviews and shop data  
+- **Firebase Client SDK** – used in the browser (Firestore, etc.)  
+- **Firebase Admin SDK** – used server-side in Next.js (secure access, serverTimestamp, etc.)  
+- **Firebase serverTimestamp & Timestamp** – consistent time handling  
+- **date-fns / date-fns-tz** – date formatting and timezone conversion 
 
 ## 🚀 Getting Started
 
@@ -61,17 +70,26 @@ npm run build
 
 ## 📁 Project Structure
 ```bash
-src/
-├── assets/              # Static assets
-├── component/           # Reusable UI components
-├── constants/           # App constants (ice/sugar/toppings)
-├── context/             # React Context for global state
-├── data/                # Mock data
-├── layout/              # Header, Footer, Section wrappers
-├── page/                # Pages: DrinkList, Detail, Editor
-├── types/               # TypeScript types
-├── utils/               # Utility functions
-└── main.tsx             # App entry point
+.
+├── app/            # Next.js App Router pages
+│   ├── admin/
+│   │   └── shop/
+│   ├── drink/
+│   │   ├── [drinkId]/
+│   │   │   └── edit/
+│   │   └── add/
+│   └── shop/
+│       └── [shopSlug]/
+├── components/     # Reusable UI components
+├── constants/      # Constant values and configs
+├── context/        # React Context providers
+├── layout/         # Layout components (Header, Footer, etc.)
+├── lib/            # Library helpers (Firebase, etc.)
+├── public/         # Static assets
+├── services/       # API client/server logic
+├── styles/         # Global styles
+├── types/          # TypeScript definitions
+├── utils/          # Utility functions
 
 ```
 
@@ -79,5 +97,5 @@ src/
 The favicon used in this project was downloaded from Icons8 and is used with attribution.
 
 ## 📜 License
-This project is licensed under a **custom non-commercial license**.
+This project is licensed under a **[custom non-commercial license](./LICENSE)**.  
 See the LICENSE file for details.

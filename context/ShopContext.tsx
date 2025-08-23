@@ -28,34 +28,34 @@ export const ShopProvider = ({
     const [isLoadingApprovedShop, setIsLoadingApprovedShop] = useState(!initApprovedShops.length);
     const [errorApproved, setErrorApproved] = useState<Error | null>(null);
 
-    useEffect(() => {
-      // 啟動即時監聽
-      let unsubscribe: (() => void) | undefined;
+    // useEffect(() => {
+    //   // 啟動即時監聽
+    //   let unsubscribe: (() => void) | undefined;
   
-      (async () => {
-        const sub = await fetchShops({
-          mode: 'subscribe',
-          isApproved: true,
-          callback: (shops) => {
-            setApprovedShops(shops);
-            setIsLoadingApprovedShop(false);
-            setErrorApproved(null);
-          },
-          errorCallback: (err) => {
-            setErrorApproved(err);
-            setIsLoadingApprovedShop(false);
-          },
-        });
+    //   (async () => {
+    //     const sub = await fetchShops({
+    //       mode: 'subscribe',
+    //       isApproved: true,
+    //       callback: (shops) => {
+    //         setApprovedShops(shops);
+    //         setIsLoadingApprovedShop(false);
+    //         setErrorApproved(null);
+    //       },
+    //       errorCallback: (err) => {
+    //         setErrorApproved(err);
+    //         setIsLoadingApprovedShop(false);
+    //       },
+    //     });
   
-        if (typeof sub === 'function') {
-          unsubscribe = sub;
-        }
-      })();
+    //     if (typeof sub === 'function') {
+    //       unsubscribe = sub;
+    //     }
+    //   })();
   
-      return () => {
-        if (unsubscribe) unsubscribe();
-      };
-    }, []);
+    //   return () => {
+    //     if (unsubscribe) unsubscribe();
+    //   };
+    // }, []);
   
 
     return (

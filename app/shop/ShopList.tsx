@@ -18,7 +18,7 @@ const ShopList = () => {
 
     const shops = useMemo(() => {
         return approvedShops.map(shop => {
-            const shopReviews = reviewsByShopId[shop.id] || [];
+            const shopReviews = reviewsByShopId[shop.shopId] || [];
             const totalReviews = shopReviews.length;
             const averageRating =
             totalReviews > 0
@@ -58,7 +58,7 @@ const ShopList = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filterShops.map(shop => (
                             <ShopCard
-                                key={shop.id}
+                                key={shop.shopId}
                                 data={shop}
                                 onClick={() => router.push(`/shop/${shop.slug}`)}
                             />

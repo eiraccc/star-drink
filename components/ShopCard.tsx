@@ -34,7 +34,7 @@ const ShopCard = ({ data, onClick }: ShopCardProps) => {
            <div className="min-h-[250px]">
                {data.reviews.slice(0,2).map(review => (
                    <div
-                       key={review.id}
+                       key={review.shopId}
                        className="bg-background p-3 rounded-lg mt-2"
                    >
                         <div className="flex gap-2 items-center">

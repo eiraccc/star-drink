@@ -78,9 +78,9 @@ const DrinkList = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortReviews.map((review) => (
               <DrinkCard
-                key={review.id}
+                key={review.reviewId}
                 data={review}
-                onClick={() => router.push(`/drink/${review.id}`)}
+                onClick={() => router.push(`/drink/${review.reviewId}`)}
               />
             ))}
           </div>

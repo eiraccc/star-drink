@@ -18,6 +18,9 @@ export default [
   },
   {
     files: ['**/*.{ts,tsx}'],
+    env: {
+      node: true,
+    },
     languageOptions: {
       parser: tsParser,
       parserOptions: {

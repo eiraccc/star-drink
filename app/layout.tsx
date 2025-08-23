@@ -6,7 +6,7 @@ import '../styles/index.css'
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { DrinkReviewProvider } from '../context/DrinkReviewContext';
-import { fetchReviewsServer } from '../services/drinkReviewServer';
+import { fetchReviewsServer } from '../services/reviewServer';
 import ToastProvider from '../components/ToastProvider';
 import AnalyticsInit from '../components/AnalyticsInit';
 
@@ -72,11 +72,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({children}: {children: ReactNode}) {
     const cookieStore = await cookies();
-    const locale = cookieStore.get('locale')?.value || 'en-GB';
-    console.log('locale:',locale)
-    
-    const reviewData = await fetchReviewsServer({});
-    // console.log('reviewData', reviewData)
+    let locale = cookieStore.get('locale')?.value?.trim();
+    if (!locale) locale = 'en-GB';
+    console.log('locale:', locale);
+
+    const reviewData = await fetchReviewsServer();
+
     return (
         <html lang={locale}>
         <body className='bg-background text-text'>

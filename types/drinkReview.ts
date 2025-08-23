@@ -13,7 +13,7 @@ export type ToppingType =
 export type DrinkRatingType = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface DrinkReviewType {
-    id: string,
+    reviewId: string,
     drinkName: string,
     shopName: string,
     shopId: string,

@@ -15,7 +15,7 @@ export interface ShopNameSlugType {
 }
 
 export interface ShopType extends ShopSubmittedType, ShopNameSlugType {
-    id: string;
+    shopId: string;
     description: string;
     isApproved: boolean;
     createdAt: string;

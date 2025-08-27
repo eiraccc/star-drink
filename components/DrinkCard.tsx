@@ -3,6 +3,7 @@ import StarRating from "./StarRating"
 import { DrinkReviewType } from "../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../constants/drink";
 import { RiDrinks2Fill } from "react-icons/ri";
+import { formatTimestampToUserLocalString } from "../utils/timeFormat";
 
 type DrinkCardProps = {
   data: DrinkReviewType,
@@ -37,7 +38,7 @@ const DrinkCard = ({ data, onClick }: DrinkCardProps) => {
                 })}
             </div>
             <p className="text-text-secondary text-sm mt-2 min-h-[40px] line-clamp-2">{data.comment}</p>
-            <p className="text-background text-xs text-right mt-2">{data.createdAt}</p>
+            <p className="text-background text-xs text-right mt-2">{formatTimestampToUserLocalString(data.createdAt)}</p>
         </div>
     )
 }

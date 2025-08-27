@@ -5,10 +5,10 @@ import { ShopType } from "../types/shop";
 
 interface UseShopsOptions {
   onlyApproved?: boolean;
-  initialData?: ShopType[];
+  initShopData?: ShopType[];
 }
 
-export const useShops = ({ onlyApproved = true, initialData = [] }: UseShopsOptions = {}) => {
+export const useShops = ({ onlyApproved = true, initShopData = [] }: UseShopsOptions = {}) => {
   return useQuery({
     queryKey: ['shops', onlyApproved ? 'approved' : 'all'],
     queryFn: async () => {
@@ -18,7 +18,7 @@ export const useShops = ({ onlyApproved = true, initialData = [] }: UseShopsOpti
         .order('created_at', { ascending: false });
 
       if (onlyApproved) {
-        query = query.eq('isApproved', true);
+        query = query.eq('is_approved', true);
       }
 
       const { data, error } = await query;
@@ -26,6 +26,6 @@ export const useShops = ({ onlyApproved = true, initialData = [] }: UseShopsOpti
 
       return data.map((shop: any) => camelcaseKeys(shop, { deep: true }));
     },
-    initialData
+    initialData: initShopData
   });
 };

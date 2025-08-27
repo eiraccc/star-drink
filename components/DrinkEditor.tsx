@@ -27,7 +27,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   }, []);
 
   const { data: reviews, isFetching: isLoadingReview } = useReviews({});
-  const { data: shops } = useShops({ onlyApproved: false });
+  const { data: shops } = useShops({ onlyApproved: true });
   const addReviewMutation = useAddReview();
   const editReviewMutation = useEditReview();
 

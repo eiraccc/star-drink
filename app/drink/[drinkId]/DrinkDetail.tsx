@@ -12,8 +12,8 @@ import { ImCross } from "react-icons/im";
 import { ShopType } from '../../../types/shop';
 import { toast } from 'react-toastify';
 import ShopStatusTag from '../../../components/ShopStatusTag';
-import { fetchShops } from '../../../services/shopClient';
 import { useReviews, useDeleteReview } from '../../../services/reviewClient';
+import { useShops } from '../../../services/shopClientNew';
 import { formatTimestampToUserLocalString } from '../../../utils/timeFormat';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
@@ -23,6 +23,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
   const [shopStatus, setShopStatus] = useState<ShopStatusType>('');
   const [shopData, setShopData] = useState<ShopType | null>(null);
+  const { data: shops } = useShops({ onlyApproved: true });
   const { data: reviews, isFetching: isLoadingReview } = useReviews({});
   const deleteReviewMutation = useDeleteReview();
 
@@ -35,21 +36,15 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   useEffect(() => {
     // get shop status
     if(drinkData?.shopId) {
-      getShopInfo(drinkData.shopId);
+      const shopData = shops.find(n => n.shopId === drinkData.shopId);
+      if(shopData) {
+        setShopStatus(shopData.isApproved ? 'approved' : 'pending');
+        setShopData(shopData);
+      } else {
+        setShopStatus('removed');
+      }
     }
   }, [drinkData]);
-
-  const getShopInfo = async(shopId: string) => {
-      const shopInfo = await fetchShops({shopId: shopId}) as ShopType[];
-      if(shopInfo?.length) {
-          const shopData = shopInfo[0];
-          setShopStatus(shopData.isApproved ? 'approved' : 'pending');
-          setShopData(shopData);
-          // TODO: if shop change name, shoule change name field in drink data
-      } else {
-          setShopStatus('removed');
-      }
-  };
 
   const iceOpacity:number = drinkData ? (iceOptions.find(n => n.value === drinkData.ice)?.opacity || 0) : 0;
   const sugarOpacity:number = drinkData ? (sugarOptions.find(n => n.value === drinkData.sugar)?.opacity || 0) : 0;

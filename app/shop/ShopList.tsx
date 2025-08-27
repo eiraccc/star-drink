@@ -1,23 +1,32 @@
 'use client';
 import { useMemo, useState } from "react"
 import { useRouter } from 'next/navigation';
-import { useDrinkReview } from "../../context/DrinkReviewContext";
 import ShopCard from "../../components/ShopCard";
 import LoadingSection from "../../components/LoadingSection";
 import ErrorSection from "../../components/ErrorSection";
 import { RiSearchLine } from "react-icons/ri";
-import { useShop } from "../../context/ShopContext";
 import { useReviews } from "../../services/reviewClient";
+import { useShops } from "../../services/shopClientNew";
+import { ShopType } from "../../types/shop";
 
-const ShopList = () => {
+const ShopList = ({initShopData}: {initShopData: ShopType[]}) => {
     const router = useRouter();
     const [searchValue, setSearchValue] = useState<string>('');
-    const { reviewsByShopId, isLoadingReview } = useDrinkReview();
-    const { approvedShops, isLoadingApprovedShop } = useShop();
+    const { data: reviews, isFetching: isLoadingReview } = useReviews({});
+    const { data: approvedShops, isFetching: isLoadingApprovedShop } = useShops({
+        onlyApproved: true,
+        initShopData: initShopData
+    });
 
     const isLoading = isLoadingReview || isLoadingApprovedShop;
 
     const shops = useMemo(() => {
+        console.log('approvedShops',approvedShops)
+        const reviewsByShopId = reviews.reduce((all, review) => {
+            if (!all[review.shopId]) all[review.shopId] = [];
+            all[review.shopId].push(review);
+            return all;
+        }, {});
         return approvedShops.map(shop => {
             const shopReviews = reviewsByShopId[shop.shopId] || [];
             const totalReviews = shopReviews.length;
@@ -33,7 +42,7 @@ const ShopList = () => {
                 averageRating,
             };
         });
-    },  [approvedShops, reviewsByShopId]);
+    },  [approvedShops, reviews]);
 
     const filterShops = shops.filter(shop => {
         return shop.nameEn.toLowerCase().includes(searchValue.toLowerCase());

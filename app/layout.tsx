@@ -5,8 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../styles/index.css'
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
-import { DrinkReviewProvider } from '../context/DrinkReviewContext';
-import { fetchReviewsServer } from '../services/reviewServer';
 import ToastProvider from '../components/ToastProvider';
 import AnalyticsInit from '../components/AnalyticsInit';
 import Providers from './providers';
@@ -77,19 +75,16 @@ export default async function RootLayout({children}: {children: ReactNode}) {
     if (!locale) locale = 'en-GB';
     console.log('locale:', locale);
 
-    const reviewData = await fetchReviewsServer();
-
     return (
         <html lang={locale}>
         <body className='bg-background text-text'>
+          <ToastProvider />
+          <AnalyticsInit />
+          
           <Providers>
-            <ToastProvider />
-            <AnalyticsInit />
             <div className='flex flex-col'>
                 <Header />
-                <DrinkReviewProvider initReviewData={reviewData}>
-                    <main>{children}</main>
-                </DrinkReviewProvider>
+                <main>{children}</main>
                 <Footer/>
             </div>
           </Providers>

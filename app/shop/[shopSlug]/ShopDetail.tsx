@@ -4,22 +4,21 @@ import { useRouter } from 'next/navigation';
 import LoadingOverlay from "../../../components/LoadingOverlay";
 import ErrorSection from "../../../components/ErrorSection";
 import DrinkCard from "../../../components/DrinkCard";
-import { useDrinkReview } from "../../../context/DrinkReviewContext";
-import { useShop } from "../../../context/ShopContext";
 import { FaComment, FaStar } from "react-icons/fa";
+import { useReviews } from "../../../services/reviewClient";
+import { useShops } from "../../../services/shopClientNew";
 
 const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
   const router = useRouter();
-  const { reviewsByShopId, isLoadingReview } = useDrinkReview();
-  const { approvedShops, isLoadingApprovedShop } = useShop();
+  const { data: reviews, isFetching: isLoadingReview } = useReviews({});
+  const { data: approvedShops, isFetching: isLoadingApprovedShop } = useShops({ onlyApproved: true });
 
   const isLoading = isLoadingReview || isLoadingApprovedShop;
 
   const shopData = useMemo(() => {
     const data = approvedShops.find(n => n.slug === shopSlug);
     if(!data) return null;
-
-    const shopReviews = reviewsByShopId[data.id] || [];
+    const shopReviews = reviews.filter(n => n.shopId === data.shopId) || [];
     const totalReviews = shopReviews.length;
       const averageRating = totalReviews > 0
             ? shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
@@ -31,7 +30,7 @@ const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
         totalReviews,
         averageRating,
     };
-  }, [approvedShops, reviewsByShopId, shopSlug]);
+  }, [approvedShops, reviews, shopSlug]);
   
   return (
     <section className="flex justify-center p-6 pb-10">
@@ -62,7 +61,7 @@ const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                 {shopData.reviews.map(review => (
                   <DrinkCard
-                    key={review.id}
+                    key={review.reviewId}
                     data={review}
                     onClick={() => router.push(`/drink/${review.id}`)}
                   />

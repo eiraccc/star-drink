@@ -21,7 +21,6 @@ export const useReviews = ({
       if (shopId) query = query.eq('shop_id', shopId);
 
       const { data, error } = await query;
-      console.log('api', data)
       if (error) throw error;
 
       const formatted = data.map((r: any) =>

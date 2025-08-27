@@ -13,7 +13,6 @@ import { useReviews } from "../services/reviewClient";
 
 const DrinkList = ({initReviewData}: {initReviewData: DrinkReviewType[]}) => {
   const { data: reviews, isLoading: isLoadingReview } = useReviews({initReviewData: initReviewData});
-  console.log('allReviews',reviews)
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {

@@ -6,6 +6,7 @@ import { addShopByName } from "../services/shopClient";
 import LoadingOverlay from "./LoadingOverlay";
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { useAddShop } from "../services/shopClientNew";
 
 interface propsType {
     isOpen: boolean;
@@ -17,21 +18,39 @@ type FormType = Omit<ShopSubmittedType, 'submittedBy'>;
 
 const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const addShopMutation = useAddShop();
+
     const handleAddShop = async(submittedData: FormType) => {
-        setIsLoading(true);
-        try {
-            const newId = await addShopByName({
-                ...submittedData,
-                submittedBy: 'test_user'
-            });
-            onAdd(newId, submittedData.submittedName);
-            toast.success('Shop added successfully! Please wait for admin approval.');
-        } catch (error) {
-            console.log('add shop error', error);
-            toast.error("Failed to add shop. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
+        // setIsLoading(true);
+        // try {
+        //     const newId = await addShopByName({
+        //         ...submittedData,
+        //         submittedBy: 'test_user',
+        //         submittedByRole: 'user'
+        //     });
+        //     onAdd(newId, submittedData.submittedName);
+        //     toast.success('Shop added successfully! Please wait for admin approval.');
+        // } catch (error) {
+        //     console.log('add shop error', error);
+        //     toast.error("Failed to add shop. Please try again.");
+        // } finally {
+        //     setIsLoading(false);
+        // }
+
+        addShopMutation.mutate({
+            ...submittedData,
+            submittedBy: 'test_user',
+            submittedByRole: 'user'
+        }, {
+            onSuccess: (newId) => {
+                onAdd(newId, submittedData.submittedName);
+                toast.success('Shop added successfully! Please wait for admin approval.');
+            },
+            onError: (err) => {
+                console.log('add shop error', err);
+                toast.error("Failed to add shop. Please try again.");
+            },
+        });
     };
 
     const {

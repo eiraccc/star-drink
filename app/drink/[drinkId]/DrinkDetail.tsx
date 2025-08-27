@@ -23,7 +23,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
   const [shopStatus, setShopStatus] = useState<ShopStatusType>('');
   const [shopData, setShopData] = useState<ShopType | null>(null);
-  const { data: shops } = useShops({ onlyApproved: true });
+  const { data: shops } = useShops({ onlyApproved: false });
   const { data: reviews, isFetching: isLoadingReview } = useReviews({});
   const deleteReviewMutation = useDeleteReview();
 
@@ -37,6 +37,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
     // get shop status
     if(drinkData?.shopId) {
       const shopData = shops.find(n => n.shopId === drinkData.shopId);
+      console.log('shops',shops, drinkData.shopId)
       if(shopData) {
         setShopStatus(shopData.isApproved ? 'approved' : 'pending');
         setShopData(shopData);

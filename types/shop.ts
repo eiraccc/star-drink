@@ -7,6 +7,10 @@ export interface ShopSubmittedType {
     submittedBy: string;
 }
 
+export interface ShopAddSubmittedType extends ShopSubmittedType {
+    submittedByRole: 'user'
+}
+
 export interface ShopNameSlugType {
     nameEn: string;
     nameZh: string;
@@ -37,7 +41,7 @@ export interface ShopTypeWithReview extends ShopType {
     averageRating: number
 }
 
-export type ShopFormType = Omit<ShopType, 'id' | 'createdAt' | 'updatedAt'>
+export type ShopFormType = Omit<ShopType, 'shopId' | 'createdAt' | 'updatedAt'>
 
 export interface AliasLabelType {
   value: string;

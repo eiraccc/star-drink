@@ -1,5 +1,3 @@
-import { Timestamp, FieldValue } from "firebase/firestore";
-
 export type SugarLevel = 0 | 25 | 50 | 75 | 100;
 export type IceLevel = -1 | 0 | 30 | 70 | 100;
 
@@ -30,17 +28,3 @@ export interface DrinkReviewType {
 
 export type DrinkReviewFormType = Omit<DrinkReviewType, 'reviewId' | 'userId' | 'userName' | 'createdAt' | 'updatedAt'>
 export type DrinkReviewEditType = Omit<DrinkReviewType, 'createdAt' | 'updatedAt'>
-
-export interface DrinkReviewFirestoreData {
-  drinkName: string;
-  shopName: string;
-  shopId: string,
-  rating: DrinkRatingType;
-  sugar: SugarLevel;
-  ice: IceLevel;
-  toppings: ToppingType[];
-  comment: string;
-  userId: string;
-  createdAt: Timestamp | FieldValue;
-  updatedAt: Timestamp | FieldValue;
-}

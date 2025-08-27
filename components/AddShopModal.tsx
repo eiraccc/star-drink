@@ -5,7 +5,7 @@ import { ShopSubmittedType } from "../types/shop";
 import LoadingOverlay from "./LoadingOverlay";
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { useAddShop } from "../services/shopClientNew";
+import { useAddShop } from "../services/shopClient";
 
 interface propsType {
     isOpen: boolean;

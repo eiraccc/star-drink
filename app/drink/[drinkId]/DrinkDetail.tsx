@@ -13,7 +13,7 @@ import { ShopType } from '../../../types/shop';
 import { toast } from 'react-toastify';
 import ShopStatusTag from '../../../components/ShopStatusTag';
 import { useReviews, useDeleteReview } from '../../../services/reviewClient';
-import { useShops } from '../../../services/shopClientNew';
+import { useShops } from '../../../services/shopClient';
 import { formatTimestampToUserLocalString } from '../../../utils/timeFormat';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';

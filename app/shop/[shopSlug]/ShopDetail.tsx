@@ -6,7 +6,7 @@ import ErrorSection from "../../../components/ErrorSection";
 import DrinkCard from "../../../components/DrinkCard";
 import { FaComment, FaStar } from "react-icons/fa";
 import { useReviews } from "../../../services/reviewClient";
-import { useShops } from "../../../services/shopClientNew";
+import { useShops } from "../../../services/shopClient";
 
 const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
   const router = useRouter();

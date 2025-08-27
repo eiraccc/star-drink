@@ -6,7 +6,7 @@ import LoadingSection from "../../components/LoadingSection";
 import ErrorSection from "../../components/ErrorSection";
 import { RiSearchLine } from "react-icons/ri";
 import { useReviews } from "../../services/reviewClient";
-import { useShops } from "../../services/shopClientNew";
+import { useShops } from "../../services/shopClient";
 import { ShopType } from "../../types/shop";
 
 const ShopList = ({initShopData}: {initShopData: ShopType[]}) => {

@@ -1,175 +1,149 @@
-import {
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  query,
-  where,
-  QueryConstraint,
-  collection,
-  serverTimestamp,
-  Timestamp,
-  QueryDocumentSnapshot,
-  DocumentData,
-  documentId,
-  onSnapshot,
-} from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import {
-  ShopType,
-  ShopTypeFirestore,
-  ShopSubmittedType,
-  ShopFormType,
-} from '../types/shop';
-import { formatTimestampToUserLocalString } from '../utils/timeFormat';
-import { generateSlug } from '../utils/autoSlug';
+import { supabase } from "../lib/supabase";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import camelcaseKeys from "camelcase-keys";
+import { ShopType, ShopSubmittedType, ShopFormType, ShopAddSubmittedType } from "../types/shop";
+import { generateSlug } from "../utils/autoSlug";
+import _ from 'lodash';
 
-const shopRef = collection(db, 'shops');
-
-function formatDoc(doc: QueryDocumentSnapshot<DocumentData>): ShopType {
-  const data = doc.data() as ShopTypeFirestore & {
-    createdAt: Timestamp;
-    updatedAt: Timestamp
-  };
-  return {
-    id: doc.id,
-    ...data,
-    createdAt: formatTimestampToUserLocalString(data.createdAt),
-    updatedAt: formatTimestampToUserLocalString(data.updatedAt),
-  };
-};
-
-type FetchMode = 'once' | 'subscribe';
-
-interface FetchShopsParams {
-  mode?: FetchMode;
-  shopId?: string;
-  shopSlug?: string;
-  isApproved?: boolean;
-  callback?: (_shops: ShopType[]) => void; // for subscribe
-  errorCallback?: (_error: Error) => void; // for subscribe
+interface UseShopsOptions {
+  onlyApproved?: boolean;
+  initShopData?: ShopType[];
 }
 
-export async function fetchShops({
-  mode = 'once',
-  shopId,
-  shopSlug,
-  isApproved,
-  callback,
-  errorCallback,
-}: FetchShopsParams): Promise<ShopType[] | (() => void)> {
-  const conditions: QueryConstraint[] = [];
+export const useShops = ({ onlyApproved = true, initShopData = [] }: UseShopsOptions = {}) => {
+  return useQuery({
+    queryKey: ['shops', onlyApproved ? 'approved' : 'all'],
+    queryFn: async () => {
+      let query = supabase
+        .from('shops')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-  if (shopId) {
-    conditions.push(where(documentId(), '==', shopId));
-  }
-  if (shopSlug) {
-    conditions.push(where('slug', '==', shopSlug));
-  }
-  if (isApproved !== undefined) {
-    conditions.push(where('isApproved', '==', isApproved));
-  }
-
-  const q = conditions.length > 0 ? query(shopRef, ...conditions) : shopRef;
-
-  if (mode === 'once') {
-    // 一次性抓資料
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(formatDoc);
-  }
-
-  if (mode === 'subscribe') {
-    if (!callback) throw new Error('subscribe mode requires a callback');
-    // 即時監聽
-    return onSnapshot(
-      q,
-      (snapshot) => {
-        const shops = snapshot.docs.map(formatDoc);
-        callback(shops);
-      },
-      (error) => {
-        if (errorCallback) errorCallback(error);
+      if (onlyApproved) {
+        query = query.eq('is_approved', true);
       }
-    );
-  }
 
-  throw new Error(`Invalid mode: ${mode}`);
+      const { data, error } = await query;
+      if (error) throw error;
+
+      return data.map((shop: any) => camelcaseKeys(shop, { deep: true }));
+    },
+    initialData: initShopData
+  });
 };
 
-export async function addShopByName({
-  submittedName,
-  submittedNote,
-  submittedBy,
-}: ShopSubmittedType) {
-  try {
-    const shopData: ShopTypeFirestore = {
-      ...generateSlug(submittedName),
-      submittedName,
-      submittedNote,
-      submittedBy,
-      submittedByRole: 'user',
-      description: '',
-      isApproved: false,
-      createdAt: serverTimestamp() as Timestamp,
-      updatedAt: serverTimestamp() as Timestamp,
-    };
-    const result = await addDoc(shopRef, shopData);
-    return result.id;
-  } catch (error) {
-    console.error('add error:', error);
-    throw error;
-  }
-}
+export const useAddShop = () => {
+  const queryClient = useQueryClient();
 
-export async function addShop(data: ShopFormType) {
-    try {
-      const shopData: ShopTypeFirestore = {
-        ...data,
-        submittedByRole: 'admin',
-        createdAt: serverTimestamp() as Timestamp,
-        updatedAt: serverTimestamp() as Timestamp,
-      };
-      const result = await addDoc(shopRef, shopData);
-      return result.id;
-    } catch (error) {
-      console.error('add error:', error);
-      throw error;
-    }
-  }
+  return useMutation<string, Error, ShopAddSubmittedType | ShopFormType>({
+    mutationFn: async (data: ShopAddSubmittedType | ShopFormType) => {
+      let insertData: any = {};
 
-export async function approveShop(shopId: string) {
-  try {
-    const ref = doc(db, 'shops', shopId);
-    await updateDoc(ref, {
-      isApproved: true,
-      updatedAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error('update error:', error);
-    throw error;
-  }
-}
+      if (data.submittedByRole === 'user') {
+        const slugInfo = generateSlug(data.submittedName);
+        // by user
+        insertData = {
+          name_en: slugInfo.nameEn,
+          name_zh: slugInfo.nameZh,
+          slug: slugInfo.slug,
+          alias: slugInfo.alias,
+          submitted_name: data.submittedName,
+          submitted_note: data.submittedNote,
+          submitted_by: data.submittedBy,
+          submitted_by_role: 'user',
+          description: '',
+          is_approved: false,
+        };
+      } else {
+        // by admin
+        insertData = {
+          name_en: data.nameEn,
+          name_zh: data.nameZh,
+          slug: data.slug,
+          alias: data.alias,
+          submitted_by: data.submittedBy,
+          submitted_by_role: 'admin',
+          description: data.description ?? '',
+          is_approved: true,
+        };
+      }
 
-export async function editShop(data: Omit<ShopType, 'createdAt'>) {
-  try {
-    const ref = doc(db, 'shops', data.id);
-    await updateDoc(ref, {
-      ...data,
-      updatedAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error('update error:', error);
-    throw error;
-  }
-}
+      const { data: shop, error } = await supabase
+        .from('shops')
+        .insert([insertData])
+        .select('shop_id')
+        .single();
 
-export async function deleteShop(shopId: string) {
-  try {
-    const ref = doc(db, 'shops', shopId);
-    await deleteDoc(ref);
-  } catch (error) {
-    console.error('delete error:', error);
-    throw error;
-  }
-}
+      if (error) throw error;
+
+      return shop.shop_id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
+    },
+  });
+};
+
+export const useApproveShop = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, string>({
+    mutationFn: async (shopId) => {
+      const { error } = await supabase
+        .from('shops')
+        .update({ is_approved: true })
+        .eq('shop_id', shopId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
+    },
+  });
+};
+
+export const useEditShop = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<ShopType, Error, Omit<ShopType, 'createdAt'>>({
+    mutationFn: async (data) => {
+      const { shopId, ...updateData } = data;
+      const newData = _.mapKeys(updateData, (value, key) => _.snakeCase(key));
+      console.log('test', updateData, newData)
+
+      const { data: shop, error } = await supabase
+        .from('shops')
+        .update(newData)
+        .eq('shop_id', shopId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return camelcaseKeys(shop, { deep: true }) as ShopType;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
+    },
+  });
+};
+
+export const useDeleteShop = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (shopId: string) => {
+      const { error } = await supabase
+        .from('shops')
+        .delete()
+        .eq('shop_id', shopId);
+
+      if (error) throw error;
+
+      return shopId;
+    },
+    onSuccess: (deletedId) => {
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
+    },
+  });
+};

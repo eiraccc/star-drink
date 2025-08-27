@@ -19,7 +19,7 @@ import {
     useEditShop,
     useAddShop,
     useDeleteShop
-} from "../../../services/shopClientNew";
+} from "../../../services/shopClient";
 
 const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const [isClient, setIsClient] = useState(false);

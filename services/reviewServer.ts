@@ -5,21 +5,7 @@ export async function fetchReviewsServer() {
   try {
     const { data, error } = await supabaseAdmin
       .from('reviews')
-      .select(`
-        review_id,
-        rating,
-        sugar,
-        ice,
-        toppings,
-        comment,
-        user_id,
-        drink_id,
-        shop_id,
-        created_at,
-        updated_at,
-        drinks!inner(drink_name),
-        shops!inner(name_en)
-      `)
+      .select(`*, drinks!inner(drink_name), shops(name_en), users!inner(user_name)`)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -28,8 +14,9 @@ export async function fetchReviewsServer() {
       camelcaseKeys(
         {
           ...r,
-          drink_name: r.drinks.drink_name,
-          shop_name: r.shops.name_en,
+          drinkName: r.drinks?.drink_name ?? '',
+          shopName: r.shops?.name_en ?? r.shop_name ?? '',
+          userName: r.users?.user_name ?? ''
         },
         { deep: true }
       )
@@ -38,6 +25,7 @@ export async function fetchReviewsServer() {
     formatted.forEach(r => {
       delete r.drinks;
       delete r.shops;
+      delete r.users;
     });
 
     return formatted;

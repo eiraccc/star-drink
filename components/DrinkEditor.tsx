@@ -16,7 +16,7 @@ import MultiSelect from './MultiSelect';
 import { toast } from 'react-toastify';
 import { useForm, Controller } from "react-hook-form";
 import { useReviews, useAddReview, useEditReview } from '../services/reviewClient';
-import { useShops } from '../services/shopClientNew';
+import { useShops } from '../services/shopClient';
 
 const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   const router = useRouter();

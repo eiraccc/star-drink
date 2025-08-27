@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import ShopStatusTag from '../../../components/ShopStatusTag';
 import { fetchShops } from '../../../services/shopClient';
 import { useReviews, useDeleteReview } from '../../../services/reviewClient';
+import { formatTimestampToUserLocalString } from '../../../utils/timeFormat';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 
@@ -110,7 +111,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
               <p className="text-text-secondary text-sm mt-2">{drinkData.comment}</p>
               <hr className="border-t border-secondary my-4" />
               <p className="text-text-secondary text-xs mt-2">
-                Post by <span className='text-primary'>{drinkData.userName}</span> on {drinkData.createdAt}
+                Post by <span className='text-primary'>{drinkData.userName}</span> on {formatTimestampToUserLocalString(drinkData.createdAt)}
               </p>
 
               <div className="flex justify-end mt-4 space-x-2">

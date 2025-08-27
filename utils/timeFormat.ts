@@ -1,10 +1,13 @@
-import { Timestamp } from "firebase/firestore";
+import { parseISO } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
-// Format the time according to the user's time zone
-export const formatTimestampToUserLocalString = (timestamp: Timestamp | undefined | null): string => {
-    if (!timestamp) return '';
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-    return formatInTimeZone(timestamp.toDate(), userTimeZone, "yyyy-MM-dd HH:mm:ss");
-  }
-  
+export const formatTimestampToUserLocalString = (
+  timestamp: string | undefined | null,
+  pattern: string = "yyyy-MM-dd HH:mm:ss"
+): string => {
+  if (!timestamp) return "";
+
+  const date = parseISO(timestamp);
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  return formatInTimeZone(date, userTimeZone, pattern);
+};

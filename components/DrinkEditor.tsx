@@ -10,14 +10,13 @@ import { BaseSelectOptionType } from '../types/selectOptionType';
 import StepSelector from './StepSelector';
 import ErrorSection from './ErrorSection';
 import LoadingOverlay from './LoadingOverlay';
-import { useDrinkReview } from "../context/DrinkReviewContext";
-import { fetchShops } from '../services/shopClient';
 import AddShopModal from './AddShopModal';
 import ShopSelect, { OptionTypeWithApprovalStatus } from './ShopSelect';
 import MultiSelect from './MultiSelect';
 import { toast } from 'react-toastify';
 import { useForm, Controller } from "react-hook-form";
-import { ShopType } from '../types/shop';
+import { useReviews, useAddReview, useEditReview } from '../services/reviewClient';
+import { useShops } from '../services/shopClientNew';
 
 const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   const router = useRouter();
@@ -27,7 +26,11 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
     setIsClient(true);
   }, []);
 
-  const { reviews, addReview, editReview, isLoadingReview } = useDrinkReview();
+  const { data: reviews, isFetching: isLoadingReview } = useReviews({});
+  const { data: shops } = useShops({ onlyApproved: false });
+  const addReviewMutation = useAddReview();
+  const editReviewMutation = useEditReview();
+
   const [showToppingOptions, setShowToppingOptions] = useState<BaseSelectOptionType[]>(toppingOptions);
   const [toppingSelected, setToppingSelected] = useState<BaseSelectOptionType[]>([]);
   const [shopOptions, setShopOptions] = useState<OptionTypeWithApprovalStatus[]>([]);
@@ -54,40 +57,33 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   });
 
   const getShopsAndSetOptions = useCallback(async(editData: DrinkReviewFormType | null) => {
-    try {
-      const data = await fetchShops({isApproved: true}) as ShopType[];
-
-      if (!data?.length) return;
-      let shopList = data.map(shop => (
-        {
-          value: shop.id,
-          label: shop.nameEn,
-          isApproved: true
-        }
-      ));
-
-      if(editData) {
-        const matchedShop = shopList.find(n => n.value === editData.shopId);
-        if(matchedShop) {
-          setValue('shopInfo', matchedShop);
-        } else {
-          const newOption = {
-            label: editData.shopName,
-            value: editData.shopId,
-            isApproved: false
-          };
-          shopList.push(newOption);
-          setValue('shopInfo', newOption);
-        }
-      } else {
-        setValue('shopInfo', null);
+    let shopList = shops.map(shop => (
+      {
+        value: shop.shopId,
+        label: shop.nameEn,
+        isApproved: true
       }
+    ));
 
-      setShopOptions(shopList);
-    } catch (error) {
-      console.log('get shop error', error);
+    if(editData) {
+      const matchedShop = shopList.find(n => n.value === editData.shopId);
+      if(matchedShop) {
+        setValue('shopInfo', matchedShop);
+      } else {
+        const newOption = {
+          label: editData.shopName,
+          value: editData.shopId,
+          isApproved: false
+        };
+        shopList.push(newOption);
+        setValue('shopInfo', newOption);
+      }
+    } else {
+      setValue('shopInfo', null);
     }
- }, [setValue]);
+
+    setShopOptions(shopList);
+ }, [setValue, shops]);
 
   const addNewTopping = useCallback((newTopping:string)  => {
     const newToppingValue = newTopping.trim().toLowerCase().replace(/\s+/g, '-');
@@ -119,14 +115,14 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   useEffect(() => {
     if (isEdit && drinkId) {
       // edit
-      const currentDrink = reviews.find(n => n.id === drinkId);
+      const currentDrink = reviews.find(n => n.reviewId === drinkId);
       if (currentDrink) {
         setDrinkIdError(false);
 
         const { createdAt: _createdAt, updatedAt: _updatedAt, userId: _userId, ...editData } = currentDrink;
 
         // set old toppings
-        editData.toppings.forEach(topping => {
+        editData.toppings.forEach((topping: string) => {
           addNewTopping(topping);
         });
 
@@ -153,6 +149,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
     }
   }, [
     drinkId,
+    shops,
     reviews,
     isEdit,
     addNewTopping,
@@ -185,30 +182,38 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
     return submittedData;
   };
 
-  const handleAdd = async (data: DrinkForm) => {
+  const handleAdd = (data: DrinkForm) => {
     const submittedData = concatSubmittedData(data);
-    try {
-      await addReview(submittedData);
-      toast.success('Drink added successfully!');
-      router.push('/');
-    } catch (error) {
-      console.log('error', error);
-      toast.error("Failed to add drink. Please try again.");
-    }
+
+    addReviewMutation.mutate(submittedData, {
+      onSuccess: () => {
+        toast.success('Drink added successfully!');
+        router.push('/');
+      },
+      onError: (error: any) => {
+        console.log('error', error);
+        toast.error('Failed to add drink. Please try again.');
+      },
+    });
   };
 
-  const handleEdit = async (data: DrinkForm) => {
+  const handleEdit = (data: DrinkForm) => {
     const submittedData = concatSubmittedData(data);
-    try {
-      if (drinkId && submittedData) {
-        await editReview(drinkId, submittedData);
-        toast.success('Drink updated successfully!');
-        router.push(`/drink/${drinkId}`);
+    if (!drinkId || !submittedData) return;
+
+    editReviewMutation.mutate(
+      { reviewId: drinkId, data: submittedData },
+      {
+        onSuccess: () => {
+          toast.success('Drink updated successfully!');
+          router.push(`/drink/${drinkId}`);
+        },
+        onError: (error: any) => {
+          console.error(error);
+          toast.error("Failed to update drink. Please try again.");
+        }
       }
-    } catch (error) {
-      console.log('error', error);
-      toast.error("Failed to update drink. Please try again.");
-    }
+    );
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -239,8 +244,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
             <MdArrowBackIos />Back home
           </Link>
 
-          {isLoadingReview && <LoadingOverlay />}
-
+          { addReviewMutation.isPending && <LoadingOverlay /> }
           { !isLoadingReview && (
             drinkIdError ? (
               <ErrorSection

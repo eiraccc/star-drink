@@ -2,15 +2,18 @@
 import { useState, useEffect, useMemo } from "react"
 import { useRouter } from 'next/navigation';
 import { SortKey, SortType } from "../types/sorting";
+import { DrinkReviewType } from "../types/drinkReview";
 import { sugarOptions, iceOptions, SugarIceLabelType } from '../constants/drink'
 import DrinkCard from "./DrinkCard";
 import ErrorSection from "./ErrorSection";
 import FilterBar from "./FilterBar";
 import LoadingSection from "./LoadingSection";
-import { useDrinkReview } from "../context/DrinkReviewContext";
 import { BaseSelectOptionType } from "../types/selectOptionType";
+import { useReviews } from "../services/reviewClient";
 
-const DrinkList = () => {
+const DrinkList = ({initReviewData}: {initReviewData: DrinkReviewType[]}) => {
+  const { data: reviews, isLoading: isLoadingReview } = useReviews({initReviewData: initReviewData});
+  console.log('allReviews',reviews)
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -25,8 +28,6 @@ const DrinkList = () => {
     key: 'rating',
     order: 'desc'
   });
-
-  const { reviews, isLoadingReview } = useDrinkReview();
 
   const toggleSort = (key:SortKey) => {
     setSort(preSort => {

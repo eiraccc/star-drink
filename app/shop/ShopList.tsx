@@ -7,6 +7,7 @@ import LoadingSection from "../../components/LoadingSection";
 import ErrorSection from "../../components/ErrorSection";
 import { RiSearchLine } from "react-icons/ri";
 import { useShop } from "../../context/ShopContext";
+import { useReviews } from "../../services/reviewClient";
 
 const ShopList = () => {
     const router = useRouter();

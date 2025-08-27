@@ -9,6 +9,7 @@ import { DrinkReviewProvider } from '../context/DrinkReviewContext';
 import { fetchReviewsServer } from '../services/reviewServer';
 import ToastProvider from '../components/ToastProvider';
 import AnalyticsInit from '../components/AnalyticsInit';
+import Providers from './providers';
 
 type LocaleType = 'en-GB' | 'zh-TW';
 const supportedLocales = ['en-GB', 'zh-TW'] as const;
@@ -81,6 +82,7 @@ export default async function RootLayout({children}: {children: ReactNode}) {
     return (
         <html lang={locale}>
         <body className='bg-background text-text'>
+          <Providers>
             <ToastProvider />
             <AnalyticsInit />
             <div className='flex flex-col'>
@@ -90,6 +92,7 @@ export default async function RootLayout({children}: {children: ReactNode}) {
                 </DrinkReviewProvider>
                 <Footer/>
             </div>
+          </Providers>
         </body>
         </html>
     );

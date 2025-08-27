@@ -23,11 +23,13 @@ export interface DrinkReviewType {
     toppings: ToppingType[],
     comment: string,
     userId: string,
+    userName: string,
     createdAt: string,
     updatedAt: string,
 }
 
-export type DrinkReviewFormType = Omit<DrinkReviewType, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
+export type DrinkReviewFormType = Omit<DrinkReviewType, 'reviewId' | 'userId' | 'userName' | 'createdAt' | 'updatedAt'>
+export type DrinkReviewEditType = Omit<DrinkReviewType, 'createdAt' | 'updatedAt'>
 
 export interface DrinkReviewFirestoreData {
   drinkName: string;

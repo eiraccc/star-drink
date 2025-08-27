@@ -9,11 +9,11 @@ import { DrinkReviewType } from "../../../types/drinkReview"
 import { iceLabelMap, sugarLabelMap, iceOptions, sugarOptions } from "../../../constants/drink";
 import { MdArrowBackIos } from "react-icons/md";
 import { ImCross } from "react-icons/im";
-import { useDrinkReview } from "../../../context/DrinkReviewContext";
 import { ShopType } from '../../../types/shop';
 import { toast } from 'react-toastify';
 import ShopStatusTag from '../../../components/ShopStatusTag';
 import { fetchShops } from '../../../services/shopClient';
+import { useReviews, useDeleteReview } from '../../../services/reviewClient';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 
@@ -22,11 +22,12 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
   const [shopStatus, setShopStatus] = useState<ShopStatusType>('');
   const [shopData, setShopData] = useState<ShopType | null>(null);
-  const { reviews, deleteReview, isLoadingReview } = useDrinkReview();
+  const { data: reviews, isFetching: isLoadingReview } = useReviews({});
+  const deleteReviewMutation = useDeleteReview();
 
   useEffect(() => {
     // get data
-    const drinkData = reviews.find(n => n.id === drinkId) || null;
+    const drinkData = reviews.find(n => n.reviewId === drinkId) || null;
     setDrinkData(drinkData);
   }, [reviews, drinkId]);
 
@@ -52,17 +53,18 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   const iceOpacity:number = drinkData ? (iceOptions.find(n => n.value === drinkData.ice)?.opacity || 0) : 0;
   const sugarOpacity:number = drinkData ? (sugarOptions.find(n => n.value === drinkData.sugar)?.opacity || 0) : 0;
 
-  const handleDelete = async () => {
-    try {
-      if (drinkId) {
-        await deleteReview(drinkId);
+  const handleDelete = () => {
+    if (!drinkId) return;
+    deleteReviewMutation.mutate(drinkId, {
+      onSuccess: () => {
         toast.success('Drink deleted successfully!');
         router.push('/');
-      }
-    } catch (error) {
-      console.log('error', error);
-      toast.error("Failed to delete drink. Please try again.");
-    }
+      },
+      onError: (err) => {
+        console.log('error', err);
+        toast.error("Failed to delete drink. Please try again.");
+      },
+    });
   };
 
   return (
@@ -72,9 +74,9 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
           <MdArrowBackIos />Back home
         </Link>
 
-
+        { (deleteReviewMutation.isPending || isLoadingReview) && <LoadingOverlay /> }
         {
-          isLoadingReview ? <LoadingOverlay /> : drinkData ? (
+          !isLoadingReview && (drinkData ? (
             <div>
               <h2 className="text-text text-lg font-bold flex items-center">
                 {drinkData.drinkName}
@@ -108,7 +110,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
               <p className="text-text-secondary text-sm mt-2">{drinkData.comment}</p>
               <hr className="border-t border-secondary my-4" />
               <p className="text-text-secondary text-xs mt-2">
-                Post by <span className='text-primary'>{drinkData.userId}</span> on {drinkData.createdAt}
+                Post by <span className='text-primary'>{drinkData.userName}</span> on {drinkData.createdAt}
               </p>
 
               <div className="flex justify-end mt-4 space-x-2">
@@ -132,7 +134,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
               errorMsg='Uh-oh, no drink here!'
               btnActionHome={true}
             />
-          )
+          ))
         }
       </div>
     </section>

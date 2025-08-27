@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '../../../lib/supabaseAdmin';
+import { supabase } from '../../../lib/supabase';
 import camelcaseKeys from 'camelcase-keys';
 
 // GET /api/reviews
 export async function GET() {
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('reviews')
       .select(`
         review_id,

@@ -11,6 +11,7 @@ import {
   RiArrowUpSLine,
 } from 'react-icons/ri';
 import { shopColumns } from "../../../constants/shopColumnConfig";
+import { formatTimestampToUserLocalString } from '../../../utils/timeFormat';
 
 interface propsType {
   shops: ShopType[];
@@ -99,7 +100,7 @@ const ShopTable = ({
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                     {sortShops.map((shop) => (
-                        <tr key={shop.id} className="hover:bg-background">
+                        <tr key={shop.shopId} className="hover:bg-background">
                             {shopColumns.filter(col => visableLabelKeys.includes(col.key)).map(col => {
                                 const val = shop[col.key as keyof ShopType];
                                 let content;
@@ -132,6 +133,11 @@ const ShopTable = ({
                                         </div>
                                       );
                                       break;
+
+                                    case 'createdAt':
+                                    case 'updatedAt':
+                                      content = formatTimestampToUserLocalString(val as string);
+                                      break;
                           
                                     default:
                                       content = val;
@@ -150,7 +156,7 @@ const ShopTable = ({
                                 >
                                     <button
                                         disabled={!checkApproveValid(shop) || shop.isApproved}
-                                        onClick={() => handleApprove(shop.id, shop)}
+                                        onClick={() => handleApprove(shop.shopId, shop)}
                                         className="bg-highlight text-background px-5 py-2 rounded-md text-sm hover:opacity-90 disabled:opacity-50"
                                     >Approve</button>
                                 </Tooltip>
@@ -168,7 +174,7 @@ const ShopTable = ({
                             <td className="px-4 py-2">
                                 <div className="flex items-center justify-center">
                                     <MdDelete
-                                        onClick={() => handleDelete(shop.id)}
+                                        onClick={() => handleDelete(shop.shopId)}
                                         className="text-primary hover:opacity-80 cursor-pointer"
                                         size={25}
                                     />

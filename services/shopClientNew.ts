@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import camelcaseKeys from "camelcase-keys";
 import { ShopType, ShopSubmittedType, ShopFormType, ShopAddSubmittedType } from "../types/shop";
 import { generateSlug } from "../utils/autoSlug";
+import _ from 'lodash';
 
 interface UseShopsOptions {
   onlyApproved?: boolean;
@@ -78,7 +79,71 @@ export const useAddShop = () => {
       return shop.shop_id;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['shops'] });
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
+    },
+  });
+};
+
+export const useApproveShop = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, string>({
+    mutationFn: async (shopId) => {
+      const { error } = await supabase
+        .from('shops')
+        .update({ is_approved: true })
+        .eq('shop_id', shopId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
+    },
+  });
+};
+
+export const useEditShop = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<ShopType, Error, Omit<ShopType, 'createdAt'>>({
+    mutationFn: async (data) => {
+      const { shopId, ...updateData } = data;
+      const newData = _.mapKeys(updateData, (value, key) => _.snakeCase(key));
+      console.log('test', updateData, newData)
+
+      const { data: shop, error } = await supabase
+        .from('shops')
+        .update(newData)
+        .eq('shop_id', shopId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return camelcaseKeys(shop, { deep: true }) as ShopType;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
+    },
+  });
+};
+
+export const useDeleteShop = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (shopId: string) => {
+      const { error } = await supabase
+        .from('shops')
+        .delete()
+        .eq('shop_id', shopId);
+
+      if (error) throw error;
+
+      return shopId;
+    },
+    onSuccess: (deletedId) => {
+      queryClient.invalidateQueries({ queryKey: ['shops', 'all'] });
     },
   });
 };

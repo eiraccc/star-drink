@@ -1,12 +1,6 @@
 'use client';
 import React, { useEffect, useState, useMemo } from "react"
 import { ShopType, ShopFormType } from "../../../types/shop";
-import {
-    addShop as addShopToFB,
-    editShop as editShopToFB,
-    deleteShop as deleteShopInFB,
-    approveShop
-} from "../../../services/shopClient";
 import { BaseSelectOptionType } from "../../../types/selectOptionType";
 import SingleSelect from "../../../components/SingleSelect";
 import MultiSelect from "../../../components/MultiSelect";
@@ -19,7 +13,13 @@ import ConfirmModal from "../../../components/ConfirmModal";
 import { FaPlus } from 'react-icons/fa';
 import { shopColumns, typeToInitColumnsMap, ApprovalStatusType } from "../../../constants/shopColumnConfig";
 import { toast } from 'react-toastify';
-import { fetchShops } from "../../../services/shopClient";
+import {
+    useShops,
+    useApproveShop,
+    useEditShop,
+    useAddShop,
+    useDeleteShop
+} from "../../../services/shopClientNew";
 
 const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const [isClient, setIsClient] = useState(false);
@@ -27,37 +27,16 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
         setIsClient(true);
     }, []);
     
-    const [isLoadingAction, setIsLoadingAction] = useState<boolean>(false);
+    const { data: allShops, isFetching: isLoadingShops } = useShops({
+        onlyApproved: false,
+        initShopData: initAllShops
+    });
+    const approveShopMutation = useApproveShop();
+    const addShopMutation = useAddShop();
+    const editShopMutation = useEditShop();
+    const deleteShopMutation = useDeleteShop();
+    const isLoading = approveShopMutation.isPending || editShopMutation.isPending || deleteShopMutation.isPending;
     const [editMode, setEditMode] = useState<'edit' | 'add' | ''>('');
-    const [allShops, setAllShops] = useState<ShopType[]>(initAllShops);
-    const [errorAll, setErrorAll] = useState<Error | null>(null);
-
-    useEffect(() => {
-        let unsubscribe: (() => void) | undefined;
-
-        (async () => {
-            try {
-              unsubscribe = (await fetchShops({
-                mode: 'subscribe',
-                callback: (shops) => {
-                  setAllShops(shops as ShopType[]);
-                  setErrorAll(null);
-                },
-                errorCallback: (error) => setErrorAll(error),
-              })) as () => void;
-            } catch (error) {
-              setErrorAll(error as Error);
-            }
-        })();
-        
-        return () => {
-            if (unsubscribe) unsubscribe();
-        };
-    }, []);
-
-    useEffect(() => {
-        console.log('error', errorAll);
-    }, [errorAll]);
 
     const filterOptions: BaseSelectOptionType[] = [
       { value: 'all', label: 'All' },
@@ -102,15 +81,15 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const handleApprove = async (shopId: string, data: ShopType) => {
         if(!checkApproveValid(data) || data.isApproved) return;
 
-        setIsLoadingAction(true);
-        try {
-            await approveShop(shopId);
-            // await fetchShop();
-        } catch (error) {
-            console.error('set isApproved error', error);
-        } finally {
-            setIsLoadingAction(false);
-        }
+        approveShopMutation.mutate(shopId, {
+            onSuccess: () => {
+                toast.success('Shop approved successfully!');
+            },
+            onError: (err) => {
+                console.log('error', err);
+                toast.error("Failed to approve shop. Please try again.");
+            },
+        });
     };
 
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
@@ -144,40 +123,38 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if(!editData) return;
-        setIsLoadingAction(true);
-        try {
-            const {createdAt: _createdAt, ...editItem} = editData as ShopType;
-            await editShopToFB(editItem);
-            setEditMode('');
-            setShowEditModal(false);
-            setEditData(null);
-            toast.success('Shop edited successfully!');
-            // await fetchShop();
-        } catch (error) {
-            console.log('edit error', error);
-            toast.error("Failed to edit shop. Please try again.");
-        } finally {
-            setIsLoadingAction(false);
-        }
+
+        const {createdAt: _createdAt, ...editItem} = editData as ShopType;
+        editShopMutation.mutate(editItem, {
+            onSuccess: () => {
+                setEditMode('');
+                setShowEditModal(false);
+                setEditData(null);
+                toast.success('Shop edited successfully!');
+            },
+            onError: (err) => {
+                console.log('error', err);
+                toast.error("Failed to edit shop. Please try again.");
+            },
+        });
     };
 
     const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if(!editData) return;
-        setIsLoadingAction(true);
-        try {
-            await addShopToFB(editData);
-            setEditMode('');
-            setShowEditModal(false);
-            setEditData(null);
-            toast.success('Shop added successfully!');
-            // await fetchShop();
-        } catch (error) {
-            console.log('edit error', error);
-            toast.error("Failed to add shop. Please try again.");
-        } finally {
-            setIsLoadingAction(false);
-        }
+
+        addShopMutation.mutate(editData, {
+            onSuccess: () => {
+                setEditMode('');
+                setShowEditModal(false);
+                setEditData(null);
+                toast.success('Shop added successfully!');
+            },
+            onError: (err) => {
+                console.log('error', err);
+                toast.error("Failed to add shop. Please try again.");
+            },
+        });
     };
 
     const handleCancel = () => {
@@ -199,17 +176,15 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
         setShowDeleteConfirm(false);
         if(!deleteShopId) return;
 
-        setIsLoadingAction(true);
-        try {
-            await deleteShopInFB(deleteShopId);
-            toast.success('Shop deleted successfully!');
-            // await fetchShop();
-        } catch (error) {
-            console.log('delete error', error);
-            toast.error("Failed to delete shop. Please try again.");
-        } finally {
-            setIsLoadingAction(false);
-        }
+        deleteShopMutation.mutate(deleteShopId, {
+            onSuccess: () => {
+                toast.success('Shop deleted successfully!');
+            },
+            onError: (err) => {
+                console.log('error', err);
+                toast.error("Failed to delete shop. Please try again.");
+            },
+        });
     };
 
     return (
@@ -264,9 +239,9 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
                 </button>
             </div>}
 
-            {isLoadingAction && <LoadingOverlay />}
+            {isLoading && <LoadingOverlay />}
 
-            {!isClient ? <LoadingSection /> : allShops.length ? (
+            {isLoadingShops ? <LoadingSection /> : allShops.length ? (
                 <ShopTable
                     shops={filtershops}
                     visableLabelKeys={selectedVisableLabels.map(n => n.value)}

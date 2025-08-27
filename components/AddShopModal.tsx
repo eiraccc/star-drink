@@ -1,8 +1,7 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Modal from "./Modal";
 import { ShopSubmittedType } from "../types/shop";
-import { addShopByName } from "../services/shopClient";
 import LoadingOverlay from "./LoadingOverlay";
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -17,26 +16,9 @@ interface propsType {
 type FormType = Omit<ShopSubmittedType, 'submittedBy'>;
 
 const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const addShopMutation = useAddShop();
 
     const handleAddShop = async(submittedData: FormType) => {
-        // setIsLoading(true);
-        // try {
-        //     const newId = await addShopByName({
-        //         ...submittedData,
-        //         submittedBy: 'test_user',
-        //         submittedByRole: 'user'
-        //     });
-        //     onAdd(newId, submittedData.submittedName);
-        //     toast.success('Shop added successfully! Please wait for admin approval.');
-        // } catch (error) {
-        //     console.log('add shop error', error);
-        //     toast.error("Failed to add shop. Please try again.");
-        // } finally {
-        //     setIsLoading(false);
-        // }
-
         addShopMutation.mutate({
             ...submittedData,
             submittedBy: 'test_user',
@@ -65,7 +47,7 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
     useEffect(() => reset(), [isOpen, reset]);
 
     return (<>
-        {isLoading && <LoadingOverlay />}
+        {addShopMutation.isPending && <LoadingOverlay />}
         <Modal
             isOpen={isOpen}
             title='Add Shop'

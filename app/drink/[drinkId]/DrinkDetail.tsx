@@ -44,6 +44,9 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
       } else {
         setShopStatus('removed');
       }
+    } else if(drinkData?.shopName) {
+      // dont have shopId but have origin shopName (keep shopName)
+      setShopStatus('removed');
     }
   }, [drinkData]);
 

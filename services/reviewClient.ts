@@ -15,7 +15,7 @@ export const useReviews = ({
     queryFn: async () => {
       let query = supabase
         .from('reviews')
-        .select(`*, drinks!inner(drink_name), shops!inner(name_en), users!inner(user_name)`)
+        .select(`*, drinks!inner(drink_name), shops(name_en), users!inner(user_name)`)
         .order('created_at', { ascending: false });
 
       if (shopId) query = query.eq('shop_id', shopId);
@@ -27,9 +27,9 @@ export const useReviews = ({
         camelcaseKeys(
           {
             ...r,
-            drinkName: r.drinks.drink_name,
-            shopName: r.shops.name_en,
-            userName: r.users.user_name
+            drinkName: r.drinks?.drink_name ?? '',
+            shopName: r.shops?.name_en ?? r.shop_name ?? '',
+            userName: r.users?.user_name ?? ''
           },
           { deep: true }
         )
@@ -38,6 +38,7 @@ export const useReviews = ({
       formatted.forEach(r => {
         delete r.drinks;
         delete r.shops;
+        delete r.users;
       });
 
       return formatted;

@@ -1,13 +1,19 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { RiDrinks2Line } from "react-icons/ri";
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaUserCircle, FaUser } from 'react-icons/fa';
 import { FiSun, FiMoon } from "react-icons/fi";
 import { MdStorefront } from "react-icons/md";
+import { supabase } from '../lib/supabase';
+import { useRouter } from 'next/navigation';
+import { signOut } from '../lib/auth';
+import { toast } from 'react-toastify';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const Header = () => {
+    const router = useRouter();
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
     const pathname = usePathname();
 
@@ -23,12 +29,100 @@ const Header = () => {
     const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
     const pageTitle = useMemo(() => {
-        const paths = pathname.split('/').filter(Boolean);
-        return paths.length > 0 ? capitalize(paths[0]) : 'Drink';
-      }, [pathname]);
+      const paths = pathname.split('/').filter(Boolean);
+      return paths.length > 0 ? capitalize(paths[0]) : 'Drink';
+    }, [pathname]);
+
+    type UserType = {
+        user_id: string
+        email: string,
+        name: string
+    }
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+    
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setIsUserMenuOpen(false);
+        }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const [user, setUser] = useState<UserType | null>(null);
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: authData } = await supabase.auth.getUser();
+            const userId = authData.user?.id;
+            const email = authData.user?.email;
+
+            if (!userId || !email) return;
+
+            // 從 profiles 拿 name
+            const { data: profileData, error } = await supabase
+            .from('profiles')
+            .select('name')
+            .eq('user_id', userId)
+            .single();
+            console.log('profileData',profileData)
+
+            if (error) {
+                console.error(error);
+                setUser({ user_id: userId, email, name: '' }); // fallback
+            } else {
+                setUser({ user_id: userId, email, name: profileData.name });
+            }
+        };
+
+        fetchUser();
+
+        // 監聽登入狀態變化
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session?.user) {
+            const userId = session.user.id;
+            const email = session.user.email ?? '';
+
+            supabase
+                .from('profiles')
+                .select('name')
+                .eq('user_id', userId)
+                .single()
+                .then(({ data, error }) => {
+                setUser({ user_id: userId, email, name: data?.name ?? '' });
+                });
+            } else {
+            setUser(null);
+            }
+        });
+
+        return () => listener.subscription.unsubscribe();
+    }, []);
+
+    const handleLogout = async () => {
+        setIsLoading(true);
+        try {
+            const result = await signOut();
+            toast.success('Signed out!');
+            setIsUserMenuOpen(false);
+        } catch (err: any) {
+            console.log('err', err.message);
+            toast.error("Sign out error! Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <header className='relative flex items-center justify-between p-4 border-b-2 border-primary'>
+            {isLoading && <LoadingOverlay />}
+
             <div className='flex'>
                 <Link href="/">
                     <div className='text-primary hover:text-secondary mr-2'>
@@ -59,10 +153,51 @@ const Header = () => {
                 <button
                     onClick={ collapseMode }
                     aria-label="切換模式"
-                    className="flex items-center gap-2 bg-primary text-contrast px-2 py-2 rounded-full hover:opacity-80 transition"
+                    className="flex items-center gap-2 bg-primary text-contrast px-2 py-2 mr-2 rounded-full hover:opacity-80 transition"
                 >
                     { isDarkMode ? <FiMoon size={23} /> : <FiSun size={23} /> }
                 </button>
+                {/* <Link href="/login">
+                    <FaUserCircle size={40} className='text-secondary' />
+                </Link> */}
+                <div className='relative'>
+                    {user ? (
+                        <button
+                            className='flex items-center'
+                            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                        >
+                            <FaUserCircle size={40} className='text-secondary' />
+                        </button>
+                    ) : (
+                        <button
+                            className="px-4 py-2 border-2 rounded-full text-sm text-secondary border-secondary hover:border-primary hover:text-primary"
+                            onClick={() => router.push('/login')}
+                        >
+                            Log in
+                        </button>
+                    )}
+                    {isUserMenuOpen && (
+                        <div
+                            ref={menuRef}
+                            className="absolute right-0 mt-2 w-[160px] bg-white border rounded shadow-lg p-2"
+                        >
+                            <div
+                                className="px-2 py-1 mb-2 w-full rounded flex items-center border-b border-primary text-primary"
+                            >
+                                <FaUser className='mr-2' />
+                                { user?.name || '' }
+                            </div>
+                            <button
+                                className="block px-2 py-1 w-full hover:bg-surface rounded"
+                                onClick={handleLogout}
+                            >
+                                Log out
+                            </button>
+                        </div>
+                    )}
+                </div>
+                
+                
             </div>
             {pathname !== '/drink/add' && (
                 <Link

@@ -131,7 +131,7 @@ const Header = () => {
                                 className="px-2 py-1 mb-2 w-full rounded flex items-center border-b border-primary text-primary"
                             >
                                 <FaUser className='mr-2' />
-                                { user?.name || '' }
+                                { user?.user_name || '' }
                             </div>
                             <button
                                 className="block px-2 py-1 w-full hover:bg-surface rounded"

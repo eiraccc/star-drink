@@ -26,5 +26,5 @@ export interface DrinkReviewType {
     updatedAt: string,
 }
 
-export type DrinkReviewFormType = Omit<DrinkReviewType, 'reviewId' | 'userId' | 'userName' | 'createdAt' | 'updatedAt'>
+export type DrinkReviewFormType = Omit<DrinkReviewType, 'reviewId' | 'userName' | 'createdAt' | 'updatedAt'>
 export type DrinkReviewEditType = Omit<DrinkReviewType, 'createdAt' | 'updatedAt'>

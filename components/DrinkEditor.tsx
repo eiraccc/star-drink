@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import { useForm, Controller } from "react-hook-form";
 import { useReviews, useAddReview, useEditReview } from '../services/reviewClient';
 import { useShops } from '../services/shopClient';
+import { useAuth } from '../context/AuthContext';
 
 const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   const router = useRouter();
@@ -25,6 +26,15 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user) {
+      toast.warning('Please log in first');
+      router.push('/login');
+    }
+  }, [user]);
 
   const { data: reviews, isFetching: isLoadingReview } = useReviews({});
   const { data: shops } = useShops({ onlyApproved: true });
@@ -169,7 +179,6 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
     setShowAddShoptModal(false);
   };
 
-
   const concatSubmittedData = (data: DrinkForm): DrinkReviewFormType => {
     let { shopInfo, ...newData } = data;
     const submittedData: DrinkReviewFormType = {
@@ -177,6 +186,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
       toppings: toppingSelected.map(n => n.value),
       shopId: shopInfo?.value ?? '',
       shopName: shopInfo?.label ?? '',
+      userId: user?.user_id ?? ''
     };
   
     return submittedData;

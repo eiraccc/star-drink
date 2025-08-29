@@ -15,7 +15,7 @@ export const useReviews = ({
     queryFn: async () => {
       let query = supabase
         .from('reviews')
-        .select(`*, drinks!inner(drink_name), shops(name_en), users!inner(user_name)`)
+        .select(`*, drinks!inner(drink_name), shops(name_en), profiles!inner(user_name)`)
         .order('created_at', { ascending: false });
 
       if (shopId) query = query.eq('shop_id', shopId);
@@ -29,7 +29,7 @@ export const useReviews = ({
             ...r,
             drinkName: r.drinks?.drink_name ?? '',
             shopName: r.shops?.name_en ?? r.shop_name ?? '',
-            userName: r.users?.user_name ?? ''
+            userName: r.profiles?.user_name ?? ''
           },
           { deep: true }
         )
@@ -38,7 +38,7 @@ export const useReviews = ({
       formatted.forEach(r => {
         delete r.drinks;
         delete r.shops;
-        delete r.users;
+        delete r.profiles;
       });
 
       return formatted;
@@ -52,8 +52,7 @@ export const useAddReview = () => {
 
   return useMutation<DrinkReviewType, Error, DrinkReviewFormType>({
     mutationFn: async (data: DrinkReviewFormType) => {
-      const userId = 'c8006b65-e892-455d-829b-ed4cf4035374';
-      const { shopId, drinkName, rating, sugar, ice, comment, toppings } = data;
+      const { shopId, drinkName, userId, rating, sugar, ice, comment, toppings } = data;
 
       // 1. get matched drink_id
       let { data: drink, error: drinkError } = await supabase
@@ -99,7 +98,7 @@ export const useAddReview = () => {
           *,
           drinks!inner(drink_name),
           shops!inner(name_en),
-          users!inner(user_name)
+          profiles!inner(user_name)
         `
         )
         .single();
@@ -112,7 +111,7 @@ export const useAddReview = () => {
           ...review,
           drinkName: review.drinks?.drink_name ?? '',
           shopName: review.shops?.name_en ?? '',
-          userName: review.users?.user_name ?? ''
+          userName: review.profiles?.user_name ?? ''
             
         },
         { deep: true }
@@ -136,8 +135,7 @@ export const useEditReview = () => {
 
   return useMutation<DrinkReviewType, Error, { reviewId: string; data: DrinkReviewFormType }>({
     mutationFn: async ({ reviewId, data }) => {
-      const userId = 'c8006b65-e892-455d-829b-ed4cf4035374';
-      const { shopId, drinkName, rating, sugar, ice, comment, toppings } = data;
+      const { shopId, drinkName, userId, rating, sugar, ice, comment, toppings } = data;
 
       // 1. get matched drink_id
       let { data: drink, error: drinkError } = await supabase
@@ -181,7 +179,7 @@ export const useEditReview = () => {
           *,
           drinks!inner(drink_name),
           shops!inner(name_en),
-          users!inner(user_name)
+          profiles!inner(user_name)
         `
         )
         .single();
@@ -194,7 +192,7 @@ export const useEditReview = () => {
           ...review,
           drinkName: review.drinks?.drink_name ?? '',
           shopName: review.shops?.name_en ?? '',
-          userName: review.users?.user_name ?? ''
+          userName: review.profiles?.user_name ?? ''
         },
         { deep: true }
       );

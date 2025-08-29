@@ -5,7 +5,7 @@ export async function fetchReviewsServer() {
   try {
     const { data, error } = await supabaseAdmin
       .from('reviews')
-      .select(`*, drinks!inner(drink_name), shops(name_en), users!inner(user_name)`)
+      .select(`*, drinks!inner(drink_name), shops(name_en), profiles!inner(user_name)`)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -16,7 +16,7 @@ export async function fetchReviewsServer() {
           ...r,
           drinkName: r.drinks?.drink_name ?? '',
           shopName: r.shops?.name_en ?? r.shop_name ?? '',
-          userName: r.users?.user_name ?? ''
+          userName: r.profiles?.user_name ?? ''
         },
         { deep: true }
       )
@@ -25,7 +25,7 @@ export async function fetchReviewsServer() {
     formatted.forEach(r => {
       delete r.drinks;
       delete r.shops;
-      delete r.users;
+      delete r.profiles;
     });
 
     return formatted;

@@ -14,7 +14,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
+    const [userName, setUserName] = useState('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleLogin = async () => {
@@ -47,7 +47,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             const { error: profileError } = await supabase
             .from('profiles')
             .upsert(
-                { user_id: user.id, name },
+                { user_id: user.id, user_name: userName },
                 { onConflict: 'user_id' } // 避免重複 key 錯誤
             );
 
@@ -87,8 +87,8 @@ const AuthForm = ({ mode }: AuthFormProps) => {
                         type="text"
                         placeholder="Name"
                         className="w-full p-3 px-4 mb-4 border rounded-full placeholder-surface border-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
                         />
                     )}
 

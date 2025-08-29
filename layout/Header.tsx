@@ -6,11 +6,11 @@ import { RiDrinks2Line } from "react-icons/ri";
 import { FaPlus, FaUserCircle, FaUser } from 'react-icons/fa';
 import { FiSun, FiMoon } from "react-icons/fi";
 import { MdStorefront } from "react-icons/md";
-import { supabase } from '../lib/supabase';
 import { useRouter } from 'next/navigation';
 import { signOut } from '../lib/auth';
 import { toast } from 'react-toastify';
 import LoadingOverlay from '../components/LoadingOverlay';
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
     const router = useRouter();
@@ -33,12 +33,6 @@ const Header = () => {
       return paths.length > 0 ? capitalize(paths[0]) : 'Drink';
     }, [pathname]);
 
-    type UserType = {
-        user_id: string
-        email: string,
-        name: string
-    }
-
     const [isLoading, setIsLoading] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -56,59 +50,12 @@ const Header = () => {
         };
     }, []);
 
-    const [user, setUser] = useState<UserType | null>(null);
-    useEffect(() => {
-        const fetchUser = async () => {
-            const { data: authData } = await supabase.auth.getUser();
-            const userId = authData.user?.id;
-            const email = authData.user?.email;
-
-            if (!userId || !email) return;
-
-            // 從 profiles 拿 name
-            const { data: profileData, error } = await supabase
-            .from('profiles')
-            .select('name')
-            .eq('user_id', userId)
-            .single();
-            console.log('profileData',profileData)
-
-            if (error) {
-                console.error(error);
-                setUser({ user_id: userId, email, name: '' }); // fallback
-            } else {
-                setUser({ user_id: userId, email, name: profileData.name });
-            }
-        };
-
-        fetchUser();
-
-        // 監聽登入狀態變化
-        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-            if (session?.user) {
-            const userId = session.user.id;
-            const email = session.user.email ?? '';
-
-            supabase
-                .from('profiles')
-                .select('name')
-                .eq('user_id', userId)
-                .single()
-                .then(({ data, error }) => {
-                setUser({ user_id: userId, email, name: data?.name ?? '' });
-                });
-            } else {
-            setUser(null);
-            }
-        });
-
-        return () => listener.subscription.unsubscribe();
-    }, []);
+    const { user } = useAuth();
 
     const handleLogout = async () => {
         setIsLoading(true);
         try {
-            const result = await signOut();
+            await signOut();
             toast.success('Signed out!');
             setIsUserMenuOpen(false);
         } catch (err: any) {
@@ -150,6 +97,7 @@ const Header = () => {
                         </button>
                     </Link>
                 )}
+
                 <button
                     onClick={ collapseMode }
                     aria-label="切換模式"
@@ -157,9 +105,7 @@ const Header = () => {
                 >
                     { isDarkMode ? <FiMoon size={23} /> : <FiSun size={23} /> }
                 </button>
-                {/* <Link href="/login">
-                    <FaUserCircle size={40} className='text-secondary' />
-                </Link> */}
+
                 <div className='relative'>
                     {user ? (
                         <button
@@ -196,9 +142,8 @@ const Header = () => {
                         </div>
                     )}
                 </div>
-                
-                
             </div>
+
             {pathname !== '/drink/add' && (
                 <Link
                     href="/drink/add"

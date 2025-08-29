@@ -8,6 +8,7 @@ import Footer from '../layout/Footer';
 import ToastProvider from '../components/ToastProvider';
 import AnalyticsInit from '../components/AnalyticsInit';
 import Providers from './providers';
+import { AuthProvider } from '../context/AuthContext';
 
 type LocaleType = 'en-GB' | 'zh-TW';
 const supportedLocales = ['en-GB', 'zh-TW'] as const;
@@ -82,11 +83,13 @@ export default async function RootLayout({children}: {children: ReactNode}) {
           <AnalyticsInit />
           
           <Providers>
-            <div className='flex flex-col'>
-                <Header />
-                <main>{children}</main>
-                <Footer/>
-            </div>
+            <AuthProvider>
+              <div className='flex flex-col'>
+                  <Header />
+                  <main>{children}</main>
+                  <Footer/>
+              </div>
+            </AuthProvider>
           </Providers>
         </body>
         </html>

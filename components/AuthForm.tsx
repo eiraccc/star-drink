@@ -74,58 +74,74 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
                 {isLoading && <LoadingOverlay />}
 
-                {mode === 'signup' && <input
-                    type="name"
-                    placeholder="Name"
-                    className="w-full p-3 px-4 mb-4 border rounded-full placeholder-surface border-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />}
-
-                <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-full p-3 px-4 mb-4 border rounded-full placeholder-surface border-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full p-3 px-4 mb-4 border rounded-full placeholder-surface border-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-
-                <div className="flex flex-col gap-3 mb-2">
-                    {mode === 'login' ? (
-                        <button
-                            onClick={handleLogin}
-                            disabled={isLoading}
-                            className={`w-full px-4 py-2 rounded-md text-sm text-contrast bg-primary hover:opacity-80 disabled:opacity-50`}
-                        >
-                            Login
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handleSignUp}
-                            disabled={isLoading}
-                            className={`w-full px-4 py-2 rounded-md text-sm text-contrast bg-highlight hover:opacity-80 disabled:opacity-50`}
-                        >
-                            Sign Up
-                        </button>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        if (mode === 'login') handleLogin();
+                        else handleSignUp();
+                    }}
+                    className="flex flex-col"
+                >
+                    {mode === 'signup' && (
+                        <input
+                        type="text"
+                        placeholder="Name"
+                        className="w-full p-3 px-4 mb-4 border rounded-full placeholder-surface border-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        />
                     )}
-                </div>
+
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        className="w-full p-3 px-4 mb-4 border rounded-full placeholder-surface border-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        className="w-full p-3 px-4 mb-4 border rounded-full placeholder-surface border-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <div className="flex flex-col gap-3 mb-2">
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className={`w-full px-4 py-2 rounded-md text-sm text-contrast ${
+                                mode === 'login' ? 'bg-primary' : 'bg-highlight'
+                            } hover:opacity-80 disabled:opacity-50`}
+                        >
+                            {mode === 'login' ? 'Login' : 'Sign Up'}
+                        </button>
+                    </div>
+                </form>
 
                 {/* 底線註冊按鈕 */}
-                {mode === 'login' && <div className="text-center mt-2">
-                    <Link href="/signup">
+                {mode === 'login' && (
+                    <div className="text-center mt-2">
+                        <Link href="/signup">
                         <button className="text-primary underline text-sm hover:opacity-80">
-                        Don't have an account? Sign Up
+                            Don't have an account? Sign Up
                         </button>
+                        </Link>
+                    </div>
+                )}
+
+                {/* 註冊頁底線按鈕 */}
+                {mode === 'signup' && (
+                <div className="text-center mt-2">
+                    <Link href="/login">
+                    <button className="text-primary underline text-sm hover:opacity-80">
+                        Already have an account? Login
+                    </button>
                     </Link>
-                </div>}
+                </div>
+                )}
             </div>
         </section>
     )

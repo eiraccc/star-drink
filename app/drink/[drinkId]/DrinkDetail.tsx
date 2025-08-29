@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import StarRating from '../../../components/StarRating';
@@ -14,12 +14,14 @@ import { toast } from 'react-toastify';
 import ShopStatusTag from '../../../components/ShopStatusTag';
 import { useReviews, useDeleteReview } from '../../../services/reviewClient';
 import { useShops } from '../../../services/shopClient';
+import { useAuth } from '../../../context/AuthContext';
 import { formatTimestampToUserLocalString } from '../../../utils/timeFormat';
 
 type ShopStatusType = 'approved' | 'pending' | 'removed' | '';
 
 const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
   const router = useRouter();
+  const { user } = useAuth();
   const [drinkData, setDrinkData] = useState<DrinkReviewType | null>(null);
   const [shopStatus, setShopStatus] = useState<ShopStatusType>('');
   const [shopData, setShopData] = useState<ShopType | null>(null);
@@ -67,6 +69,11 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
     });
   };
 
+  const isOwnReview = useMemo(() => {
+    if(!user || !drinkData) return false;
+    return drinkData.userId === user.user_id
+  }, [user, drinkData]);
+
   return (
     <section className='flex justify-center p-6 pb-10'>
       <div className='w-full md:max-w-[500px]'>
@@ -113,20 +120,22 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
                 Post by <span className='text-primary'>{drinkData.userName}</span> on {formatTimestampToUserLocalString(drinkData.createdAt)}
               </p>
 
-              <div className="flex justify-end mt-4 space-x-2">
-                <button
-                  onClick={() => router.push(`/drink/${drinkId}/edit`)}
-                  className="bg-primary text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="bg-danger text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
-                >
-                  Delete
-                </button>
-              </div>
+              {isOwnReview && (
+                <div className="flex justify-end mt-4 space-x-2">
+                  <button
+                    onClick={() => router.push(`/drink/${drinkId}/edit`)}
+                    className="bg-primary text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="bg-danger text-background px-5 py-2 rounded-md text-sm hover:opacity-90"
+                  >
+                    Delete
+                  </button>
+                </div>
+            )}
               
             </div>
           ) : (

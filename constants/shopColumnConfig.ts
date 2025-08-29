@@ -11,7 +11,7 @@ export const shopColumns: shopColumnType[] = [
   { key: 'alias', label: 'Alias' },
   { key: 'submittedName', label: 'Submitted Name' },
   { key: 'submittedNote', label: 'Submitted Note' },
-  { key: 'submittedBy', label: 'Submitted By' },
+  { key: 'submittedByEmail', label: 'Submitted By' },
   { key: 'description', label: 'Description' },
   { key: 'createdAt', label: 'Created At' },
   { key: 'updatedAt', label: 'Updated At' },
@@ -21,7 +21,7 @@ export const shopColumns: shopColumnType[] = [
 export type ApprovalStatusType = 'all' | 'approved' | 'pending';
 
 export const typeToInitColumnsMap:any = {
-  pending: ['nameEn', 'nameZh', 'slug', 'submittedName', 'submittedBy', 'submittedNote', 'createdAt', 'isApproved'],
+  pending: ['nameEn', 'nameZh', 'slug', 'submittedName', 'submittedByEmail', 'submittedNote', 'createdAt', 'isApproved'],
   approved: ['nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'isApproved'],
   all: ['id', 'nameEn', 'nameZh', 'slug', 'alias', 'createdAt', 'updatedAt',  'isApproved'],
 };

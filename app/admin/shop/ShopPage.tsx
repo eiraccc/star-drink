@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState, useMemo } from "react"
-import { ShopType, ShopFormType } from "../../../types/shop";
+import { ShopType, ShopFormType, ShopEditType } from "../../../types/shop";
 import { BaseSelectOptionType } from "../../../types/selectOptionType";
 import SingleSelect from "../../../components/SingleSelect";
 import MultiSelect from "../../../components/MultiSelect";
@@ -20,12 +20,15 @@ import {
     useAddShop,
     useDeleteShop
 } from "../../../services/shopClient";
+import { useAuth } from "../../../context/AuthContext";
 
 const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const [isClient, setIsClient] = useState(false);
     useEffect(() => {
         setIsClient(true);
     }, []);
+
+    const { user } = useAuth();
     
     const { data: allShops, isFetching: isLoadingShops } = useShops({
         onlyApproved: false,
@@ -98,7 +101,8 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const openEdit = (data: ShopType) => {
         setEditMode('edit');
         setShowEditModal(true);
-        setEditData(data);
+        const {createdAt, updatedAt, ...currentData} = data;
+        setEditData(currentData);
     };
 
     const initAddData: ShopFormType = {
@@ -109,7 +113,8 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
         description: '',
         submittedName: '',
         submittedNote: '',
-        submittedBy: 'admin_test',
+        submittedBy: '',
+        submittedByEmail: '',
         submittedByRole: 'admin',
         isApproved: true
     }
@@ -117,15 +122,19 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     const openAdd = () => {
         setEditMode('add');
         setShowEditModal(true);
-        setEditData(initAddData);
+        const initDataWithUser = {
+            ...initAddData,
+            submittedBy: user?.user_id || '',
+            submittedByEmail: user?.email || ''
+        };
+        setEditData(initDataWithUser);
     }
 
     const handleEdit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if(!editData) return;
 
-        const {createdAt: _createdAt, ...editItem} = editData as ShopType;
-        editShopMutation.mutate(editItem, {
+        editShopMutation.mutate(editData as ShopEditType, {
             onSuccess: () => {
                 setEditMode('');
                 setShowEditModal(false);

@@ -6,6 +6,7 @@ import LoadingOverlay from "./LoadingOverlay";
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { useAddShop } from "../services/shopClient";
+import { useAuth } from "../context/AuthContext";
 
 interface propsType {
     isOpen: boolean;
@@ -16,12 +17,13 @@ interface propsType {
 type FormType = Omit<ShopSubmittedType, 'submittedBy'>;
 
 const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
+    const { user } = useAuth();
     const addShopMutation = useAddShop();
 
     const handleAddShop = async(submittedData: FormType) => {
         addShopMutation.mutate({
             ...submittedData,
-            submittedBy: 'test_user',
+            submittedBy: user?.user_id || '',
             submittedByRole: 'user'
         }, {
             onSuccess: (newId) => {

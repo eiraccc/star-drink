@@ -23,6 +23,7 @@ export interface ShopType extends ShopSubmittedType, ShopNameSlugType {
     isApproved: boolean;
     createdAt: string;
     updatedAt: string;
+    submittedByEmail: string,
     submittedByRole: 'user' | 'admin'
 }
 
@@ -33,6 +34,7 @@ export interface ShopTypeWithReview extends ShopType {
 }
 
 export type ShopFormType = Omit<ShopType, 'shopId' | 'createdAt' | 'updatedAt'>
+export type ShopEditType = Omit<ShopType, 'createdAt' | 'updatedAt'>
 
 export interface AliasLabelType {
   value: string;

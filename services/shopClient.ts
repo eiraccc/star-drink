@@ -1,7 +1,7 @@
 import { supabase } from "../lib/supabase";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import camelcaseKeys from "camelcase-keys";
-import { ShopType, ShopSubmittedType, ShopFormType, ShopAddSubmittedType } from "../types/shop";
+import { ShopType, ShopEditType, ShopFormType, ShopAddSubmittedType } from "../types/shop";
 import { generateSlug } from "../utils/autoSlug";
 import _ from 'lodash';
 
@@ -16,7 +16,7 @@ export const useShops = ({ onlyApproved = true, initShopData = [] }: UseShopsOpt
     queryFn: async () => {
       let query = supabase
         .from('shops')
-        .select('*')
+        .select(`*, profiles!inner(email)`)
         .order('created_at', { ascending: false });
 
       if (onlyApproved) {
@@ -26,7 +26,21 @@ export const useShops = ({ onlyApproved = true, initShopData = [] }: UseShopsOpt
       const { data, error } = await query;
       if (error) throw error;
 
-      return data.map((shop: any) => camelcaseKeys(shop, { deep: true }));
+      const formatted = data.map((shop: any) =>
+        camelcaseKeys(
+          {
+            ...shop,
+            submittedByEmail: shop?.profiles?.email ?? ''
+          },
+          { deep: true }
+        )
+      );
+
+      formatted.forEach(shop => {
+        delete shop.profiles;
+      });
+
+      return formatted;
     },
     initialData: initShopData
   });
@@ -105,11 +119,10 @@ export const useApproveShop = () => {
 export const useEditShop = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ShopType, Error, Omit<ShopType, 'createdAt'>>({
+  return useMutation<ShopType, Error, ShopEditType>({
     mutationFn: async (data) => {
-      const { shopId, ...updateData } = data;
+      const { shopId, submittedByEmail, ...updateData } = data;
       const newData = _.mapKeys(updateData, (value, key) => _.snakeCase(key));
-      console.log('test', updateData, newData)
 
       const { data: shop, error } = await supabase
         .from('shops')

@@ -78,7 +78,7 @@ const ShopEditModal = ({
                 </div>
                 <div className="flex mb-3">
                     <p className="w-[140px]">SubmittedBy:</p>
-                    <p className="flex-1 text-primary">{editData.submittedBy || '-'}</p>
+                    <p className="flex-1 text-primary">{editData.submittedByEmail || '-'}</p>
                 </div>
                 <div className="flex mb-3">
                     <p className="w-[140px]">SubmittedByRole:</p>

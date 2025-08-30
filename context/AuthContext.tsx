@@ -10,8 +10,9 @@ import { supabase } from '../lib/supabase';
 
 type UserType = {
   user_id: string;
-  email: string;
   user_name: string;
+  email: string;
+  role: string
 } | null;
 
 type AuthContextType = {
@@ -33,11 +34,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('userName')
+        .select('*')
         .eq('user_id', userId)
         .single();
 
-      setUser({ user_id: userId, email, user_name: profile?.userName ?? '' });
+      setUser({
+        user_id: userId,
+        user_name: profile?.userName ?? '',
+        email,
+        role: profile?.role ?? '',
+      });
     };
 
     fetchUser();
@@ -50,11 +56,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
           supabase
             .from('profiles')
-            .select('userName')
+            .select('*')
             .eq('user_id', userId)
             .single()
             .then(({ data }) =>
-              setUser({ user_id: userId, email, user_name: data?.userName ?? '' })
+              setUser({
+                user_id: userId,
+                user_name: data?.userName ?? '',
+                email,
+                role: data?.role ?? '',
+              })
             );
         } else {
           setUser(null);

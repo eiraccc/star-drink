@@ -197,7 +197,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
     };
 
     return (
-        <section>
+        <div>
            <ShopEditModal
                 editMode={editMode}
                 isOpen={showEditModal}
@@ -265,7 +265,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
                     errorMsg="No shop yet!"
                  />
             )}
-        </section>
+        </div>
     )
 }
 

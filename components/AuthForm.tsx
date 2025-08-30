@@ -40,26 +40,27 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     const handleSignUp = async () => {
         setIsLoading(true);
         try {
-            const user = await signUpWithEmail(email, password); 
-            if (!user) throw new Error('User creation failed');
+            const { data: { user }, error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
 
-            // 同步新增到 profiles 表
+            // 直接新增到 profiles
             const { error: profileError } = await supabase
             .from('profiles')
             .upsert(
-                { user_id: user.id, user_name: userName },
-                { onConflict: 'user_id' } // 避免重複 key 錯誤
+                {
+                    user_id: user?.id || '',
+                    email: user?.email || '',
+                    user_name: userName,
+                    role: 'user'
+                },
+                { onConflict: 'user_id' }
             );
-
-            if (profileError) {
-                alert(profileError.message);
-                return;
-            }
+            if (profileError) throw profileError;
 
             toast.success('Signed up!');
         } catch (err: any) {
-            console.log('err', err.message);
-            toast.error("Sign up error! Please try again.");
+            console.log(err);
+            toast.error('Sign up error! Please try again.');
         } finally {
             setIsLoading(false);
         }

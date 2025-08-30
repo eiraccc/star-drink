@@ -9,8 +9,8 @@ import {
 import { supabase } from '../lib/supabase';
 
 type UserType = {
-  user_id: string;
-  user_name: string;
+  userId: string;
+  userName: string;
   email: string;
   role: string
 } | null;
@@ -38,9 +38,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .eq('user_id', userId)
         .single();
 
+
       setUser({
-        user_id: userId,
-        user_name: profile?.userName ?? '',
+        userId: userId,
+        userName: profile?.user_name ?? '',
         email,
         role: profile?.role ?? '',
       });
@@ -61,8 +62,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             .single()
             .then(({ data }) =>
               setUser({
-                user_id: userId,
-                user_name: data?.userName ?? '',
+                userId: userId,
+                userName: data?.user_name ?? '',
                 email,
                 role: data?.role ?? '',
               })

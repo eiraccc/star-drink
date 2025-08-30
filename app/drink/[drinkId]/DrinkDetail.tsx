@@ -71,7 +71,7 @@ const DrinkDetail = ({ drinkId } : { drinkId: string }) => {
 
   const isOwnReview = useMemo(() => {
     if(!user || !drinkData) return false;
-    return drinkData.userId === user.user_id
+    return drinkData.userId === user.userId
   }, [user, drinkData]);
 
   return (

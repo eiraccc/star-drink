@@ -24,6 +24,7 @@ export const useShops = ({ onlyApproved = true, initShopData = [] }: UseShopsOpt
       }
 
       const { data, error } = await query;
+      // console.log('shops', data, error)
       if (error) throw error;
 
       const formatted = data.map((shop: any) =>
@@ -42,7 +43,8 @@ export const useShops = ({ onlyApproved = true, initShopData = [] }: UseShopsOpt
 
       return formatted;
     },
-    initialData: initShopData
+    initialData: initShopData,
+    refetchOnWindowFocus: false, // 切回視窗不自動抓
   });
 };
 

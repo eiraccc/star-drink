@@ -125,7 +125,7 @@ const Header = () => {
                     {isUserMenuOpen && (
                         <div
                             ref={menuRef}
-                            className="absolute right-0 mt-2 w-[160px] bg-white border rounded shadow-lg p-2"
+                            className="absolute right-0 mt-2 w-[160px] bg-white border rounded shadow-lg p-2 z-10"
                         >
                             <div
                                 className="px-2 py-1 mb-2 w-full rounded flex items-center border-b border-primary text-primary"

@@ -7,78 +7,110 @@ import {
   ReactNode,
 } from 'react';
 import { supabase } from '../lib/supabase';
+import { Subscription, User } from '@supabase/supabase-js';
 
 type UserType = {
   userId: string;
   userName: string;
   email: string;
-  role: string
+  role: string;
 } | null;
 
 type AuthContextType = {
   user: UserType;
+  isReady: boolean;
 };
 
-const AuthContext = createContext<AuthContextType>({ user: null });
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  isReady: false,
+});
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      const userId = data.user?.id;
-      const email = data.user?.email;
+    console.log('--Auth Start--')
+    let subscription: Subscription | undefined;
 
-      if (!userId || !email) return;
+    const initAuth = async (): Promise<void> => {
+      try {
+        // 1. 先拿 session
+        const { data: { session } } = await supabase.auth.getSession();
+        // console.log('initial session', session);
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
+        if (session?.user) {
+          await loadProfile(session.user);
+        }
+        setIsReady(true);
 
+        // 2. 再監聽 session 變化
+        const { data } = supabase.auth.onAuthStateChange(async (_event, session) => {
+          // console.log('session changed', session);
+          if (session?.user) {
+            await loadProfile(session.user);
+          } else {
+            setUser(null); // sign out
+          }
+        });
 
-      setUser({
-        userId: userId,
-        userName: profile?.user_name ?? '',
-        email,
-        role: profile?.role ?? '',
-      });
+        subscription = data.subscription;
+      } catch (err) {
+        console.error('auth init error', err);
+      }
     };
 
-    fetchUser();
+    initAuth();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session?.user) {
-          const userId = session.user.id;
-          const email = session.user.email ?? '';
-
-          supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', userId)
-            .single()
-            .then(({ data }) =>
-              setUser({
-                userId: userId,
-                userName: data?.user_name ?? '',
-                email,
-                role: data?.role ?? '',
-              })
-            );
-        } else {
-          setUser(null);
-        }
-      }
-    );
-
-    return () => listener.subscription.unsubscribe();
+    return () => subscription?.unsubscribe();
   }, []);
 
+
+  const loadProfile = async (user: User) => {
+    const { id, email } = user;
+
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Failed to load profile', error);
+        setUser(null);
+        return;
+      }
+
+      if (!profile) {
+        console.warn('Profile not found for user', id);
+        setUser({
+          userId: id,
+          userName: '',
+          email: email ?? '',
+          role: ''
+        });
+        return;
+      }
+
+      setUser({
+        userId: id,
+        userName: profile.user_name,
+        email: email ?? '',
+        role: profile.role
+      });
+    } catch (err) {
+      console.error('loadProfile exception', err);
+      setUser(null);
+    }
+  };
+
+
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, isReady }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

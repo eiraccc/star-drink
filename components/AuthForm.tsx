@@ -5,6 +5,7 @@ import Link from 'next/link';
 import LoadingOverlay from './LoadingOverlay';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'next/navigation';
+import { RiContactsBookLine } from 'react-icons/ri';
 
 type AuthFormProps = {
   mode: 'login' | 'signup';

@@ -21,6 +21,7 @@ export const useReviews = ({
       if (shopId) query = query.eq('shop_id', shopId);
 
       const { data, error } = await query;
+      // console.log('reviews', data, error)
       if (error) throw error;
 
       const formatted = data.map((r: any) =>
@@ -44,6 +45,7 @@ export const useReviews = ({
       return formatted;
     },
     initialData: initReviewData,
+    refetchOnWindowFocus: false, // 切回視窗不自動抓
   });
 };
 
@@ -135,7 +137,7 @@ export const useEditReview = () => {
 
   return useMutation<DrinkReviewType, Error, { reviewId: string; data: DrinkReviewFormType }>({
     mutationFn: async ({ reviewId, data }) => {
-      const { shopId, drinkName, userId, rating, sugar, ice, comment, toppings } = data;
+      const { shopId, drinkName, rating, sugar, ice, comment, toppings } = data;
 
       // 1. get matched drink_id
       let { data: drink, error: drinkError } = await supabase
@@ -165,7 +167,6 @@ export const useEditReview = () => {
         .update({
           drink_id: drink?.drink_id || '',
           shop_id: shopId,
-          user_id: userId,
           rating,
           sugar,
           ice,

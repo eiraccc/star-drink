@@ -1,5 +1,5 @@
 import AdminSidebar from "../../components/admin/AdminSidebar";
-import AdminRoute from "../../components/admin/adminRoute";
+import AdminRoute from "../../components/admin/AdminRoute";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (

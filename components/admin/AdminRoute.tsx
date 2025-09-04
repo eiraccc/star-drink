@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import LoadingOverlay from '../LoadingOverlay';
@@ -8,13 +8,14 @@ import LoadingOverlay from '../LoadingOverlay';
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isReady } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if(!isReady) return;
     
     if (!user) {
       toast.error('Please log in first');
-      router.push('/login');
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
       return;
     }
 

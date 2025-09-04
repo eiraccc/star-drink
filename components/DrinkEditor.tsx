@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import StarRating from "./StarRating"
 import { DrinkReviewFormType, IceLevel, SugarLevel, DrinkRatingType } from "../types/drinkReview"
@@ -28,11 +28,12 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
   }, []);
 
   const { user } = useAuth();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!user) {
       toast.warning('Please log in first');
-      router.push('/login');
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
     }
   }, [user]);
 

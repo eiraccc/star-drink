@@ -23,7 +23,8 @@ const AuthForm = ({ mode }: AuthFormProps) => {
       try {
         const result = await signInWithEmail(email, password);
         toast.success('Logged in!');
-        router.push('/');
+        const params = new URLSearchParams(window.location.search);
+        router.push(params.get('redirect') || '/');
       } catch (err: any) {
         console.log('err', err.message);
         

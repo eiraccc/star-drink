@@ -22,13 +22,10 @@ const ShopCard = ({ data, onClick }: ShopCardProps) => {
         </div>
 
         <p className="text-text text-lg font-bold ">{data.nameEn}</p>
-        <div className="flex items-center">
-           <FaComment className="text-primary mr-1"/>
-           <span>Total Reviews: {data.totalReviews}</span>
-        </div>
-        <div className="flex items-center">
+        <div className="flex items-center font-bold text-yellow-100">
            <FaStar className="text-yellow-100 mr-1"/>
-           <span>Avg. Rating: {data.averageRating}/5</span>
+           <span>{data.averageRating} / 5</span>
+           <span className="ml-1">({data.totalReviews || 0})</span>
         </div>
         {data.reviews.length ? (
            <div className="min-h-[250px]">

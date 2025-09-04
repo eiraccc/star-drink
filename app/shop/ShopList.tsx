@@ -8,6 +8,7 @@ import { RiSearchLine } from "react-icons/ri";
 import { useReviews } from "../../services/reviewClient";
 import { useShops } from "../../services/shopClient";
 import { ShopType } from "../../types/shop";
+import { DrinkReviewType } from "../../types/drinkReview";
 
 const ShopList = ({initShopData}: {initShopData: ShopType[]}) => {
     const router = useRouter();
@@ -22,7 +23,7 @@ const ShopList = ({initShopData}: {initShopData: ShopType[]}) => {
 
     const shops = useMemo(() => {
         console.log('approvedShops',approvedShops)
-        const reviewsByShopId = reviews.reduce((all, review) => {
+        const reviewsByShopId = reviews.reduce<Record<string, DrinkReviewType[]>>((all, review) => {
             if (!all[review.shopId]) all[review.shopId] = [];
             all[review.shopId].push(review);
             return all;
@@ -30,9 +31,10 @@ const ShopList = ({initShopData}: {initShopData: ShopType[]}) => {
         return approvedShops.map(shop => {
             const shopReviews = reviewsByShopId[shop.shopId] || [];
             const totalReviews = shopReviews.length;
-            const averageRating =
-            totalReviews > 0
-                ? shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
+            const averageRating = totalReviews > 0
+                ? Math.round(
+                      (shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews) * 10
+                  ) / 10
                 : 0;
     
             return {

@@ -20,9 +20,11 @@ const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
     if(!data) return null;
     const shopReviews = reviews.filter(n => n.shopId === data.shopId) || [];
     const totalReviews = shopReviews.length;
-      const averageRating = totalReviews > 0
-            ? shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews
-            : 0;
+    const averageRating = totalReviews > 0
+          ? Math.round(
+                (shopReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews) * 10
+            ) / 10
+          : 0;
 
     return {
         ...data,

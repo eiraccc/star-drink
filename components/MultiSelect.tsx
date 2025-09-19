@@ -149,22 +149,34 @@ const MultiSelect = <T extends OptionType>({
     }),
   };
 
-  const SelectComponent = creatable ? CreatableSelect : Select;
-
-  return (
-    <SelectComponent<T, true>
+  return creatable ? (
+    <CreatableSelect<T, true>
       isMulti
       options={options}
       value={selected}
       onChange={(newVal: OnChangeValue<T, true>) => setSelected(newVal ? [...newVal] : [])}
       placeholder={placeholder}
       styles={customStyles}
-      components={{MultiValue: WrappedMultiValue, Option}}
+      components={{ MultiValue: WrappedMultiValue, Option }}
       hideSelectedOptions={false}
       closeMenuOnSelect={false}
       className="w-full text-m"
       isClearable={showDeleteAllBtn}
-      onCreateOption={creatable ? onCreateOption : undefined}
+      onCreateOption={onCreateOption}
+    />
+  ) : (
+    <Select<T, true>
+      isMulti
+      options={options}
+      value={selected}
+      onChange={(newVal: OnChangeValue<T, true>) => setSelected(newVal ? [...newVal] : [])}
+      placeholder={placeholder}
+      styles={customStyles}
+      components={{ MultiValue: WrappedMultiValue, Option }}
+      hideSelectedOptions={false}
+      closeMenuOnSelect={false}
+      className="w-full text-m"
+      isClearable={showDeleteAllBtn}
     />
   )
 }

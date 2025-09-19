@@ -124,7 +124,7 @@ const ShopPage = ({ initAllShops }: { initAllShops: ShopType[] }) => {
         setShowEditModal(true);
         const initDataWithUser = {
             ...initAddData,
-            submittedBy: user?.user_id || '',
+            submittedBy: user?.userId || '',
             submittedByEmail: user?.email || ''
         };
         setEditData(initDataWithUser);

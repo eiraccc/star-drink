@@ -23,7 +23,7 @@ const AddShopModal = ({isOpen, onClose, onAdd }: propsType) => {
     const handleAddShop = async(submittedData: FormType) => {
         addShopMutation.mutate({
             ...submittedData,
-            submittedBy: user?.user_id || '',
+            submittedBy: user?.userId || '',
             submittedByRole: 'user'
         }, {
             onSuccess: (newId) => {

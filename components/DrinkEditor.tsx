@@ -187,7 +187,7 @@ const DrinkEditor = ({ drinkId }: { drinkId?: string }) => {
       toppings: toppingSelected.map(n => n.value),
       shopId: shopInfo?.value ?? '',
       shopName: shopInfo?.label ?? '',
-      userId: user?.user_id ?? ''
+      userId: user?.userId ?? ''
     };
   
     return submittedData;

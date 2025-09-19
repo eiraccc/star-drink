@@ -4,7 +4,7 @@ Welcome to **Star Drink**, your personal and social drink journal.
 
 Forget what you drank or how it tasted? Star Drink helps you record and rate every drink, from sugar and ice levels to toppings. Discover favorites through community reviews, search, and filters.
 
-Built with Next.js, React, Tailwind CSS, and TypeScript for a modern, fast, and SEO-friendly experience, with server-side Firebase support for secure data management.
+Built with Next.js, React, Tailwind CSS, and TypeScript for a modern, fast, and SEO-friendly experience, with server-side Supabase support for secure data management.
 
 ## 📷 Screenshot
 ![Star Drink Screenshot](public/screenshot.png)
@@ -19,7 +19,8 @@ Built with Next.js, React, Tailwind CSS, and TypeScript for a modern, fast, and 
 - 🌟 Rate drinks using a 5-star system
 - 📜 Sort reviews by rating or creation time
 - 🔁 Toggle between light and dark mode
-- 🔄 Real-time data sync with Firebase Firestore
+- 🔄 Real-time data sync with Supabase
+- 🔒 User authentication & login via Supabase (sign up / login / session management)
 - 💬 Show error messages when invalid drink ID is accessed
 - 🌀 Loading overlay during create, read, update, and delete operations
 - ✨ Fully responsive UI
@@ -32,7 +33,7 @@ Built with Next.js, React, Tailwind CSS, and TypeScript for a modern, fast, and 
 - ⚡ Server-side rendering (SSR)
 - 📄 Static site generation (SSG)
 - 🌍 SEO-friendly metadata
-- 🔒 Firebase Admin SDK for server-side logic
+- 🔒 Supabase Client & Admin access for server-side logic
 
 ## 🛠️ Tech Stack
 
@@ -44,10 +45,7 @@ Built with Next.js, React, Tailwind CSS, and TypeScript for a modern, fast, and 
 - **React Router DOM** (v7) – used in SPA routing (legacy)  
 - **React Icons** – icon set  
 - **React Select** – customizable select inputs  
-- **Firebase (Firestore)** – managing drink reviews and shop data  
-- **Firebase Client SDK** – used in the browser (Firestore, etc.)  
-- **Firebase Admin SDK** – used server-side in Next.js (secure access, serverTimestamp, etc.)  
-- **Firebase serverTimestamp & Timestamp** – consistent time handling  
+- **Supabase** – managing drink reviews and shop data
 - **date-fns / date-fns-tz** – date formatting and timezone conversion 
 
 ## 🚀 Getting Started
@@ -72,24 +70,31 @@ npm run build
 ```bash
 .
 ├── app/            # Next.js App Router pages
-│   ├── admin/
-│   │   └── shop/
-│   ├── drink/
-│   │   ├── [drinkId]/
-│   │   │   └── edit/
+│   ├── admin/      # Admin pages and management
+│   │   ├── shop/
+│   │   └── user/
+│   ├── api/        # API routes
+│   │   └── reviews/
+│   ├── drink/      # Drink pages
+│   │   ├── [drinkId]/ 
+│   │   │   └── edit/ 
 │   │   └── add/
-│   └── shop/
-│       └── [shopSlug]/
+│   ├── login/      # Login page
+│   ├── shop/       # Shop pages
+│   │   └── [shopSlug]/
+│   └── signup/     # Signup page
 ├── components/     # Reusable UI components
+│   └── admin/      # Admin-specific components
 ├── constants/      # Constant values and configs
 ├── context/        # React Context providers
 ├── layout/         # Layout components (Header, Footer, etc.)
-├── lib/            # Library helpers (Firebase, etc.)
+├── lib/            # Library helpers (Supabase, etc.)
 ├── public/         # Static assets
 ├── services/       # API client/server logic
 ├── styles/         # Global styles
 ├── types/          # TypeScript definitions
-├── utils/          # Utility functions
+└── utils/          # Utility functions
+
 
 ```
 

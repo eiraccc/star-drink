@@ -14,5 +14,15 @@
     "declaration": true,
     "composite": true
   },
-  "include": ["src", "utils", "context", "services", "lib", "constants", "app", "components", "layout", "components", "types"]
+  "include": [
+    "utils",
+    "context",
+    "services",
+    "lib",
+    "constants",
+    "app",
+    "components",
+    "layout",
+    "types"
+  ]
 }

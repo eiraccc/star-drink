@@ -82,7 +82,7 @@ const FilterBar = ({
           ${isMobileFilterOpen ? 'max-h-96 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'}
         `}
       >
-        <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
+        <div className="w-full sm:w-[33%] sm:mr-2 mb-2 sm:mb-0">
           <MultiSelect<SugarIceLabelType>
             options={iceOptions}
             selected={selectedIce}
@@ -90,7 +90,7 @@ const FilterBar = ({
             placeholder="Ice levels"
           />
         </div>
-        <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] sm:mr-2 mb-2 sm:mb-0">
+        <div className="w-full sm:w-[33%] sm:mr-2 mb-2 sm:mb-0">
           <MultiSelect<SugarIceLabelType>
             options={sugarOptions}
             selected={selectedSugar}
@@ -98,7 +98,7 @@ const FilterBar = ({
             placeholder="Sugar levels"
           />
         </div>
-        <div className="w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]">
+        <div className="w-full sm:w-[33%]">
           <MultiSelect<BaseSelectOptionType>
             options={toppingOptions}
             selected={selectedTopping}

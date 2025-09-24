@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../styles/index.css'
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
+import Sidebar from '../layout/Sidebar';
 import ToastProvider from '../components/ToastProvider';
 import AnalyticsInit from '../components/AnalyticsInit';
 import Providers from './providers';
@@ -84,10 +85,17 @@ export default async function RootLayout({children}: {children: ReactNode}) {
           
           <Providers>
             <AuthProvider>
-              <div className='flex flex-col'>
-                  <Header />
-                  <main>{children}</main>
-                  <Footer/>
+              <div className='flex w-full'>
+                <div className='hidden sm:block w-[50px] fixed top-2 bottom-2 left-2 z-30'>
+                  <Sidebar />
+                </div>
+                <div className='sm:pl-[60px] flex-1 flex flex-col'>
+                    <div className="block sm:hidden">
+                      <Header />
+                    </div>
+                    <main>{children}</main>
+                    <Footer/>
+                </div>
               </div>
             </AuthProvider>
           </Providers>

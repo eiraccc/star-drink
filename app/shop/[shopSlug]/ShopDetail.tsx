@@ -65,7 +65,7 @@ const ShopDetail = ({ shopSlug } : { shopSlug: string }) => {
                   <DrinkCard
                     key={review.reviewId}
                     data={review}
-                    onClick={() => router.push(`/drink/${review.id}`)}
+                    onClick={() => router.push(`/drink/${review.reviewId}`)}
                   />
                 ))}
               </div>

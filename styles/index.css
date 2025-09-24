@@ -89,7 +89,7 @@ header {
   height: 74px;
 }
 section {
-  min-height: calc(100vh - 104px);
+  min-height: calc(100vh - 30px);
   padding: 10px;
 }
 section.Toastify {
